@@ -62,7 +62,7 @@
 	&:before {
 		@include fa-icon;
 		position: absolute;
-		margin: -2px 0 0 -30px;
+		margin: 3px 0 0 -25px;
 	}
 }
 
@@ -87,7 +87,7 @@
 		&:after {
 			content: "";
 			background: $clr-brand-light;
-			height: 48px;
+			height: 49px;
 			width: 100%;
 			position: absolute;
 			z-index: -1;

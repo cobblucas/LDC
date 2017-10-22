@@ -7,10 +7,14 @@
 .bbi-engagement-ctas {
 
 	.bbi-single-engage-cta {
-		margin-bottom: 10px;
+		margin-bottom: 15px;
+
+		&:last-of-type {
+			margin-bottom: 0;
+		}
 
 		@include responsive(sm) {
-			margin-bottom: 25px;
+			margin-bottom: 0;
 		}
 
 		a {
@@ -90,7 +94,6 @@
 		text-align: left;
 
 		.testimonial {
-			padding-left: 25px;
 
 			.quote {
 				position: relative;
@@ -228,7 +231,6 @@
 			color: $clr-white;
 		}
 
-
 		h3 {
 			font: {
 				family: $font-serif;
@@ -284,9 +286,9 @@
 
 	.bbi-event-wrap {
 
-		margin-bottom: 25px;
+		margin-bottom: 15px;
 
-		&:last-child {
+		&:last-of-type {
 			margin-bottom: 0;
 		}
 
@@ -328,7 +330,11 @@
 .bbi-engagement-hover-ctas {
 
 	.bbi-single-engage-hover-cta {
-		margin-bottom: 20px;
+		margin-bottom: 15px;
+
+		&:last-of-type {
+			margin-bottom: 0;
+		}
 
 		@include responsive(sm) {
 			margin-bottom: 0;
@@ -378,14 +384,24 @@
 
 .bbi-engagement-video-grid {
 
+	.row {
+		&:last-of-type {
+			.single-video {
+				&:last-of-type {
+					margin-bottom: 0;
+				}
+			}
+		}
+	}
+
 	.single-video {
 		position:relative;
-		margin-bottom: 25px;
+		margin-bottom: 15px;
 
 		@include responsive(sm) {
 			padding-left: 0;
 			border: {
-				width: 0 0 0 25px;
+				width: 0 0 0 15px;
 				style: solid;
 				color: $clr-transparent;
 			}

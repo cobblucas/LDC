@@ -46,7 +46,7 @@
 				        	<?php get_template_part('templates/modules/nav-action'); ?>
 				        </div>
 
-						<?php get_template_part('templates/modules/nav-utility'); ?>
+<!-- 						<?php get_template_part('templates/modules/nav-utility'); ?> -->
 
 					    <?php get_search_form( $echo ); ?>
 

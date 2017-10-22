@@ -18,7 +18,7 @@
 
 	@include responsive(md) {
 		float: right;
-		margin: 12px 25px 0;
+		margin: 12px 0 0 25px;
 
 		li {
 			display: inline-block;

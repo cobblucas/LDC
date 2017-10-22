@@ -62,12 +62,7 @@
 		-khtml-user-select: none;
 		-moz-user-select: none;
 		-ms-user-select: none;
-		user-select: none;/*
-
-		text-indent: 100%;
-		white-space: nowrap;
-		overflow: hidden;
-*/
+		user-select: none;
 	}
 
 	&.owl-loaded {
@@ -166,7 +161,7 @@
 			left: 10px;
 
 			@include responsive(lg) {
-				left: 18px;
+				left: 19px;
 			}
 		}
 	}
@@ -177,31 +172,41 @@
 		&:before {
 			content: $fa-var-angle-left;
 			padding-right: 3px;
+			line-height: 3rem;
+
+			@include responsive(md) {
+				line-height: 3.75rem;
+			}
+
+			@include responsive(lg) {
+				line-height: 5.25rem;
+			}
 		}
 
 		@include responsive(lg) {
 			left: -75px;
-
-
-			&:before {
-				padding: 0;
-
-			}
 		}
-
-
 	}
 
 	.owl-next {
 		right:-45px;
 
-		@include responsive(lg) {
-			right: -75px;
-		}
-
 		&:before {
 			content: $fa-var-angle-right;
 			padding-left: 3px;
+			line-height: 3rem;
+
+			@include responsive(md) {
+				line-height: 3.75rem;
+			}
+
+			@include responsive(lg) {
+				line-height: 5.25rem;
+			}
+		}
+
+		@include responsive(lg) {
+			right: -75px;
 		}
 	}
 }

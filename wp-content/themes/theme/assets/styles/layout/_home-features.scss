@@ -9,6 +9,15 @@
 	}
 
 	.bbi-single-feature {
+		margin-bottom: 15px;
+
+		&:last-of-type {
+			margin-bottom: 0;
+		}
+
+		@include responsive(md) {
+			margin-bottom: 0;
+		}
 
 		.bbi-feature-wrap {
 			border: {

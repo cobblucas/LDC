@@ -2,28 +2,25 @@
 	width: 50%;
 	float: left;
 	position: relative;
+	margin: 0;
 
-	 a {
-	 	@include button;
-	 	width: 100%;
-	 	text-align:c enter;
+	a {
+		@include button;
+		width: 100%;
+		text-align:c enter;
 
-	 	@include hover-state {
-	 		background: $clr-brand-alt;
-	 	}
-	 }
+		@include hover-state {
+			background: $clr-brand-alt;
+		}
+	}
 
 	@include responsive(sm) {
-
-	 	float: right;
-	 	width: auto;
-	 	margin-top: 20px;
-
+		float: right;
+		width: auto;
+		margin: 20px 0 0;
 	}
 
 	@include responsive(md) {
-		margin-top: 0;
+		margin: 0 0 0 25px;
 	}
-
-
 }
