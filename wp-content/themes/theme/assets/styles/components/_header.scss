@@ -10,7 +10,7 @@
 
 	@include responsive(sm) {
 		background: $header-bg;
-		padding: 20px 0 0;
+		padding: 7px 0 0;
 	}
 	.container-mid {
 		@include responsive(max-xs) {
@@ -46,9 +46,8 @@
 
 	@include responsive(sm) {
 		img {
-			padding: 0 0 15px;
+			padding: 0 0 7px;
 		}
-
 	}
 
 	@include responsive(md) {
@@ -68,7 +67,7 @@
 
 #bbi-hamburger {
 	background: $clr-brand-light;
-	width: 50%;
+	width: 100%;
 	float: right;
 	padding-left: 40px;
 	position: relative;
@@ -79,9 +78,7 @@
 	}
 
 	@include responsive(sm) {
-		margin-left: 10px;
 		width: 110px;
-		margin-top: 20px;
 		z-index: 0;
 
 		&:after {

@@ -5,6 +5,8 @@
 	@include responsive(md) {
 		display: flex;
 		flex-wrap: wrap-reverse;
+		background: none;
+		box-shadow: none;
 	}
 
 	&.collapse {
@@ -19,14 +21,6 @@
 			display: none !important;
 		}
 	}
-
-
-	@include responsive(md) {
-		background: none;
-		box-shadow: none;
-		margin-top: 15px;
-	}
-
 }
 
 .bbi-nav-primary {
@@ -35,7 +29,6 @@
 
 	@include responsive(md) {
 		@include full-cont;
-		margin-top: 40px;
 		text-align: right;
 		height: $nav-height;
 	}

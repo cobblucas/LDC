@@ -29,42 +29,16 @@
 				     MENU
 				</button>
 
-				<div class="visible-xs visible-sm">
-		        	<?php get_template_part('templates/modules/nav-action'); ?>
-		        </div>
-
-			    <div id="navbar" class="bbi-mobile-menu <?php if(get_field('menu_offcanvas', 'option')) { echo 'navbar-offcanvas'; } else { echo 'navbar-collapse collapse'; } ?> pull-right">
+				<div id="navbar" class="bbi-mobile-menu <?php if(get_field('menu_offcanvas', 'option')) { echo 'navbar-offcanvas'; } else { echo 'navbar-collapse collapse'; } ?> pull-right">
 			    	<button id="bbi-close" class="visible-xs visible-sm" aria-controls="navbar" aria-expanded="false" data-target="#navbar"
 					data-toggle="<?php if(get_field('menu_offcanvas', 'option')) { echo 'offcanvas'; } else { echo 'collapse'; } ?>" type="button">
 					     CLOSE
 					</button>
 
 					<?php get_template_part('templates/modules/nav-primary'); ?>
-					<div class="bbi-utility-wrap">
-
-						<div class="hidden-xs hidden-sm">
-				        	<?php get_template_part('templates/modules/nav-action'); ?>
-				        </div>
-
-<!-- 						<?php get_template_part('templates/modules/nav-utility'); ?> -->
-
-					    <?php get_search_form( $echo ); ?>
-
-
-
-					</div>
-
-
 
 				</div>
-
 			</div>
-
 		</div>
 	</div>
 </header>
-
-
-
-
-
