@@ -1,0 +1,25 @@
+.jfont-cont {
+	float: right;
+	margin: 10px 0;
+
+	.jfontsize-button {
+		color: $clr-white;
+		background: {
+			color: $clr-brand;
+		}
+		display: inline-block;
+		padding: .7rem 1rem .6rem;
+		text-align: center;
+		width: 4.5rem;
+
+		@include hover-state {
+			background: {
+				color: $clr-brand-2;
+			}
+		}
+	}
+
+	#jfontsize-minus {
+		display: none;
+	}
+}

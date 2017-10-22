@@ -1,0 +1,30 @@
+.bbi-nav-social {
+	display: inline-block;
+	color: $clr-brand;
+	margin-bottom: 10px;
+
+	li {
+		float: left;
+		margin-right: 5px;
+		margin-bottom: 10px;
+	}
+
+	a {
+		color: $clr-brand-2;
+		display: flex;
+		border: {
+				color: $clr-transparent !important;
+			}
+
+		@include hover-state {
+			.fa {
+				color: $clr-brand;
+			}
+		}
+	}
+
+	.fa {
+		@include font-size(34);
+		line-height: 1;
+	}
+}

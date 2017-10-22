@@ -1,0 +1,343 @@
+{
+    "key": "group_55cdf6698d568",
+    "title": "Page Section - Page Banner",
+    "fields": [
+        {
+            "key": "field_58415e83c00c2",
+            "label": "Add banner image",
+            "name": "add_banner_image",
+            "type": "true_false",
+            "value": null,
+            "instructions": "",
+            "required": 0,
+            "conditional_logic": 0,
+            "wrapper": {
+                "width": "",
+                "class": "",
+                "id": ""
+            },
+            "default_value": 0,
+            "message": "",
+            "ui": 0,
+            "ui_on_text": "",
+            "ui_off_text": ""
+        },
+        {
+            "key": "field_57e958add7f95",
+            "label": "Image",
+            "name": "",
+            "type": "tab",
+            "instructions": "",
+            "required": 0,
+            "conditional_logic": [
+                [
+                    {
+                        "field": "field_58415e83c00c2",
+                        "operator": "==",
+                        "value": "1"
+                    }
+                ]
+            ],
+            "wrapper": {
+                "width": "",
+                "class": "",
+                "id": ""
+            },
+            "placement": "left",
+            "endpoint": 0
+        },
+        {
+            "key": "field_58415cbac00c1",
+            "label": "Banner Type",
+            "name": "banner_type",
+            "type": "radio",
+            "value": null,
+            "instructions": "Select Custom to add the banner from this page. Select Universal to display the banner selected for all pages under \"Client Settings\" > Page banners.",
+            "required": 0,
+            "conditional_logic": 0,
+            "wrapper": {
+                "width": "",
+                "class": "",
+                "id": ""
+            },
+            "layout": "vertical",
+            "choices": {
+                "Custom": "Custom",
+                "Universal": "Universal"
+            },
+            "default_value": "",
+            "other_choice": 0,
+            "save_other_choice": 0,
+            "allow_null": 0,
+            "return_format": "value"
+        },
+        {
+            "key": "field_56f884b3726f0",
+            "label": "Banner Image",
+            "name": "banner_background_image",
+            "type": "image",
+            "value": null,
+            "instructions": "For best quality, the image should be 1400px in width minimum (1200px is tolerated)",
+            "required": 0,
+            "conditional_logic": [
+                [
+                    {
+                        "field": "field_58415e83c00c2",
+                        "operator": "==",
+                        "value": "1"
+                    },
+                    {
+                        "field": "field_58415cbac00c1",
+                        "operator": "==",
+                        "value": "Custom"
+                    }
+                ]
+            ],
+            "wrapper": {
+                "width": "",
+                "class": "",
+                "id": ""
+            },
+            "return_format": "array",
+            "preview_size": "thumbnail",
+            "library": "all",
+            "min_width": 1200,
+            "min_height": "",
+            "min_size": "",
+            "max_width": "",
+            "max_height": "",
+            "max_size": "",
+            "mime_types": "jpeg,jpg,png"
+        },
+        {
+            "key": "field_57e031d7cade5",
+            "label": "Image Position",
+            "name": "image_position",
+            "type": "select",
+            "value": null,
+            "instructions": "Select the vertical positioning of the image.",
+            "required": 0,
+            "conditional_logic": [
+                [
+                    {
+                        "field": "field_58415e83c00c2",
+                        "operator": "==",
+                        "value": "1"
+                    },
+                    {
+                        "field": "field_58415cbac00c1",
+                        "operator": "==",
+                        "value": "Custom"
+                    }
+                ]
+            ],
+            "wrapper": {
+                "width": "",
+                "class": "",
+                "id": ""
+            },
+            "multiple": 0,
+            "allow_null": 0,
+            "choices": {
+                "top": "top",
+                "center": "center",
+                "bottom": "bottom"
+            },
+            "default_value": [
+                "top"
+            ],
+            "ui": 0,
+            "ajax": 0,
+            "placeholder": "",
+            "return_format": "value"
+        },
+        {
+            "key": "field_57e958c2d7f96",
+            "label": "Caption",
+            "name": "",
+            "type": "tab",
+            "instructions": "",
+            "required": 0,
+            "conditional_logic": [
+                [
+                    {
+                        "field": "field_58415e83c00c2",
+                        "operator": "==",
+                        "value": "1"
+                    }
+                ]
+            ],
+            "wrapper": {
+                "width": "",
+                "class": "",
+                "id": ""
+            },
+            "placement": "left",
+            "endpoint": 0
+        },
+        {
+            "key": "field_55705d7eecb9b",
+            "label": "Display Caption?",
+            "name": "display_caption",
+            "type": "true_false",
+            "value": null,
+            "instructions": "Do you want to display a caption over the banner image?",
+            "required": 0,
+            "conditional_logic": 0,
+            "wrapper": {
+                "width": "",
+                "class": "",
+                "id": ""
+            },
+            "default_value": 0,
+            "message": "",
+            "ui": 0,
+            "ui_on_text": "",
+            "ui_off_text": ""
+        },
+        {
+            "key": "field_55706383a9499",
+            "label": "Caption Type",
+            "name": "caption_type",
+            "type": "select",
+            "value": null,
+            "instructions": "Select the type of caption you would like to display",
+            "required": 0,
+            "conditional_logic": [
+                [
+                    {
+                        "field": "field_55705d7eecb9b",
+                        "operator": "==",
+                        "value": "1"
+                    }
+                ]
+            ],
+            "wrapper": {
+                "width": "",
+                "class": "",
+                "id": ""
+            },
+            "multiple": 0,
+            "allow_null": 0,
+            "choices": {
+                "Current Page Title Only": "Current Page Title Only",
+                "Parent Page Title Only": "Parent Page Title Only",
+                "Parent and Current Titles": "Parent and Current Titles",
+                "Custom Caption": "Custom Caption"
+            },
+            "default_value": [],
+            "ui": 0,
+            "ajax": 0,
+            "placeholder": "",
+            "return_format": "value"
+        },
+        {
+            "key": "field_556e1d3a82cb2",
+            "label": "Banner Caption",
+            "name": "banner_caption",
+            "type": "wysiwyg",
+            "value": null,
+            "instructions": "Use Heading 1 for main title and Heading 3 for subtitle.",
+            "required": 0,
+            "conditional_logic": [
+                [
+                    {
+                        "field": "field_55706383a9499",
+                        "operator": "==",
+                        "value": "Custom Caption"
+                    },
+                    {
+                        "field": "field_55705d7eecb9b",
+                        "operator": "==",
+                        "value": "1"
+                    }
+                ]
+            ],
+            "wrapper": {
+                "width": "",
+                "class": "",
+                "id": ""
+            },
+            "tabs": "all",
+            "toolbar": "full",
+            "media_upload": 0,
+            "default_value": "",
+            "delay": 0
+        },
+        {
+            "key": "field_557f09f4ad992",
+            "label": "Caption Position",
+            "name": "caption_position",
+            "type": "radio",
+            "value": null,
+            "instructions": "",
+            "required": 0,
+            "conditional_logic": [
+                [
+                    {
+                        "field": "field_55705d7eecb9b",
+                        "operator": "==",
+                        "value": "1"
+                    }
+                ]
+            ],
+            "wrapper": {
+                "width": "",
+                "class": "",
+                "id": ""
+            },
+            "layout": "vertical",
+            "choices": {
+                "Left": "Left",
+                "Right": "Right",
+                "Center": "Center"
+            },
+            "default_value": "Center",
+            "other_choice": 0,
+            "save_other_choice": 0,
+            "allow_null": 0,
+            "return_format": "value"
+        }
+    ],
+    "location": [
+        [
+            {
+                "param": "post_type",
+                "operator": "==",
+                "value": "post"
+            }
+        ],
+        [
+            {
+                "param": "post_type",
+                "operator": "==",
+                "value": "page"
+            },
+            {
+                "param": "page",
+                "operator": "!=",
+                "value": "2"
+            }
+        ],
+        [
+            {
+                "param": "post_type",
+                "operator": "==",
+                "value": "ai1ec_event"
+            }
+        ]
+    ],
+    "menu_order": -10,
+    "position": "acf_after_title",
+    "style": "default",
+    "label_placement": "top",
+    "instruction_placement": "label",
+    "hide_on_screen": [
+        "excerpt",
+        "custom_fields",
+        "format"
+    ],
+    "active": 1,
+    "description": "",
+    "modified": 1508440520
+}

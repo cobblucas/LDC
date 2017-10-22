@@ -1,0 +1,254 @@
+.gform_wrapper {
+
+	form {
+		background: $clr-bg;
+		padding: 20px;
+
+		.gform_heading {
+
+			margin-top: 20px;
+
+			h3 {
+				@extend h2;
+				margin-top: 10px;
+			}
+
+			.gform_description {
+				margin: 0;
+				font: {
+					weight: $font-bold;
+				}
+			}
+		}
+
+		div.validation_error {
+			color: $clr-brand;
+			border: {
+				color: $clr-brand;
+			}
+		}
+
+		.gform_body {
+
+
+			label.gfield_label {
+				@extend h4;
+				color: $clr-text;
+				margin: 15px 0 5px;
+			}
+
+			.ginput_container {
+				label {
+
+				}
+			}
+
+			.gfield_error {
+				background:none !important;
+				border: {
+					width: 0 1px 1px 1px !important;
+					style: solid;
+					color: $clr-brand;
+				}
+
+				.ginput_container {
+					&_name, &_address {
+						label {
+							color: $clr-brand !important;
+						}
+					}
+				}
+
+
+			}
+
+			.validation_message {
+				color: $clr-brand;
+			}
+
+
+			input, textarea, select {
+				background: $clr-white !important;
+				color: $clr-brand-3;
+				padding-left: 10px !important;
+				@include responsive(max-xs) {
+					width: 100% !important;
+				}
+
+				padding: 13px 25px 13px 10px !important;
+				font: {
+					weight: $font-bold;
+				}
+				@include placeholder(rgba($clr-brand-3, .5));
+			}
+
+			input[type="file"] {
+				background: none !important;
+				padding-left: 0 !important;
+			}
+
+
+			select {
+				padding: 12px 15px 12px !important;
+				appearance: none;
+			    border: {
+				    radius: 0px !important;
+				   }
+			    background: {
+			    	image: url(../../images/dropdown-arrow@2x.png) !important;
+			    	position: 96% 50% !important;
+			    	repeat: no-repeat !important;
+			    }
+
+				@include webkit() {
+					height: 51px !important;
+					margin-top: 0 !important;
+
+
+				}
+			}
+
+			.ginput_container {
+				label {
+					color: $clr-text;
+				}
+
+				&_name, &_address {
+					label {
+						padding: 5px 0 0 5px;
+					}
+				}
+
+				&_date {
+					select {
+						padding: 12px 30px 12px 8px !important;
+						background-position: 85% 50% !important;
+					}
+
+					&:last-child {
+						margin-right: 0;
+					}
+				}
+
+				&_radio, &_checkbox {
+
+					label {
+						margin: 2px 0 0 10px;
+					}
+				}
+
+				&_radio {
+					input[type="text"] {
+						padding: 5px 10px !important;
+						background: lighten($clr-brand-3, 55%) !important;
+						width: auto !important;
+					}
+				}
+
+				.ginput_container {
+					margin-top: 0 !important;
+				}
+
+				&.ginput_recaptcha {
+					@include responsive(max-xs) {
+						transform: scale(0.82);
+						transform-origin: 0 0;
+					}
+
+
+				}
+			}
+
+			ul {
+				li.gfield {
+					margin-top: 25px;
+					padding-right: 0 !important;
+
+					@include responsive(max-xs) {
+						padding: 0;
+						width: 100% !important;
+					}
+
+					@include responsive(sm) {
+						&.gf_right_half {
+							padding: 0 0 0 10px !important;
+						}
+
+						&.gf_left_half {
+							padding: 0 6px 0 0 !important;
+							margin-right: 0 !important;
+						}
+
+						&.gf_middle_third {
+							padding: 0 16px !important;
+						}
+					}
+
+					&.gsection {
+						border: {
+							color: $clr-brand-3;
+						}
+						margin-top: 45px !important;
+
+						.gsection_title {
+							@extend h2;
+						}
+					}
+
+					&.lower-label {
+						label {
+							text-transform: none;
+						}
+					}
+				}
+			}
+
+			.gform_page_footer {
+				border: {
+					style: solid;
+					width: 1px 0 0 0;
+				}
+				width: 100%;
+				display: inline-block;
+
+				.gform_previous_button, .gform_next_button {
+					@include button;
+					background: $clr-brand-3 !important;
+					padding: 12px 24px !important;
+					width: 134px;
+
+					@include hover-state {
+						background: $clr-brand !important;
+					}
+				}
+
+				.gform_next_button {
+					float: right;
+					margin-right: 0;
+				}
+
+				input[type="submit"].gform_button {
+					@include button;
+					background: $clr-brand !important;
+					padding: 12px 24px !important;
+
+					@include hover-state {
+						background: $clr-brand-3 !important;
+					}
+				}
+			}
+		}
+	}
+}
+
+.gforms_confirmation_message {
+	background:$clr-bg;
+	padding:20px;
+
+	.gform_confirmation_message {
+		color: $clr-brand-3;
+		font: {
+			weight: $font-bold;
+		}
+	}
+}

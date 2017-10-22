@@ -1,0 +1,27 @@
+//
+// Flickr Gallery Formatting - As defined in Blackbaud BBI
+// --------------------------------------------------
+
+.flickr-gallery {
+	.photoset {
+		border: {
+			width: 0 0 1px;
+			style: solid;
+			color: $gray-lighter;
+		}
+		.thumbnail {
+			border: {
+				width: 0;
+			}
+		}
+	}
+	.controls a {
+		margin-bottom: 20px;
+	}
+	.flickr-gallery-menu {
+		background {
+			color: rgba($clr-brand,0.10) !important;
+		}
+		padding: 0 10px;
+	}
+}

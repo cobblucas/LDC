@@ -1,0 +1,241 @@
+.bbi-main-slider {
+	height:350px;
+
+
+	@include responsive(sm) {
+		height: 400px;
+		padding: 0;
+	}
+	@include responsive(md) {
+		height: 550px;
+	}
+
+
+	div {
+		height: 100%;
+	}
+
+
+	.carousel-inner {
+		.item {
+			@extend %banner-overlay;
+			padding: 50px 0;
+			@include responsive(sm) {
+				padding: 0;
+			}
+
+			a {
+				height: 100%;
+				width: 100%;
+				display: inline-block;
+			}
+		}
+
+	}
+
+
+	.carousel-caption {
+
+		width: 100%;
+		height: auto;
+		bottom: 0;
+		max-width: 100%;
+		text-shadow: none;
+		color: $clr-white;
+		background: none;
+		left: 0;
+		right: 0;
+		position: relative;
+		padding: 0;
+
+		@include responsive(sm) {
+			position: absolute;
+			bottom: 50px;
+			text-align: center;
+
+
+			&.caption-left {
+				.caption-wrap {
+					text-align: left;
+					float: left;
+				}
+
+				.bb-caption-callout {
+					margin-left: 35px;
+				}
+
+			}
+
+			&.caption-right {
+				.caption-wrap {
+					text-align: right;
+					float: right;
+				}
+
+				.bb-caption-callout {
+					margin-right: 35px;
+				}
+			}
+		}
+
+		.caption-wrap {
+			height: 100%;
+			max-width: 685px;
+			display: inline-block;
+			position: relative;
+
+			.inner-caption {
+				height: auto;
+			}
+
+			.bb-caption-callout {
+				height: auto;
+				display: inline-block;
+				max-width: 225px;
+
+				@include responsive(sm) {
+					max-width: 100%;
+				}
+				@include responsive(md) {
+					position: absolute;
+					bottom: 0;
+					left: 50%;
+					transform: translateX(-50%);
+				}
+			}
+
+			h1 {
+				color :$clr-white;
+				text-transform: none;
+
+			}
+		}
+
+		@include responsive(md) {
+
+			&.caption-left {
+				.bb-caption-callout {
+					left: 0;
+					transform: none;
+				}
+			}
+
+			&.caption-right {
+				.bb-caption-callout {
+					left: inherit;
+					right: 0;
+					transform: none;
+				}
+			}
+		}
+
+		.caption-overlay {
+			@include alpha-attribute('background-color', rgba($clr-brand-darker, 0.5), white);
+			padding: 15px 15px 55px;
+			margin-bottom: -25px;
+
+			@include responsive(sm) {
+				padding: 40px 35px 60px;
+			}
+			@include responsive(md) {
+				margin-bottom: 20px;
+			}
+		}
+	}
+
+	.carousel-indicators {
+		width: 100%;
+		position: absolute;
+		bottom: 20px;
+		left: auto;
+		margin: 0;
+		text-align: center;
+		height: 4px;
+
+		li {
+			width: 70px;
+			height: 4px;
+			background: $clr-white;
+			opacity: .5;
+			margin: 0;
+			color: transparent;
+			border: {
+				width: 0;
+				radius: 0;
+			}
+			&.active, &.active:hover {
+				background: $clr-white;
+				opacity: 1;
+			}
+			@include hover-state {
+				background: $clr-brand-2;
+			}
+		}
+	}
+
+}
+
+
+.carousel {
+	@include hover-state {
+		.carousel-control {
+			display: block;
+		}
+	}
+	.carousel-control {
+		display: none;
+		@extend .hidden-xs;
+		z-index: 1000;
+		.fa {
+			@include font-size(40);
+			position: absolute;
+			top: 48%;
+		}
+		&.left {
+			.fa {
+				left: 25px;
+			}
+		}
+		&.right {
+			.fa {
+				right: 25px;
+			}
+		}
+	}
+}
+
+
+
+// If the home slider is set to fade
+.carousel-fade {
+
+	opacity: 1;
+
+	.carousel-inner {
+
+	    .item {
+
+	        transition: opacity ease-in-out .7s;
+	        left: 0 !important;
+	        opacity: 0;
+	        top: 0;
+	        position: absolute;
+	        width: 100%;
+	        display: block !important;
+	        z-index: 1;
+	        &:first-child{
+	            top: auto;
+	            position: relative;
+	        }
+
+	        &.active {
+	            opacity: 1;
+
+	            transition: opacity ease-in-out .7s;
+	            z-index: 2;
+	        }
+	    }
+
+	}
+
+}

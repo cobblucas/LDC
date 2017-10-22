@@ -1,0 +1,116 @@
+{
+    "key": "group_57c7186625832",
+    "title": "DO NOT DELETE - Choose posts",
+    "fields": [
+        {
+            "key": "field_57c71f5a0908d",
+            "label": "Posts Options",
+            "name": "posts_options",
+            "type": "radio",
+            "value": null,
+            "instructions": "",
+            "required": 0,
+            "conditional_logic": 0,
+            "wrapper": {
+                "width": "",
+                "class": "",
+                "id": ""
+            },
+            "layout": "vertical",
+            "choices": {
+                "Choose posts": "Choose posts",
+                "Show latest from category": "Show latest from category"
+            },
+            "default_value": "",
+            "other_choice": 0,
+            "save_other_choice": 0,
+            "allow_null": 0,
+            "return_format": "value"
+        },
+        {
+            "key": "field_57c71f950908e",
+            "label": "Select posts",
+            "name": "select_posts",
+            "type": "relationship",
+            "value": null,
+            "instructions": "",
+            "required": 0,
+            "conditional_logic": [
+                [
+                    {
+                        "field": "field_57c71f5a0908d",
+                        "operator": "==",
+                        "value": "Choose posts"
+                    }
+                ]
+            ],
+            "wrapper": {
+                "width": "",
+                "class": "",
+                "id": ""
+            },
+            "post_type": [
+                "post"
+            ],
+            "taxonomy": [],
+            "min": 2,
+            "max": 10,
+            "filters": [
+                "search"
+            ],
+            "elements": [
+                "featured_image"
+            ],
+            "return_format": "id"
+        },
+        {
+            "key": "field_57c71fc60908f",
+            "label": "Posts Category",
+            "name": "posts_category",
+            "type": "taxonomy",
+            "value": null,
+            "instructions": "Choose up to 1 category. If no category is selected then all posts will be displayed from newest to oldest. (limit will be 12 posts for sliders and carousels)",
+            "required": 0,
+            "conditional_logic": [
+                [
+                    {
+                        "field": "field_57c71f5a0908d",
+                        "operator": "==",
+                        "value": "Show latest from category"
+                    }
+                ]
+            ],
+            "wrapper": {
+                "width": "",
+                "class": "",
+                "id": ""
+            },
+            "taxonomy": "category",
+            "field_type": "radio",
+            "multiple": 0,
+            "allow_null": 1,
+            "return_format": "id",
+            "add_term": 1,
+            "load_terms": 0,
+            "save_terms": 0
+        }
+    ],
+    "location": [
+        [
+            {
+                "param": "post_type",
+                "operator": "==",
+                "value": "post"
+            }
+        ]
+    ],
+    "menu_order": 0,
+    "position": "normal",
+    "style": "default",
+    "label_placement": "top",
+    "instruction_placement": "label",
+    "hide_on_screen": "",
+    "active": 0,
+    "description": "",
+    "modified": 1508442598
+}

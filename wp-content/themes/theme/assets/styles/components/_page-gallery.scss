@@ -1,0 +1,22 @@
+.bbi-page-gallery {
+
+	.page-gallery {
+		margin-left: -10px;
+	}
+
+	.gallery-item {
+		margin-bottom: 10px;
+		padding-left: 10px;
+
+		.imgWrap {
+			overflow: hidden;
+
+			@include hover-state {
+				img {
+					box-shadow: 0 0 4px $clr-text-light;
+				}
+
+			}
+		}
+	}
+}

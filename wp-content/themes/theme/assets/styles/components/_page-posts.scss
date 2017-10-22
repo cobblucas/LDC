@@ -1,0 +1,82 @@
+.bbi-page-posts {
+
+	article {
+		padding: 30px 0;
+		border: {
+			width: 0 0 1px;
+			style: solid;
+			color: $clr-brand-2-light;
+		}
+
+		&:first-child {
+			padding-top: 0;
+		}
+
+		&:last-child {
+			border: {
+				width: 0;
+			}
+			padding-bottom: 0;
+		}
+
+		img {
+			width: 100%;
+
+			@include responsive(max-xs) {
+				margin-bottom: 20px;
+			}
+		}
+	}
+
+	h6 {
+		color: $clr-brand-2;
+		margin-bottom: 20px;
+	}
+}
+
+.bb-pagination {
+	.pager {
+		li {
+			margin-left: 5px;
+
+			&:first-child {
+				margin-left: 0;
+			}
+
+			> a, > span {
+
+				background: none;
+				border: {
+					radius: 0;
+				}
+			}
+
+			&.next, &.previous {
+				text-transform: uppercase;
+				font: {
+					weight: $font-extrabold;
+				}
+			}
+
+
+			&.next {
+
+				a {
+					&:after {
+						margin: -3px 0 0 10px;
+					}
+				}
+			}
+
+			&.previous {
+
+				a {
+					&:before {
+						margin: -3px 10px 0 0;
+					}
+				}
+			}
+		}
+	}
+}
+

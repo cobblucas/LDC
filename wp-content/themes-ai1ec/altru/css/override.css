@@ -1,0 +1,147 @@
+.ai1ec-main-container .ai1ec-calendar .ai1ec-calendar-view-container .ai1ec-calendar-view .ai1ec-month-view .ai1ec-event {
+    height: auto;
+    white-space: normal;
+    margin: 0 0 8px;
+    background: #eeeeee;
+}
+
+.ai1ec-main-container .ai1ec-calendar .ai1ec-calendar-view-container .ai1ec-calendar-view .ai1ec-month-view .ai1ec-event-time {
+    display: block;
+    font-weight: normal;
+}
+
+.ai1ec-popup-excerpt a {
+    display: none;
+}
+
+[class*=ai1ec_agenda_widget] [class*=ai1ec-agenda-widget] { font-family: "proxima-nova", sans-serif; font-size: 13px; line-height: 1.428571429; color: #333333; word-wrap: break-word; max-width: 100%; }
+
+[class*=ai1ec_agenda_widget] [class*=ai1ec-agenda-widget]:hover, [class*=ai1ec_agenda_widget] [class*=ai1ec-agenda-widget]:focus { color: #d55c19; }
+
+[class*=ai1ec_agenda_widget] [class*=ai1ec-agenda-widget] .ai1ec-date { background: transparent; border-top: 1px solid #eeeeee; }
+
+[class*=ai1ec_agenda_widget] [class*=ai1ec-agenda-widget] .ai1ec-date.ai1ec-today { background: transparent; border-top: 1px solid #eeeeee; }
+
+[class*=ai1ec_agenda_widget] [class*=ai1ec-agenda-widget] .ai1ec-date .ai1ec-month { background: #d55c19; color: #fff; text-shadow: none; border-radius: 0; }
+
+[class*=ai1ec_agenda_widget] [class*=ai1ec-agenda-widget] .ai1ec-date .ai1ec-date-events .ai1ec-event > a { background: #fff; color: #d55c19; }
+
+.timely { font-weight: 400; font-size: 16px; font-family: "proxima-nova", sans-serif; }
+
+.ai1ec-popover.ai1ec-popup { border-color: #eeeeee; }
+
+.ai1ec-popover.ai1ec-popup a { color: #d55c19; }
+
+.ai1ec-popover.ai1ec-popup a:hover, .ai1ec-popover.ai1ec-popup a:focus { color: #fff; }
+
+.ai1ec-popover.ai1ec-popup .ai1ec-popover-content { background: #fff; color: #333333; }
+
+.ai1ec-popover.ai1ec-popup .ai1ec-event-time { background: #eeeeee; }
+
+.ai1ec-popover.ai1ec-popup .ai1ec-popup-title:hover a { color: #404a29 !important; }
+
+#ai1ec-container .ai1ec-event-title { color: #d55c19; }
+
+#ai1ec-container .ai1ec-title-buttons { padding: 15px 0; border-bottom: 1px solid #d55c19; margin-bottom: 30px; }
+
+#ai1ec-container .ai1ec-title-buttons .ai1ec-pagination { margin: 0; }
+
+#ai1ec-container .ai1ec-dropdown-menu .ai1ec-active a { color: #fff; }
+
+#ai1ec-container .ai1ec-month-view .ai1ec-today, #ai1ec-container .ai1ec-week-view .ai1ec-today { background-color: rgba(213, 92, 25, 0.3) !important; }
+
+#ai1ec-container .ai1ec-month-view .ai1ec-today .ai1ec-date, #ai1ec-container .ai1ec-week-view .ai1ec-today .ai1ec-date { background-color: #d55c19; }
+
+#ai1ec-container .ai1ec-month-view .ai1ec-today .ai1ec-date a, #ai1ec-container .ai1ec-week-view .ai1ec-today .ai1ec-date a { color: #fff; text-shadow: 0 1px 2px rgba(0, 0, 0, 0.6); }
+
+#ai1ec-container .ai1ec-date { background: transparent; border-top: none; }
+
+#ai1ec-container .ai1ec-date .ai1ec-date-title { border-radius: 0; border: none; background: #404a29; color: #fff !important; margin: 0 10px 10px 0; }
+
+#ai1ec-container .ai1ec-date .ai1ec-date-title .ai1ec-month { background: #9a996e; color: #fff; text-shadow: none; border-radius: 0; font-size: 16px; padding: 4px 12px; letter-spacing: 0; border-bottom: 1px solid #fff; }
+
+#ai1ec-container .ai1ec-date .ai1ec-date-title .ai1ec-day { font-size: 36px; font-weight: 700; }
+
+#ai1ec-container .ai1ec-date .ai1ec-date-title .ai1ec-weekday { font-size: 16px; }
+
+#ai1ec-container .ai1ec-date .ai1ec-date-events { margin: 0; }
+
+#ai1ec-container .ai1ec-date .ai1ec-date-events .ai1ec-event { background: #e4eef1; border: none; border-radius: 0; margin: 0 0 10px; min-height: 89px; box-shadow: none; text-align: left; }
+
+#ai1ec-container .ai1ec-date .ai1ec-date-events .ai1ec-event-title { margin-bottom: 15px; }
+
+#ai1ec-container .ai1ec-date .ai1ec-date-events .ai1ec-event-time { text-transform: uppercase; color: #9a996e; font-size: 14px; font-weight: 700; }
+
+#ai1ec-container .ai1ec-date .ai1ec-date-events .ai1ec-event-time .ai1ec-allday-badge { border-radius: 0; background: none; color: #404a29; font-size: 14px; font-weight: 700; }
+
+#ai1ec-container .ai1ec-date .ai1ec-date-events .ai1ec-event-description { font-size: 14px; margin-top: 25px; }
+
+#ai1ec-container .ai1ec-date .ai1ec-date-events .ai1ec-actions { float: left; margin-top: 20px; }
+
+#ai1ec-container .ai1ec-date .ai1ec-date-events .ai1ec-actions .ai1ec-read-more { -webkit-transition: all, 0.2s, ease-in-out; transition: all, 0.2s, ease-in-out; background: #d55c19; color: #fff; padding: 10px; cursor: pointer; display: inline-block; line-height: 20px; letter-spacing: 1px; text-decoration: none !important; text-transform: uppercase; border-width: 1px; border-style: solid; border-color: transparent; border-radius: 0 !important; font-weight: 800; font-size: 14px; border-radius: 0; }
+
+#ai1ec-container .ai1ec-date .ai1ec-date-events .ai1ec-actions .ai1ec-read-more:hover { background: #404a29; color: #fff; border: 1px solid transparent; }
+
+@media only screen and (min-width: 768px) { #ai1ec-container .ai1ec-date .ai1ec-date-events .ai1ec-actions .ai1ec-read-more { padding: 10px 20px; } }
+
+#ai1ec-container .ai1ec-date .ai1ec-date-events .ai1ec-event-toggle { position: relative; top: -10px; padding: 5px; color: #fff; background: #404a29; text-align: center; }
+
+#ai1ec-container .ai1ec-date .ai1ec-date-events .ai1ec-event-toggle span { display: inline-block; width: 100%; }
+
+#ai1ec-container .ai1ec-date .ai1ec-date-events .ai1ec-event-toggle:after, #ai1ec-container .ai1ec-date .ai1ec-date-events .ai1ec-event-toggle:before { border: solid transparent; content: ""; position: absolute; top: 50px; width: 0; height: 0; line-height: 0px; }
+
+#ai1ec-container .ai1ec-date .ai1ec-date-events .ai1ec-event-toggle:after { right: 0; border-width: 0 35px 22px 0; border-color: transparent #404a29 transparent transparent; line-height: 0px; _border-color: transparent #404a29 transparent transparent; _filter: progid:DXImageTransform.Microsoft.Chroma(color='transparent'); }
+
+#ai1ec-container .ai1ec-date .ai1ec-date-events .ai1ec-event-toggle:before { left: 0; border-width: 22px 35px 0 0; border-color: #404a29 transparent transparent transparent; _border-color: #404a29 transparent transparent transparent; _filter: progid:DXImageTransform.Microsoft.Chroma(color='transparent'); }
+
+#ai1ec-container .ai1ec-calendar-toolbar { border: none; padding: 0; }
+
+#ai1ec-container .ai1ec-calendar-toolbar ul.ai1ec-nav { list-style: none; margin: 0; padding: 0; }
+
+#ai1ec-container .ai1ec-calendar-toolbar ul.ai1ec-nav li { padding: 0; }
+
+#ai1ec-container .ai1ec-calendar-toolbar ul.ai1ec-nav li:before { content: none; }
+
+#ai1ec-container .ai1ec-calendar-toolbar ul.ai1ec-nav li .ai1ec-fa, #ai1ec-container .ai1ec-calendar-toolbar ul.ai1ec-nav li .ai1ec-caret { display: none; }
+
+#ai1ec-container .ai1ec-calendar-toolbar ul.ai1ec-nav li > a { -webkit-transition: all, 0.2s, ease-in-out; transition: all, 0.2s, ease-in-out; background: #d55c19; color: #fff; padding: 10px; cursor: pointer; display: inline-block; line-height: 20px; letter-spacing: 1px; text-decoration: none !important; text-transform: uppercase; border-width: 1px; border-style: solid; border-color: transparent; border-radius: 0 !important; font-weight: 800; font-size: 14px; background: #7eb0be; }
+
+#ai1ec-container .ai1ec-calendar-toolbar ul.ai1ec-nav li > a:hover { background: #404a29; color: #fff; border: 1px solid transparent; }
+
+@media only screen and (min-width: 768px) { #ai1ec-container .ai1ec-calendar-toolbar ul.ai1ec-nav li > a { padding: 10px 20px; } }
+
+#ai1ec-container .ai1ec-calendar-toolbar ul.ai1ec-nav li > a:after { display: inline-block; font: normal normal normal 14px/1 FontAwesome; font-size: inherit; text-rendering: auto; -webkit-font-smoothing: antialiased; -moz-osx-font-smoothing: grayscale; vertical-align: middle; content: "\f0ab"; font-size: 22px; margin: -4px 0 0 4px; }
+
+.ai1ec-agenda-view .ai1ec-categories, .ai1ec-agenda-view .ai1ec-tags { float: left; margin: 20px 0; }
+
+@media only screen and (min-width: 768px) { .ai1ec-agenda-view .ai1ec-categories, .ai1ec-agenda-view .ai1ec-tags { margin: 30px 0 0 20px; } }
+
+.ai1ec-event-details, .ai1ec-single-event .ai1ec-time .ai1ec-field-value, .ai1ec-multi-event .ai1ec-time .ai1ec-field-value { font: normal 14px "proxima-nova", sans-serif; color: #404a29; }
+
+.ai1ec-event-avatar img { min-height: 0; }
+
+.ai1ec-field-label { color: #d55c19; width: auto; min-width: 95px; text-align: left; padding-left: 15px; }
+
+.timely .ai1ec-btn-primary { -webkit-transition: all, 0.2s, ease-in-out; transition: all, 0.2s, ease-in-out; background: #d55c19; color: #fff; padding: 10px; cursor: pointer; display: inline-block; line-height: 20px; letter-spacing: 1px; text-decoration: none !important; text-transform: uppercase; border-width: 1px; border-style: solid; border-color: transparent; border-radius: 0 !important; font-weight: 800; font-size: 14px; }
+
+.timely .ai1ec-btn-primary:hover { background: #404a29; color: #fff; border: 1px solid transparent; }
+
+@media only screen and (min-width: 768px) { .timely .ai1ec-btn-primary { padding: 10px 20px; } }
+
+.ai1ec-dropdown-menu > .ai1ec-active > a, .ai1ec-dropdown-menu > .ai1ec-active > a:hover, .ai1ec-dropdown-menu > .ai1ec-active > a:focus { background: #7eb0be; }
+
+.ai1ec-posterboard-view { font-family: "proxima-nova", sans-serif; }
+
+.ai1ec-posterboard-view .ai1ec-event-wrap { background: #eff5f7; opacity: 1; }
+
+.ai1ec-posterboard-view .ai1ec-buy-tickets { margin-top: 10px; }
+
+.ai1ec-posterboard-view .ai1ec-month { background: #9a996e; }
+
+.ai1ec-posterboard-view .ai1ec-day, .ai1ec-posterboard-view .ai1ec-weekday { background: #404a29; }
+
+.ai1ec-posterboard-view footer { background: #7eb0be; }
+
+.ai1ec-posterboard-view footer a { color: #fff; font-weight: 800 !important; font-size: 12px; }
+
+.ai1ec-posterboard-view footer:after { background: none; }

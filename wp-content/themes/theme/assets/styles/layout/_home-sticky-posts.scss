@@ -1,0 +1,55 @@
+.bbi-home-sticky-wrap {
+	text-align: center;
+
+	.bbi-home-sticky {
+
+		@include responsive(sm) {
+			flex: 1 1 50%;
+		}
+
+		@include responsive(md) {
+			flex: auto;
+		}
+	}
+
+	.bbi-posts-outer {
+
+		@include responsive(sm) {
+			display: flex;
+			flex-wrap: wrap;
+		}
+
+	}
+
+	.bbi-posts-inner {
+		background: $clr-bg;
+		border: {
+			width: 1px;
+			style: solid;
+			color: $clr-brand;
+		}
+		height: 100%;
+	}
+
+	.bbi-post-excerpt-wrap {
+		padding: 30px 20px;
+
+		.bb-news-date {
+			margin-bottom: 15px;
+			color: $clr-grey;
+		}
+	}
+
+	.bbi-post-excerpt {
+		color: $clr-text-light;
+	}
+
+	.bbi-read-more {
+		@include full-cont;
+		font: {
+			weight: $font-bold;
+		}
+		text-transform: uppercase;
+		margin-top: 15px;
+	}
+}

@@ -1,0 +1,15 @@
+.ai1ec-main-container .ai1ec-calendar .ai1ec-calendar-view-container .ai1ec-calendar-view .ai1ec-month-view .ai1ec-event {
+    height: auto;
+    white-space: normal;
+    margin: 0 0 8px;
+    background: #eeeeee;
+}
+
+.ai1ec-main-container .ai1ec-calendar .ai1ec-calendar-view-container .ai1ec-calendar-view .ai1ec-month-view .ai1ec-event-time {
+    display: block;
+    font-weight: normal;
+}
+
+.ai1ec-popup-excerpt a {
+    display: none;
+}

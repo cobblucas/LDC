@@ -1,0 +1,230 @@
+/*
+ *  Owl Carousel - Core
+ */
+.owl-carousel {
+	display: none;
+	width: 100%;
+	-webkit-tap-highlight-color: transparent;
+	/* position relative and z-index fix webkit rendering fonts issue */
+	position: relative;
+	z-index: 1;
+	max-width: 85%;
+	margin: 0 auto;
+
+	.owl-stage {
+		position: relative;
+		-ms-touch-action: pan-Y;
+		display: flex;
+	}
+
+	.owl-stage:after {
+		content: ".";
+		display: block;
+		clear: both;
+		visibility: hidden;
+		height: 0;
+	}
+
+	.owl-stage-outer {
+		position: relative;
+		overflow: hidden;
+		padding: 0 2px;
+		/* fix for flashing background */
+		-webkit-transform: translate3d(0px, 0px, 0px);
+	}
+
+	.owl-item {
+		position: relative;
+		min-height: 1px;
+		float: left;
+		display: flex;
+		-webkit-backface-visibility: hidden;
+		-webkit-tap-highlight-color: transparent;
+		-webkit-touch-callout: none;
+	}
+	.owl-item img {
+		display: block;
+		width: 100%;
+		-webkit-transform-style: preserve-3d;
+	}
+
+	.owl-nav.disabled,
+	.owl-dots.disabled {
+		display: none;
+	}
+
+	.owl-nav .owl-prev,
+	.owl-nav .owl-next,
+	.owl-dot {
+		cursor: pointer;
+		cursor: hand;
+		-webkit-user-select: none;
+		-khtml-user-select: none;
+		-moz-user-select: none;
+		-ms-user-select: none;
+		user-select: none;/*
+
+		text-indent: 100%;
+		white-space: nowrap;
+		overflow: hidden;
+*/
+	}
+
+	&.owl-loaded {
+		display: block;
+	}
+
+	&.owl-loading {
+		opacity: 0;
+		display: block;
+	}
+
+	&.owl-hidden {
+		opacity: 0;
+	}
+
+	&.owl-refresh .owl-item {
+		display: none;
+	}
+
+	&.owl-drag .owl-item {
+		-webkit-user-select: none;
+		-moz-user-select: none;
+		-ms-user-select: none;
+		user-select: none;
+	}
+
+	&.owl-grab {
+		cursor: move;
+		cursor: grab;
+	}
+
+	&.owl-rtl {
+		direction: rtl;
+	}
+
+	&.owl-rtl .owl-item {
+		float: right;
+	}
+}
+
+/* No Js */
+.no-js .owl-carousel {
+	display: block;
+}
+
+// Control arrrows
+
+.owl-nav {
+	.owl-prev,.owl-next {
+		position: absolute;
+		top: 50%;
+		transform: translateY(-50%);
+		color: transparent !important;
+		width: 40px;
+		height: 40px;
+		margin: 0 !important;
+		padding: 0 !important;
+		display: block;
+		background: {
+			color: $clr-brand !important;
+		}
+		border: {
+			width: 3px;
+			style: solid;
+			color: $clr-brand-light;
+			radius: 100% !important;
+		}
+		text-align:center;
+
+		@include responsive(md) {
+			width: 45px;
+			height: 45px;
+		}
+
+
+		@include responsive(lg) {
+			width: 60px;
+			height: 60px;
+		}
+
+		@include hover-state {
+			background: {
+				color: $clr-brand-2;
+			}
+			border: {
+				color: $clr-brand-2-light;
+			}
+		}
+
+		&:before {
+			@include fa-icon();
+			color: $clr-white;
+			@include font-size(35);
+			display: inline-block;
+			position: absolute;
+			left: 10px;
+
+			@include responsive(lg) {
+				left: 18px;
+			}
+		}
+	}
+
+	.owl-prev {
+		left: -45px;
+
+		&:before {
+			content: $fa-var-angle-left;
+			padding-right: 3px;
+		}
+
+		@include responsive(lg) {
+			left: -75px;
+
+
+			&:before {
+				padding: 0;
+
+			}
+		}
+
+
+	}
+
+	.owl-next {
+		right:-45px;
+
+		@include responsive(lg) {
+			right: -75px;
+		}
+
+		&:before {
+			content: $fa-var-angle-right;
+			padding-left: 3px;
+		}
+	}
+}
+
+.owl-dots {
+	display: inline-block;
+
+	.owl-dot {
+		background: {
+			color: $clr-white;
+		}
+		width: 12px;
+		height: 12px;
+		border: {
+			radius: 100%;
+		}
+		display: inline-block;
+		margin: 10px 4px;
+
+		&.active {
+			background: {
+				color: $clr-brand;
+			}
+		}
+	}
+}

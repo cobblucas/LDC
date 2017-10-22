@@ -1,0 +1,23 @@
+.bbi-page-column-module {
+
+	text-align: center;
+
+	.bbi-module-media {
+		margin-bottom: 25px;
+
+		.fa {
+			@include font-size(100);
+			color: $clr-brand;
+		}
+	}
+
+	a.btn-primary {
+		@include button-alt;
+	}
+
+	.bbi-single-column {
+		@include responsive(max-xs) {
+			margin-bottom: 35px;
+		}
+	}
+}

@@ -1,0 +1,251 @@
+{
+    "key": "group_582cdd1b919e7",
+    "title": "DO NOT DELETE: Section Background",
+    "fields": [
+        {
+            "key": "field_582cdd6272984",
+            "label": "Section Background",
+            "name": "",
+            "type": "tab",
+            "instructions": "",
+            "required": 0,
+            "conditional_logic": 0,
+            "wrapper": {
+                "width": "",
+                "class": "",
+                "id": ""
+            },
+            "placement": "left",
+            "endpoint": 0
+        },
+        {
+            "key": "field_582cdd7372985",
+            "label": "Background Type",
+            "name": "background_type",
+            "type": "radio",
+            "value": null,
+            "instructions": "",
+            "required": 0,
+            "conditional_logic": 0,
+            "wrapper": {
+                "width": "",
+                "class": "",
+                "id": ""
+            },
+            "layout": "horizontal",
+            "choices": {
+                "Image": "Image",
+                "Color": "Color"
+            },
+            "default_value": "",
+            "other_choice": 0,
+            "save_other_choice": 0,
+            "allow_null": 0,
+            "return_format": "value"
+        },
+        {
+            "key": "field_582cdd7872986",
+            "label": "Background Color",
+            "name": "background_color",
+            "type": "radio",
+            "value": null,
+            "instructions": "<span class=\"bg row-1\">\r\n<span class=\"acf-background white\"><\/span><span class=\"acf-background brand-1\"><\/span><span class=\"acf-background brand-2\"><\/span><span class=\"acf-background brand-3\"><\/span>\r\n<\/span>",
+            "required": 0,
+            "conditional_logic": [
+                [
+                    {
+                        "field": "field_582cdd7372985",
+                        "operator": "==",
+                        "value": "Color"
+                    }
+                ]
+            ],
+            "wrapper": {
+                "width": "",
+                "class": "",
+                "id": ""
+            },
+            "choices": {
+                "white": "White",
+                "brand1": "Brand Color 1",
+                "brand2": "Brand Color 2",
+                "brand3": "Brand Color 3"
+            },
+            "allow_null": 0,
+            "other_choice": 0,
+            "save_other_choice": 0,
+            "default_value": "White",
+            "layout": "horizontal",
+            "return_format": "value"
+        },
+        {
+            "key": "field_582cdd7d72987",
+            "label": "Background Image",
+            "name": "background_image",
+            "type": "image",
+            "value": null,
+            "instructions": "",
+            "required": 1,
+            "conditional_logic": [
+                [
+                    {
+                        "field": "field_582cdd7372985",
+                        "operator": "==",
+                        "value": "Image"
+                    }
+                ]
+            ],
+            "wrapper": {
+                "width": "",
+                "class": "",
+                "id": ""
+            },
+            "return_format": "url",
+            "preview_size": "thumbnail",
+            "library": "all",
+            "min_width": 1400,
+            "min_height": 500,
+            "min_size": "",
+            "max_width": "",
+            "max_height": "",
+            "max_size": "",
+            "mime_types": ""
+        },
+        {
+            "key": "field_588927da5af61",
+            "label": "Add Image Filter",
+            "name": "add_image_filter",
+            "type": "true_false",
+            "value": null,
+            "instructions": "",
+            "required": 0,
+            "conditional_logic": [
+                [
+                    {
+                        "field": "field_582cdd7372985",
+                        "operator": "==",
+                        "value": "Image"
+                    }
+                ]
+            ],
+            "wrapper": {
+                "width": "",
+                "class": "",
+                "id": ""
+            },
+            "default_value": 0,
+            "message": "",
+            "ui": 0,
+            "ui_on_text": "",
+            "ui_off_text": ""
+        },
+        {
+            "key": "field_584e41c861417",
+            "label": "White Text",
+            "name": "white_text",
+            "type": "true_false",
+            "value": null,
+            "instructions": "Check this box if the main text color should be set to white.",
+            "required": 0,
+            "conditional_logic": 0,
+            "wrapper": {
+                "width": "",
+                "class": "",
+                "id": ""
+            },
+            "default_value": 0,
+            "message": "",
+            "ui": 0,
+            "ui_on_text": "",
+            "ui_off_text": ""
+        },
+        {
+            "key": "field_584edc96b72bc",
+            "label": "Fix Background",
+            "name": "fix_background",
+            "type": "true_false",
+            "value": null,
+            "instructions": "Check this box if the background image should be set to fixed.",
+            "required": 0,
+            "conditional_logic": [
+                [
+                    {
+                        "field": "field_582cdd7372985",
+                        "operator": "==",
+                        "value": "Image"
+                    }
+                ]
+            ],
+            "wrapper": {
+                "width": "",
+                "class": "",
+                "id": ""
+            },
+            "default_value": 0,
+            "message": "",
+            "ui": 0,
+            "ui_on_text": "",
+            "ui_off_text": ""
+        },
+        {
+            "key": "field_582cdd8172988",
+            "label": "Background Position",
+            "name": "background_position",
+            "type": "select",
+            "value": null,
+            "instructions": "Select the vertical positioning of the image. By default the image is centered but you can adjust this depending on the position of the subject(s) on the image.",
+            "required": 0,
+            "conditional_logic": [
+                [
+                    {
+                        "field": "field_582cdd7372985",
+                        "operator": "==",
+                        "value": "Image"
+                    },
+                    {
+                        "field": "field_584edc96b72bc",
+                        "operator": "!=",
+                        "value": "1"
+                    }
+                ]
+            ],
+            "wrapper": {
+                "width": "",
+                "class": "",
+                "id": ""
+            },
+            "multiple": 0,
+            "allow_null": 0,
+            "choices": {
+                "center": "center",
+                "top": "top",
+                "bottom": "bottom"
+            },
+            "default_value": [
+                "center"
+            ],
+            "ui": 0,
+            "ajax": 0,
+            "placeholder": "",
+            "return_format": "value"
+        }
+    ],
+    "location": [
+        [
+            {
+                "param": "post_type",
+                "operator": "==",
+                "value": "post"
+            }
+        ]
+    ],
+    "menu_order": 0,
+    "position": "normal",
+    "style": "default",
+    "label_placement": "top",
+    "instruction_placement": "label",
+    "hide_on_screen": "",
+    "active": 0,
+    "description": "",
+    "modified": 1508442682
+}

@@ -1,0 +1,214 @@
+{
+    "key": "group_55cdf66ae9df6",
+    "title": "CPT - Testimonials",
+    "fields": [
+        {
+            "key": "field_55693b55906fc",
+            "label": "Testimonial",
+            "name": "testimonial",
+            "type": "wysiwyg",
+            "value": null,
+            "instructions": "",
+            "required": 0,
+            "conditional_logic": 0,
+            "wrapper": {
+                "width": "",
+                "class": "",
+                "id": ""
+            },
+            "tabs": "all",
+            "toolbar": "full",
+            "media_upload": 0,
+            "default_value": "",
+            "delay": 0
+        },
+        {
+            "key": "field_55693c6a11bfc",
+            "label": "Testimonial Author",
+            "name": "testimonial_author",
+            "type": "text",
+            "value": null,
+            "instructions": "Enter name of testimonial author here. (optional)",
+            "required": 0,
+            "conditional_logic": 0,
+            "wrapper": {
+                "width": "",
+                "class": "",
+                "id": ""
+            },
+            "default_value": "",
+            "maxlength": "",
+            "placeholder": "",
+            "prepend": "",
+            "append": "",
+            "formatting": "html",
+            "readonly": 0,
+            "disabled": 0
+        },
+        {
+            "key": "field_55693b76906fd",
+            "label": "Add Image",
+            "name": "add_image",
+            "type": "true_false",
+            "value": null,
+            "instructions": "",
+            "required": 0,
+            "conditional_logic": 0,
+            "wrapper": {
+                "width": "",
+                "class": "",
+                "id": ""
+            },
+            "default_value": 0,
+            "message": "",
+            "ui": 0,
+            "ui_on_text": "",
+            "ui_off_text": ""
+        },
+        {
+            "key": "field_55693b88906fe",
+            "label": "Image Type",
+            "name": "image_type",
+            "type": "select",
+            "value": null,
+            "instructions": "Choose if the image should be a small image next to the testimonial a full width background image behind the text.",
+            "required": 0,
+            "conditional_logic": [
+                [
+                    {
+                        "field": "field_55693b76906fd",
+                        "operator": "==",
+                        "value": "1"
+                    }
+                ]
+            ],
+            "wrapper": {
+                "width": "",
+                "class": "",
+                "id": ""
+            },
+            "multiple": 0,
+            "allow_null": 0,
+            "choices": {
+                "Small Side Image": "Small Side Image",
+                "Full Width Background": "Full Width Background"
+            },
+            "default_value": [],
+            "ui": 0,
+            "ajax": 0,
+            "placeholder": "",
+            "return_format": "value",
+            "disabled": 0,
+            "readonly": 0
+        },
+        {
+            "key": "field_55693c0e906ff",
+            "label": "Small Image",
+            "name": "small_image",
+            "type": "image",
+            "value": null,
+            "instructions": "",
+            "required": 0,
+            "conditional_logic": [
+                [
+                    {
+                        "field": "field_55693b76906fd",
+                        "operator": "==",
+                        "value": "1"
+                    },
+                    {
+                        "field": "field_55693b88906fe",
+                        "operator": "==",
+                        "value": "Small Side Image"
+                    }
+                ]
+            ],
+            "wrapper": {
+                "width": "",
+                "class": "",
+                "id": ""
+            },
+            "return_format": "url",
+            "preview_size": "medium",
+            "library": "all",
+            "min_width": 0,
+            "min_height": 0,
+            "min_size": 0,
+            "max_width": 0,
+            "max_height": 0,
+            "max_size": 0,
+            "mime_types": ""
+        },
+        {
+            "key": "field_55693c4090701",
+            "label": "Background Image",
+            "name": "background_image",
+            "type": "image",
+            "value": null,
+            "instructions": "",
+            "required": 0,
+            "conditional_logic": [
+                [
+                    {
+                        "field": "field_55693b76906fd",
+                        "operator": "==",
+                        "value": "1"
+                    },
+                    {
+                        "field": "field_55693b88906fe",
+                        "operator": "==",
+                        "value": "Full Width Background"
+                    }
+                ]
+            ],
+            "wrapper": {
+                "width": "",
+                "class": "",
+                "id": ""
+            },
+            "return_format": "array",
+            "preview_size": "slider-img",
+            "library": "all",
+            "min_width": "",
+            "min_height": "",
+            "min_size": "",
+            "max_width": "",
+            "max_height": "",
+            "max_size": "",
+            "mime_types": ""
+        }
+    ],
+    "location": [
+        [
+            {
+                "param": "post_type",
+                "operator": "==",
+                "value": "post"
+            }
+        ]
+    ],
+    "menu_order": 0,
+    "position": "normal",
+    "style": "seamless",
+    "label_placement": "top",
+    "instruction_placement": "label",
+    "hide_on_screen": [
+        "permalink",
+        "the_content",
+        "excerpt",
+        "custom_fields",
+        "discussion",
+        "comments",
+        "revisions",
+        "slug",
+        "author",
+        "format",
+        "featured_image",
+        "categories",
+        "tags",
+        "send-trackbacks"
+    ],
+    "active": 0,
+    "description": "",
+    "modified": 1508442559
+}

@@ -1,0 +1,68 @@
+.sg-colors {
+	display: flex;
+	flex-wrap: wrap;
+	list-style: none;
+	padding: 0;
+	margin: 0;
+	li {
+		flex: auto;
+		padding: 0.3em;
+		margin: 0 0.5em 0.5em 0;
+		border: {
+			width: 1px;
+			style: solid;
+			color: lighten($clr-grey, 50%);
+			radius: 5px;
+			}
+		.sg-swatch {
+		    display: block;
+		    height: 4em;
+		    margin-bottom: 0.3em;
+		    color: $clr-transparent;
+		    border: {
+			    radius: 5px;
+		    }
+		    &.clr-brand {
+			    background: {
+				    color: $clr-brand;
+			    }
+		    }
+		    &.clr-brand-2 {
+			    background: {
+				    color: $clr-brand-2;
+			    }
+		    }
+		    &.clr-brand-3 {
+			    background: {
+				    color: $clr-brand-3;
+			    }
+		    }
+		    &.clr-text {
+			    background: {
+				    color: $clr-text;
+			    }
+		    }
+		    &.clr-link {
+			    background: {
+				    color: $clr-link;
+			    }
+		    }
+		    &.clr-grey {
+			    background: {
+				    color: $clr-grey;
+			    }
+		    }
+		    &.clr-border {
+			    background: {
+				    color: $clr-border;
+			    }
+		    }
+		}
+		.sg-label {
+		    font: {
+			    size: 90%;
+			   }
+		    line-height: 1;
+		}
+	}
+}

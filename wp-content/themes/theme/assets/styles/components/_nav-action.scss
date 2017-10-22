@@ -1,0 +1,29 @@
+.bbi-nav-action {
+	width: 50%;
+	float: left;
+	position: relative;
+
+	 a {
+	 	@include button;
+	 	width: 100%;
+	 	text-align:c enter;
+
+	 	@include hover-state {
+	 		background: $clr-brand-alt;
+	 	}
+	 }
+
+	@include responsive(sm) {
+
+	 	float: right;
+	 	width: auto;
+	 	margin-top: 20px;
+
+	}
+
+	@include responsive(md) {
+		margin-top: 0;
+	}
+
+
+}

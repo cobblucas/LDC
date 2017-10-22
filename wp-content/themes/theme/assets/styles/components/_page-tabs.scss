@@ -1,0 +1,95 @@
+.bbi-page-tabs {
+
+	.nav-tabs {
+		border: {
+			width:0 0 1px;
+			style: solid;
+			color: $clr-border;
+		}
+		li {
+			font: {
+				weight: $font-medium;
+			}
+			&.active {
+				a {
+					background: $clr-brand;
+					border: {
+						color: $clr-brand;
+					}
+				}
+			}
+
+			a {
+				border: {
+					width: 1px 1px 0 !important;
+					style: solid;
+					color: $clr-border;
+				}
+				@include hover-state {
+					background: $clr-brand-dark;
+					color: $clr-white;
+					border: {
+						color: $clr-brand-dark;
+					}
+				}
+			}
+		}
+	}
+
+	.tab-content {
+		background: $clr-bg;
+		border: {
+			width: 0 1px 1px;
+			style: solid;
+			color: $clr-border;
+		}
+		padding: 25px;
+
+		@include responsive(sm) {
+			padding: 40px;
+		}
+
+		img {
+			border: {
+				width: 5px;
+				style: solid;
+				color: $clr-white;
+			}
+			max-width: 400px;
+			width :100%;
+		}
+	}
+
+	.panel-heading {
+		background: $clr-brand;
+		color: $clr-white;
+		position: relative;
+
+		@include hover-state {
+			background: $clr-brand-dark;
+		}
+
+
+
+		.section-title {
+			@include full-cont;
+			color: $clr-white;
+
+			&:after {
+				@include fa-icon;
+				content: $fa-var-angle-up;
+				position: absolute;
+				right: 20px;
+				color: $clr-white;
+				@include font-size(35);
+				top: 5px;
+			}
+
+			&.collapsed {
+				&:after {
+					content: $fa-var-angle-down;
+				}
+			}
+		}
+	}
+}

@@ -1,0 +1,33 @@
+.bbi-page-personnel {
+	.row {
+		@include responsive(md) {
+			margin-bottom: 35px;
+
+			&:last-of-type {
+				margin-bottom: 0;
+			}
+		}
+	}
+
+	.bbi-single-personnel {
+		text-align: center;
+		margin-bottom: 20px;
+
+		img {
+			border: {
+				width: 5px;
+				style: solid;
+				color: $clr-border;
+			}
+			margin-bottom: 30px;
+			display: inline-block;
+		}
+
+		h4 {
+			color: $clr-text;
+			font: {
+				weight: $font-medium;
+			}
+		}
+	}
+}

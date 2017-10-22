@@ -1,0 +1,40 @@
+#google_translate_element {
+	float: right;
+	margin: 10px 15px 10px 0;
+	img {
+		display: inline-block;
+	}
+
+   .goog-te-gadget-simple {
+		@include button;
+		font: {
+			family: $font-main;
+		}
+		padding: 6px;
+		border: {
+			color: $clr-brand;
+		}
+		background: {
+			color: $clr-brand !important;
+		}
+		@include hover-state {
+			background: {
+				color: $clr-brand-2 !important;
+			}
+		}
+		.goog-te-menu-value {
+			font: {
+				weight: $font-bold;
+			}
+			color: $clr-white;
+			text-transform: uppercase;
+			display: inline-block;
+			img, span {
+				display: none;
+			}
+			span:first-child {
+				display: block;
+			}
+		}
+	}
+}

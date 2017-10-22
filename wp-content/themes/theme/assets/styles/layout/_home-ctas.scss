@@ -1,0 +1,76 @@
+.bbi-home-ctas {
+	background: $clr-brand;
+	padding: 0;
+
+	@include responsive(sm) {
+		.row {
+			margin-left: 0;
+			display: flex;
+		}
+	}
+
+
+	.bbi-home-cta {
+		text-align:center;
+		padding: 20px 0;
+
+		border: {
+			width: 0 0 1px 0;
+			style: solid;
+			color: darken($clr-brand, 10%);
+		}
+
+		&:last-child {
+			border: {
+				width: 0;
+			}
+		}
+
+		@include responsive(sm) {
+			padding: 20px 0;
+			border: {
+				width: 0 1px 0 0;
+			}
+		}
+
+		a {
+			color: $clr-white;
+			background: none;
+			@include responsive(md) {
+				display: flex;
+				align-items: center;
+				justify-content: center;
+			}
+
+			@include hover-state {
+				color: $clr-text;
+			}
+		}
+
+		.fa {
+			text-align:center;
+			@include font-size(30);
+			width: 28px;
+			float: left;
+			margin: -5px 25px 0 0;
+
+			@include responsive(sm) {
+				@include full-cont;
+				margin: -5px 0 10px;
+			}
+
+			@include responsive(lg) {
+				width: auto;
+				float: left;
+				margin: -5px 10px 0 0;
+			}
+		}
+
+		@include responsive(lg) {
+			.cta-info-inner {
+				display: inline-block;
+			}
+		}
+
+	}
+}

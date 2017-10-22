@@ -1,0 +1,212 @@
+#navbar {
+	padding: 0;
+	background: $clr-brand-2;
+
+	@include responsive(md) {
+		display: flex;
+		flex-wrap: wrap-reverse;
+	}
+
+	&.collapse {
+		position:absolute;
+		left: 0;
+		margin-top: 44px;
+		width: 100%;
+		z-index: 999;
+		border: none;
+
+		#bbi-close {
+			display: none !important;
+		}
+	}
+
+
+	@include responsive(md) {
+		background: none;
+		box-shadow: none;
+		margin-top: 15px;
+	}
+
+}
+
+.bbi-nav-primary {
+	@include full-cont;
+	padding: 0;
+
+	@include responsive(md) {
+		@include full-cont;
+		margin-top: 40px;
+		text-align: right;
+		height: $nav-height;
+	}
+
+	> ul {
+		width: 100%;
+		border: none;
+		position: relative;
+
+		@include responsive(md) {
+			width: auto;
+			display: inline-block;
+		}
+
+		> li {
+			width: 100%;
+
+			&.active-current-item, &.current-menu-ancestor {
+				> a {
+					color: $clr-white;
+
+					@include responsive(md) {
+						color: $nav-link-hover;
+						border: {
+							width: 0 0 5px 0;
+							style: solid;
+							color: $clr-brand-2;
+						}
+					}
+				}
+			}
+			> a {
+				color: $nav-link;
+				font: {
+					weight: $font-bold;
+				}
+				text-transform: uppercase;
+				padding: 12px 20px 10px;
+				display: inline-block;
+				width: 85%;
+
+
+				@include responsive(md) {
+					color: $clr-brand-2;
+					margin: 0 20px;
+					padding: 14px 0;
+					width:auto;
+					border: {
+						width: 0 0 5px;
+						style: solid;
+						color: $clr-transparent;
+					}
+				}
+
+				@include responsive(lg) {
+					margin-left: 45px;
+				}
+
+			}
+
+
+			&:hover, &:active, &:focus {
+				> a {
+					background: {
+						color: $nav-link-bg-hover;
+					}
+					color: $clr-white;
+
+					@include responsive(md) {
+						background: {
+							color: $clr-transparent;
+						}
+						color: $nav-link-hover;
+						border: {
+							width: 0 0 5px 0;
+							style: solid;
+							color: $clr-brand-2;
+						}
+					}
+				}
+
+				@include responsive(md) {
+					.sub-menu {
+						display: block;
+					}
+				}
+			}
+
+			@include responsive(md) {
+				&:last-child {
+
+					.sub-menu {
+						right: 0;
+
+						a {
+							text-align: right;
+						}
+					}
+				}
+			}
+
+			.bbi-dropdown-arrow {
+				float: right;
+				margin: 6px 15px 0 0;
+
+				&:before {
+					@include fa-icon();
+					content: $fa-var-arrow-circle-down;
+					color: $clr-white;
+					font-size: 18px;
+					width: 30px;
+					height: 30px;
+					text-align: center;
+					padding-top: 4px;
+					cursor: pointer;
+				}
+
+				&[aria-expanded="true"] {
+					&:before {
+						content: $fa-var-arrow-circle-up;
+					}
+				}
+			}
+
+			.sub-menu {
+				position: relative;
+				background: {
+					color: $nav-submenu-bg;
+				}
+				border: {
+					width: 0;
+					radius: 0;
+				}
+				width: 100%;
+				display: none;
+				@include no-list;
+				padding: 10px 0;
+				z-index: 999;
+
+				@include responsive(md) {
+					position: absolute;
+					width: 200px;
+					box-shadow: 0px 5px 10px rgba($clr-black, .2);
+				}
+
+				> li {
+					a {
+						@include full-cont;
+						text-align: left;
+						color: $nav-submenu-link;
+						padding: 0 10px 5px 20px;
+						margin: 0;
+						&:hover, &:active, &:focus {
+							color: $nav-submenu-link-hover;
+						}
+
+						@include responsive(md) {
+							padding: 0 20px 15px;
+						}
+					}
+				}
+
+				.sub-menu {
+					display: none;
+				}
+			}
+
+			@include responsive(md) {
+				width: auto;
+				float: left;
+			}
+		}
+	}
+}

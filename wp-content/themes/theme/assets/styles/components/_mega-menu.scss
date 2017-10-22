@@ -1,0 +1,64 @@
+.bbi-mega-menu {
+
+	.mega-sub {
+		display: none;
+		background: $clr-white;
+		width: 700px;
+		left: 0;
+		padding: 5px 25px 10px;
+		text-align: left;
+		width: 100%;
+
+		@include responsive(sm) {
+			position: absolute;
+			padding: 45px 35px;
+			left: 0;
+			border: {
+				width: 7px;
+				style: solid;
+				color: $clr-brand-light;
+			}
+			box-shadow: 0px 5px 8px rgba(0,0,0,.2);
+
+			.sub-menu {
+				margin-top: 20px;
+			}
+		}
+
+		.menu-section-title {
+
+			font: {
+				@include font-size(30);
+				family: $font-serif;
+				weight: $font-semibold;
+			}
+			color: $clr-text-light;
+		}
+
+		h2 {
+			font: {
+				weight: $font-semibold;
+			}
+		}
+
+
+	}
+
+	> li {
+
+		@include hover-state {
+			.mega-sub {
+				display: block;
+			}
+		}
+
+	}
+
+	.bbi-mega-content {
+		@include responsive(md) {
+			margin-top: -30px;
+		}
+
+	}
+
+}

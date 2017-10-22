@@ -1,0 +1,46 @@
+// Silent Classes and Mixins for button
+
+@mixin button {
+	background: $primary-btn-bg;
+	color: $primary-btn-clr;
+	border: {
+		width: 0;
+		radius: 0;
+	}
+	padding: 12px 20px;
+	display: inline-block;
+	white-space: normal;
+	text-transform: uppercase;
+	font: {
+		weight: $font-bold;
+		family: $font-main;
+	}
+	text-align:center;
+	@include font-size($font-size);
+	@include transition(all, .20s, ease-in-out);
+
+	@include hover-state {
+		background: $primary-btn-bg-hover;
+		color: $primary-btn-clr-hover;
+	}
+}
+
+
+@mixin button-alt {
+	@include button;
+	background: {
+		color: $clr-brand-light;
+	}
+	border: {
+		width: 0;
+	}
+	color: $clr-white;
+
+	@include hover-state {
+		background: {
+			color: $clr-brand-2;
+		}
+		color: $clr-white;
+	}
+}
+

@@ -1,0 +1,109 @@
+#bbi-header {
+
+	position:relative;
+	padding: 15px 0 0;
+	border: {
+		width: 0 0 1px 0;
+		style: solid;
+		color: $clr-brand-2;
+	}
+
+	@include responsive(sm) {
+		background: $header-bg;
+		padding: 20px 0 0;
+	}
+	.container-mid {
+		@include responsive(max-xs) {
+			width: 100%;
+		}
+	}
+}
+
+.bbi-header-right {
+	@include responsive(md) {
+		float: left;
+		position: relative;
+		width: 75%;
+		padding-left: 25px;
+	}
+}
+
+.bbi-logo-wrap {
+	@include responsive(max-xs) {
+		text-align: center;
+		margin-bottom: 15px;
+	}
+
+	a {
+		display: inline-block;
+	}
+
+	img {
+		display:inline-block;
+		max-width: 100% !important;
+	}
+
+
+	@include responsive(sm) {
+		img {
+			padding: 0 0 15px;
+		}
+
+	}
+
+	@include responsive(md) {
+		img {
+			padding: 0;
+		}
+	}
+}
+
+%mobile-buttons {
+	&:before {
+		@include fa-icon;
+		position: absolute;
+		margin: -2px 0 0 -30px;
+	}
+}
+
+#bbi-hamburger {
+	background: $clr-brand-light;
+	width: 50%;
+	float: right;
+	padding-left: 40px;
+	position: relative;
+	@extend %mobile-buttons;
+
+	&:before {
+		content: $fa-var-bars;
+	}
+
+	@include responsive(sm) {
+		margin-left: 10px;
+		width: 110px;
+		margin-top: 20px;
+		z-index: 0;
+
+		&:after {
+			content: "";
+			background: $clr-brand-light;
+			height: 48px;
+			width: 100%;
+			position: absolute;
+			z-index: -1;
+			top: 0;
+		}
+	}
+}
+
+#bbi-close {
+	width: 100%;
+	text-align: right;
+	background: $clr-brand;
+
+	@extend %mobile-buttons;
+
+	&:before {
+		content: $fa-var-close;
+	}
+}

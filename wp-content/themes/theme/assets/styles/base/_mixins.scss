@@ -1,0 +1,491 @@
+@mixin font-size($sizeValue: 1.6, $line: $sizeValue * 1.5){
+	font-size: ($sizeValue * 1) + px;
+	line-height: ($line * 1) + px;
+	font-size: ($sizeValue / 10) + rem;
+	line-height: ($line / 10) + rem;
+}
+
+@mixin hover-state {
+    &:hover, &:active, &:focus {
+        @content;
+    }
+}
+
+@mixin link-hover {
+	font-weight: bold;
+	&:hover {
+		color: $body-link-hover;
+		text-decoration: underline;
+	}
+}
+
+@mixin nav-sep {
+	padding: 0 6px 0 0;
+
+	&:after {
+		content: "|";
+		margin-left: 8px;
+		color: $clr-text-light;
+	}
+
+	&:last-child {
+		&:after {
+			content: none;
+		}
+	}
+}
+
+// Retina
+$is-hidpi: "(-webkit-min-device-pixel-ratio: 1.5), (min--moz-device-pixel-ratio: 1.5), (-o-min-device-pixel-ratio: 3/2), (min-device-pixel-ratio: 1.5),(min-resolution: 1.5dppx)";
+
+@mixin retinize($file, $type, $width, $height) {
+    background-image: url('../../images/' + $file + '.' + $type);
+    background-repeat: no-repeat;
+    background-position: center;
+    width: $width;
+    height: $height;
+    @media #{$is-hidpi} {
+      &{
+      background-image: url('../../images/' + $file + '@2x.' + $type);
+      @include background-size($width);
+    }
+  }
+}
+
+//Responsive Media Queries
+@mixin responsive($width) {
+
+  @if $width == xxs {
+    @media only screen and (min-width: 320px) {
+      @content;
+    }
+  }
+
+   @else if $width == max-xxs {
+    @media only screen and (max-width: $screen-xxs-max) {
+      @content;
+    }
+  }
+
+  @else if $width == xs {
+    @media only screen and (min-width: $screen-xs) {
+      @content;
+    }
+  }
+
+  @else if $width == max-xs {
+    @media only screen and (max-width: $screen-xs-max) {
+      @content;
+    }
+  }
+
+  @else if $width == sm {
+    @media only screen and (min-width: $screen-sm) {
+      @content;
+    }
+  }
+
+  @else if $width == max-sm {
+    @media only screen and (max-width: $screen-sm-max) {
+      @content;
+    }
+  }
+
+  @else if $width == md {
+    @media only screen and (min-width: $screen-md) {
+      @content;
+    }
+  }
+
+   @else if $width == max-md {
+    @media only screen and (max-width: $screen-md-max) {
+      @content;
+    }
+  }
+
+  @else if $width == lg {
+    @media only screen and (min-width: $screen-lg) {
+      @content;
+    }
+  }
+
+  @else if $width == max-lg {
+    @media only screen and (max-width: $screen-lg-max) {
+      @content;
+    }
+  }
+
+  @else if $width == xl {
+    @media only screen and (min-width: $screen-xl) {
+      @content;
+    }
+  }
+
+}
+
+//target webkit browsers
+@mixin webkit() {
+  @media(-webkit-min-device-pixel-ratio:0) {
+    @content;
+  }
+}
+
+//CSS transform
+@mixin transition($transition-property, $transition-time, $method) {
+    -webkit-transition: $transition-property $transition-time $method;
+    -moz-transition: $transition-property $transition-time $method;
+    -ms-transition: $transition-property $transition-time $method;
+    -o-transition: $transition-property $transition-time $method;
+    transition: $transition-property $transition-time $method;
+}
+
+@mixin last {
+  &:last-child {
+    margin-right: 0;
+    margin-bottom: 0;
+  }
+}
+
+@mixin fluid-img {
+  max-width: 100%;
+  height: auto;
+  width: 100%;
+  @include responsive(md) {
+    width: auto;
+  }
+}
+
+@mixin linear-gradient($fromColor, $toColor) {
+  background-color: $toColor; /* Fallback Color */
+  background-image: -webkit-gradient(linear, left top, left bottom, from($fromColor), to($toColor)); /* Saf4+, Chrome */
+  background-image: -webkit-linear-gradient(top, $fromColor, $toColor); /* Chrome 10+, Saf5.1+, iOS 5+ */
+  background-image:    -moz-linear-gradient(top, $fromColor, $toColor); /* FF3.6 */
+  background-image:     -ms-linear-gradient(top, $fromColor, $toColor); /* IE10 */
+  background-image:      -o-linear-gradient(top, $fromColor, $toColor); /* Opera 11.10+ */
+  background-image:         linear-gradient(top, $fromColor, $toColor);
+  filter: progid:DXImageTransform.Microsoft.gradient(GradientType=0,StartColorStr='#{$fromColor}', EndColorStr='#{$toColor}');
+}
+
+@mixin blockquote {
+	@include font-size(20);
+	font-style: italic;
+	color: $blockquote-clr;
+	padding: 25px;
+	text-align: left;
+	border: {
+		color: $clr-brand;
+	}
+}
+
+@mixin input-placeholder($placeholder-color){
+  &::-webkit-input-placeholder {
+    color: $placeholder-color;
+    }
+  &:-moz-placeholder{
+    color: $placeholder-color;
+    }
+  &::-moz-placeholder { //for newer versions of Firefox
+    color: $placeholder-color;
+    }
+  &:-ms-input-placeholder {
+    color: $placeholder-color;
+    }
+}
+
+// Makes and clears grids automatically fit depending on the number of items. It relies on the silent classes below.
+
+@mixin masonry-grid-structure {
+	&__one{
+		@extend %one-masonry-grid-item;
+	}
+
+	&__two{
+		@extend %two-masonry-grid-item;
+	}
+
+	&__three{
+		@extend %three-masonry-grid-item;
+	}
+
+	&__four{
+		@extend %four-masonry-grid-item;
+	}
+
+	&__five{
+		@extend %five-masonry-grid-item;
+	}
+
+	&__six{
+		@extend %six-masonry-grid-item;
+	}
+
+	.grid-item {
+	    display: inline-block;
+	    margin: 0 0 1em;
+	    width: 100%;
+	}
+}
+
+%one-masonry-grid-item{
+	column-count: 1;
+	column-gap: 1em;
+}
+
+%two-masonry-grid-item{
+	column-count: 1;
+	column-gap: 1em;
+	@media (min-width: $screen-sm-min) {
+		column-count: 2;
+	}
+}
+
+%three-masonry-grid-item{
+	column-count: 1;
+	column-gap: 1em;
+	@media (min-width: $screen-sm-min) {
+		column-count: 2;
+	}
+	@media (min-width: $screen-md-min) {
+		column-count: 3;
+	}
+
+}
+
+%four-masonry-grid-item {
+	column-count: 1;
+	column-gap: 1em;
+	@media (min-width: $screen-sm-min) {
+		column-count: 2;
+	}
+	@media (min-width: $screen-md-min) {
+		column-count: 3;
+	}
+	@media (min-width: $screen-lg-min) {
+		column-count: 4;
+	}
+
+}
+
+%five-masonry-grid-item{
+	column-count: 1;
+	column-gap: 1em;
+	@media (min-width: $screen-sm-min) {
+		column-count: 2;
+	}
+	@media (min-width: $screen-md-min) {
+		column-count: 3;
+	}
+	@media (min-width: $screen-lg-min) {
+		column-count: 5;
+	}
+
+
+}
+
+%six-masonry-grid-item{
+	column-count: 1;
+	column-gap: 1em;
+	@media (min-width: $screen-sm-min) {
+		column-count: 2;
+	}
+	@media (min-width: $screen-md-min) {
+		column-count: 4;
+	}
+	@media (min-width: $screen-lg-min) {
+		column-count: 6;
+	}
+}
+
+@mixin grid-structure {
+	margin-bottom: 25px;
+	&__one{
+		@extend %one-grid-item;
+	}
+
+	&__two{
+		@extend %two-grid-item;
+	}
+
+	&__three{
+		@extend %three-grid-item;
+	}
+
+	&__four{
+		@extend %four-grid-item;
+	}
+
+	&__five{
+		@extend %five-grid-item;
+	}
+
+	&__six{
+		@extend %six-grid-item;
+	}
+
+}
+
+%one-grid-item{
+	@extend .col-sm-12;
+}
+
+%two-grid-item{
+	@extend .col-sm-6;
+	&:nth-child(3n+3){
+		clear: left;
+	}
+}
+
+%three-grid-item{
+	@extend .col-sm-4;
+	&:nth-child(4n+4){
+		clear: left;
+	}
+}
+
+%four-grid-item {
+	@extend .col-sm-6;
+	@extend .col-md-3;
+	@media (min-width: $screen-sm-min) {
+		&:nth-child(3n+3){
+			clear: left;
+		}
+	}
+	@media (min-width: $screen-md-min) {
+		&:nth-child(3n+3){
+			clear: none;
+		}
+		&:nth-child(5n+5){
+			clear: left;
+		}
+	}
+}
+
+%five-grid-item{
+	@media (min-width: $screen-sm-min) {
+		float: left;
+		position: relative;
+	    min-height: 1px;
+	    padding-right: 15px;
+	    padding-left: 15px;
+		width: 20%;
+		&:nth-child(6n+6){
+			clear: left;
+		}
+	}
+}
+
+%six-grid-item{
+	@extend .col-sm-6;
+	@extend .col-md-4;
+	//Use if you want 1 row of six items on LG and uncomment $screen-lg-min media below
+/*
+	 	@extend .col-lg-2;
+*/
+	@media (min-width: $screen-sm-min) {
+		&:nth-child(2n+3){
+			clear: left;
+		}
+	}
+	@media (min-width: $screen-md-min) {
+		&:nth-child(2n+3){
+			clear: none;
+		}
+		&:nth-child(4n+4){
+			clear: left;
+		}
+	}
+	@media (min-width: $screen-lg-min) {
+		&:nth-child(2n+3){
+			clear: none;
+		}
+		//Use if you want 1 row of six items on LG
+/*
+		&:nth-child(4n+4){
+			clear: none;
+		}
+		&:nth-child(7n+7){
+			clear: left;
+		}
+*/
+
+	}
+}
+
+@mixin full-cont {
+	display: inline-block;
+	width: 100%;
+}
+
+@mixin keyframes($animation-name) {
+    @-webkit-keyframes #{$animation-name} {
+        @content;
+    }
+    @-moz-keyframes #{$animation-name} {
+        @content;
+    }
+    @-ms-keyframes #{$animation-name} {
+        @content;
+    }
+    @-o-keyframes #{$animation-name} {
+        @content;
+    }
+    @keyframes #{$animation-name} {
+        @content;
+    }
+}
+
+@mixin alpha-attribute($attribute, $color, $background) {
+  $percent: alpha($color) * 100%;
+  $opaque: opacify($color, 1);
+  $solid-color: mix($opaque, $background, $percent);
+  #{$attribute}: $solid-color;
+  #{$attribute}: $color;
+}
+
+@mixin bg-cover {
+  background: {
+    size: cover !important;
+    position: center 30% !important;
+  }
+
+}
+
+@mixin no-list {
+	list-style: none;
+	margin: 0;
+	padding: 0;
+}
+
+@mixin section-filter {
+  &:before {
+    position: absolute;
+    content: "";
+    filter: none;
+    z-index: 1;
+    height: 100%;
+    width: 100%;
+
+    /* IE9 SVG, needs conditional override of 'filter' to 'none' */
+    background: url(data:image/svg+xml;base64,PD94bWwgdmVyc2lvbj0iMS4wIiA/Pgo8c3ZnIHhtbG5zPSJodHRwOi8vd3d3LnczLm9yZy8yMDAwL3N2ZyIgd2lkdGg9IjEwMCUiIGhlaWdodD0iMTAwJSIgdmlld0JveD0iMCAwIDEgMSIgcHJlc2VydmVBc3BlY3RSYXRpbz0ibm9uZSI+CiAgPGxpbmVhckdyYWRpZW50IGlkPSJncmFkLXVjZ2ctZ2VuZXJhdGVkIiBncmFkaWVudFVuaXRzPSJ1c2VyU3BhY2VPblVzZSIgeDE9IjAlIiB5MT0iMCUiIHgyPSIwJSIgeTI9IjEwMCUiPgogICAgPHN0b3Agb2Zmc2V0PSIwJSIgc3RvcC1jb2xvcj0iIzAwMDAwMCIgc3RvcC1vcGFjaXR5PSIwLjY1Ii8+CiAgICA8c3RvcCBvZmZzZXQ9IjEwMCUiIHN0b3AtY29sb3I9IiMwMDAwMDAiIHN0b3Atb3BhY2l0eT0iMCIvPgogIDwvbGluZWFyR3JhZGllbnQ+CiAgPHJlY3QgeD0iMCIgeT0iMCIgd2lkdGg9IjEiIGhlaWdodD0iMSIgZmlsbD0idXJsKCNncmFkLXVjZ2ctZ2VuZXJhdGVkKSIgLz4KPC9zdmc+);
+
+    background: linear-gradient(to top,  rgba($clr-black,0.6) 0%,rgba($clr-black,0) 100%); /* W3C, IE10+, FF16+, Chrome26+, Opera12+, Safari7+ */
+    filter: progid:DXImageTransform.Microsoft.gradient( startColorstr='#a6000000', endColorstr='$clr-black',GradientType=0 ); /* IE6-8 */
+  }
+}
+
+@mixin aspect-ratio($width, $height) {
+  position: relative;
+  &:before {
+    display: block;
+    content: "";
+    width: 100%;
+    padding-top: ($height / $width) * 100%;
+  }
+  > .ratio-content {
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+  }
+}

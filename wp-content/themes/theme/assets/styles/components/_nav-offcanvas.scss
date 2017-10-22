@@ -1,0 +1,81 @@
+$offcanvas-xs: 82%;
+$offcanvas-sm: 50%;
+
+
+.row-offcanvas {
+    position: relative;
+    transition: all 0.25s ease-out 0s;
+}
+
+.navbar-offcanvas {
+    position: absolute;
+    top: 0;
+    width: $offcanvas-xs;
+    background: $clr-brand-2;
+    height: 100vh;
+
+    @include responsive(sm) {
+        width: $offcanvas-sm;
+    }
+
+    @include responsive(md) {
+    	position: relative;
+    	width: auto;
+        height: auto;
+    }
+}
+
+//OFFF CANVAS RIGHT
+
+.row-offcanvas-right.active {
+    right: $offcanvas-xs;
+
+    @include responsive(sm) {
+        right: $offcanvas-sm;
+    }
+    .navbar-fixed-top {
+    	position: relative;
+    }
+}
+.row-offcanvas-right {
+    right: 0;
+}
+
+.row-offcanvas-right .navbar-offcanvas {
+    right: -$offcanvas-xs;
+
+     @include responsive(sm) {
+        right: -$offcanvas-sm;
+    }
+
+    @include responsive(md) {
+     right: 0;
+    }
+}
+
+
+//OFF CANVAS Left
+.row-offcanvas-left.active {
+    left: $offcanvas-xs;
+
+     @include responsive(sm) {
+        left: $offcanvas-sm;
+    }
+    .navbar-fixed-top {
+    	position: relative;
+    }
+}
+.row-offcanvas-left {
+    left: 0;
+}
+
+.row-offcanvas-left .navbar-offcanvas {
+    left: -$offcanvas-xs;
+
+     @include responsive(sm) {
+        left: -$offcanvas-sm;
+    }
+    @include responsive(md) {
+    	left: 0;
+    }
+}

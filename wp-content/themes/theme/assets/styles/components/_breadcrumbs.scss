@@ -1,0 +1,27 @@
+#page-breadcrumbs {
+	padding-left: 0;
+	.breadcrumbs {
+		padding: 15px 0;
+		float: left;
+		color :$clr-text;
+		width: 100%;
+		@include responsive(sm) {
+			width: auto;
+		}
+		.delimiter {
+			&:after {
+				content: ">";
+				padding: 0 10px;
+			}
+		}
+		a {
+			color: $clr-text;
+			@include hover-state {
+				color: $clr-brand-dark;
+			}
+		}
+		.current {
+			color: $clr-brand;
+		}
+	}
+}

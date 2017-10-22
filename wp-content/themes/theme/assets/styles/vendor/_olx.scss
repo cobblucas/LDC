@@ -1,0 +1,124 @@
+//
+// OLX formatting
+// --------------------------------------------------
+#bbi-wrapper {
+	.BBFormContainer{
+	    border: {
+		    radius: 0;
+		   }
+	    padding: 0;
+	    width: 100%;
+		.BBFormSection{
+			legend {
+				.BBFormSectionHeading {
+					margin: 0;
+					text-align: center;
+					label {
+						@extend %footer-title;
+					}
+				}
+
+			}
+
+			.BBFormFieldContainer {
+				width: auto;
+
+				.BBFormFieldLabelEdit {
+					color: $clr-white;
+				}
+
+				.BBFormSubSectionHeading {
+					color: $clr-text;
+					margin-bottom: 20px;
+					display: inline-block;
+				}
+
+				&.BBFormSignupFieldTall {
+					width: 100%;
+
+					input {
+						width: 100%;
+						max-width: 400px;
+						height: 40px;
+						text-transform: capitalize;
+
+						&:focus {
+							border: {
+								width: 1px;
+								style: solid;
+								color: $clr-grey !important;
+							}
+						}
+					}
+				}
+			}
+
+			.BBFormButtonRow {
+				display: inline-block;
+				margin-top: 5px;
+
+			}
+
+			.BBFormSubmitbutton{
+				@extend .btn;
+				box-shadow: none;
+				padding: 8px 20px 11px;
+			}
+			.BBFormTextbox {
+				@extend .form-control;
+			}
+		}
+
+		.BBFormButtonRow {
+			&:before {
+				content: " ";
+			    display: table;
+			    clear: both;
+			}
+		}
+
+	}
+
+	.BBFormFieldContainer + .BBFormFieldContainer + .BBFormFieldContainer {
+		width: 100%;
+		@include responsive(sm) {
+			width: 97%;
+		}
+		@include responsive(lg) {
+			width: 99%;
+		}
+	}
+
+	#bbox-msg-wrapper {
+		img {
+			width: auto !important;
+		}
+	}
+
+}
+
+#bbi-footer {
+
+	.BBFormContainer {
+
+		.BBFormSection {
+
+			.BBFormSectionHeading {
+
+				@include responsive(max-xs) {
+					text-align: center;
+				}
+			}
+
+			.BBFormSignupFieldTall {
+
+				input {
+					display: inline-block;
+				}
+
+			}
+		}
+
+	}
+
+}

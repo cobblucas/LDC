@@ -1,0 +1,47 @@
+{
+    "key": "group_55cdf66ade15e",
+    "title": "Post Author",
+    "fields": [
+        {
+            "key": "field_56042bde72ba9",
+            "label": "Show Author Info",
+            "name": "show_author_info",
+            "type": "true_false",
+            "value": null,
+            "instructions": "If you check this box, an author short bio can be displayed below the post as well as a link to the author's single page that has a bio and other posts by same author. Biography can be updated under \"user\" profile.",
+            "required": 0,
+            "conditional_logic": 0,
+            "wrapper": {
+                "width": "",
+                "class": "",
+                "id": ""
+            },
+            "default_value": 0,
+            "message": "",
+            "ui": 0,
+            "ui_on_text": "",
+            "ui_off_text": ""
+        }
+    ],
+    "location": [
+        [
+            {
+                "param": "post_type",
+                "operator": "==",
+                "value": "post"
+            }
+        ]
+    ],
+    "menu_order": 0,
+    "position": "normal",
+    "style": "default",
+    "label_placement": "top",
+    "instruction_placement": "label",
+    "hide_on_screen": [
+        "custom_fields",
+        "send-trackbacks"
+    ],
+    "active": 0,
+    "description": "",
+    "modified": 1508442826
+}

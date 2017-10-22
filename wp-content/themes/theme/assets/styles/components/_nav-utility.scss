@@ -1,0 +1,53 @@
+.bbi-utility-wrap {
+
+	@include full-cont;
+	background: $clr-brand-dark;
+	padding: 15px 20px;
+
+	@include responsive(md) {
+		background: none;
+		float: right;
+		padding: 0;
+
+	}
+
+}
+
+.bbi-nav-utility {
+	margin-bottom: 15px;
+
+	@include responsive(md) {
+		float: right;
+		margin: 12px 25px 0;
+
+		li {
+			display: inline-block;
+			@include nav-sep;
+
+			a {
+				color: $clr-white;
+
+				@include hover-state {
+					color: $clr-brand;
+				}
+
+				@include responsive(md) {
+					color: $clr-text;
+					padding: 0 0 3px;
+					border: {
+						width: 0 0 1px;
+						style: solid;
+						color: $clr-text;
+					}
+
+					@include hover-state {
+						color: $clr-brand-2;
+						border: {
+							color: $clr-transparent;
+						}
+					}
+				}
+			}
+		}
+	}
+}

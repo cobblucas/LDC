@@ -1,0 +1,84 @@
+// ==========================================================================
+// Variables
+// ==========================================================================
+@import "base/variables";
+//@import "base/variables-bootstrap";
+
+// ==========================================================================
+// Bootstrap + Fontawesome.
+// ==========================================================================
+@import "../../bower_components/bootstrap-sass/assets/stylesheets/_bootstrap.scss";
+@import "../../bower_components/font-awesome/scss/font-awesome.scss";
+
+// ==========================================================================
+// Mixins
+// ==========================================================================
+@import "base/mixins";
+
+// ==========================================================================
+// Common Global (used in one or more common elements and/or components).
+// ==========================================================================
+@import "base/button";
+@import "base/global";
+@import "base/base";
+@import "base/form";
+@import "base/style-guide";
+
+// ==========================================================================
+// Plugin & 3rd Parties Styles.
+// ==========================================================================
+@import "vendor/ai1ec";
+@import "vendor/youtubevimeowrapper";
+@import "vendor/gravity-form";
+@import "vendor/owl-carousel";
+@import "vendor/addthis";
+@import "vendor/jfont-resizer";
+@import "vendor/google-translate";
+@import "vendor/olx";
+@import "vendor/flickrgallery";
+@import "vendor/search-filter";
+
+// ==========================================================================
+// Components
+// ==========================================================================
+@import 'components/header';
+@import 'components/footer';
+@import 'components/mega-menu';
+@import 'components/comments';
+@import 'components/breadcrumbs';
+
+@import "components/main-slider";
+@import "components/page-banner";
+@import "components/engagement-section";
+@import "components/sidebar";
+
+@import "components/nav-primary";
+@import 'components/nav-social';
+@import 'components/nav-action';
+@import 'components/nav-utility';
+@import 'components/nav-offcanvas';
+
+@import "components/page-accordion";
+@import "components/page-gallery";
+@import "components/page-landing-subpages";
+@import "components/page-misc-posts";
+@import "components/page-columns";
+@import "components/page-personnel";
+@import "components/page-posts";
+@import "components/page-tabs";
+@import "components/page-tables";
+@import "components/page-testimonial";
+@import "components/page-videos";
+
+// ==========================================================================
+// Sections.
+// ==========================================================================
+@import "layout/home-features";
+@import "layout/home-ctas";
+@import "layout/home-sticky-posts";
+@import "layout/_blog";
+
+// ==========================================================================
+// Shame.
+// ==========================================================================
+@import "_shame";

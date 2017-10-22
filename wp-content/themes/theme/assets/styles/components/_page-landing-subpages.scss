@@ -1,0 +1,48 @@
+.bbi-landing-subpages {
+
+	.bbi-supbages-wrap {
+		.row {
+			@include responsive(sm) {
+				display: flex;
+			}
+		}
+	}
+
+	.section-title-outer {
+		text-align: center;
+	}
+
+	.bbi-subpage {
+		text-align: center;
+
+		@include responsive(sm) {
+			display: flex;
+		}
+
+		h3 {
+			font: {
+				family: $font-serif;
+			}
+
+			@include responsive(md) {
+				margin-bottom: 25px;
+			}
+		}
+
+		p {
+			color: $clr-text;
+		}
+
+		.bbi-info-wrap {
+			padding: 25px 10px;
+
+			@include responsive(md) {
+				padding: 25px 30px;
+			}
+
+			@include responsive(md) {
+				padding: 25px 40px;
+			}
+		}
+	}
+}

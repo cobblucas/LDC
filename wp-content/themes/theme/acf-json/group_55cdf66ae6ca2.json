@@ -1,0 +1,96 @@
+{
+    "key": "group_55cdf66ae6ca2",
+    "title": "Single Events",
+    "fields": [
+        {
+            "key": "field_56a12e951cd8c",
+            "label": "Short Description",
+            "name": "short_description",
+            "type": "textarea",
+            "value": null,
+            "instructions": "",
+            "required": 0,
+            "conditional_logic": 0,
+            "wrapper": {
+                "width": "",
+                "class": "",
+                "id": ""
+            },
+            "default_value": "",
+            "new_lines": "wpautop",
+            "maxlength": "",
+            "placeholder": "",
+            "rows": "",
+            "readonly": 0,
+            "disabled": 0
+        },
+        {
+            "key": "field_55ca4c756c344",
+            "label": "Form Code",
+            "name": "form_code",
+            "type": "textarea",
+            "value": null,
+            "instructions": "Paste here the code of the registration form if applicable. (ie: OLX...)",
+            "required": 0,
+            "conditional_logic": 0,
+            "wrapper": {
+                "width": "",
+                "class": "",
+                "id": ""
+            },
+            "default_value": "",
+            "new_lines": "br",
+            "maxlength": "",
+            "placeholder": "",
+            "rows": "",
+            "readonly": 0,
+            "disabled": 0
+        },
+        {
+            "key": "field_55f4754966b34",
+            "label": "Home Featured",
+            "name": "home_featured",
+            "type": "true_false",
+            "value": null,
+            "instructions": "This only applies for the Home Widget calendar with featured image.",
+            "required": 0,
+            "conditional_logic": 0,
+            "wrapper": {
+                "width": "",
+                "class": "",
+                "id": ""
+            },
+            "default_value": 0,
+            "message": "Check this box if this event should be displayed on homepage.",
+            "ui": 0,
+            "ui_on_text": "",
+            "ui_off_text": ""
+        }
+    ],
+    "location": [
+        [
+            {
+                "param": "post_type",
+                "operator": "==",
+                "value": "ai1ec_event"
+            }
+        ]
+    ],
+    "menu_order": 0,
+    "position": "normal",
+    "style": "seamless",
+    "label_placement": "top",
+    "instruction_placement": "label",
+    "hide_on_screen": [
+        "custom_fields",
+        "discussion",
+        "comments",
+        "slug",
+        "author",
+        "format",
+        "send-trackbacks"
+    ],
+    "active": 0,
+    "description": "",
+    "modified": 1508442839
+}

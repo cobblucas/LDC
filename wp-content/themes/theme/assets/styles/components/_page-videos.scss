@@ -1,0 +1,48 @@
+.bbi-page-videos {
+
+	.single-video {
+
+		.bbi-video-wrap {
+			@include aspect-ratio(16, 9);
+		}
+
+		.media-wrap {
+			@include alpha-attribute('background-color', rgba($clr-brand, 0.75), white);
+			@include transition(all, .20s, ease-in-out);
+			display: flex;
+			height: 100%;
+			text-align: center;
+
+			@include hover-state {
+				@include alpha-attribute('background-color', rgba($clr-brand, 0.85), white);
+			}
+
+		}
+
+		h6 {
+			margin-top: 15px;
+		}
+
+	}
+}
+
+
+.play-btn {
+	margin: auto;
+
+	.fa {
+		color: $clr-white;
+		width: 60px;
+		height: 60px;
+		border: {
+			width: 2px;
+			style: solid;
+			color: $clr-white;
+			radius: 100%;
+		}
+		@include font-size(26);
+		padding: 10px 0 0 4px;
+
+	}
+
+}

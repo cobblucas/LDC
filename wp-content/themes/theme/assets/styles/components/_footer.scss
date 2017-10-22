@@ -1,0 +1,183 @@
+%footer-title {
+	font: {
+		family: $font-serif;
+		weight: $font-semibold;
+	}
+	text-transform: uppercase;
+	color: $clr-white;
+}
+
+
+#bbi-footer {
+
+	color: $clr-text;
+	background: $clr-brand-2;
+
+	h1, h2, h3, h4, h5, h6 {
+		color: $clr-white;
+	}
+
+	.bbi-newsletter {
+		background: $clr-brand-light;
+		padding: 70px 0 40px;
+		text-align: center;
+		border: {
+			width: 5px 0 0 0;
+			style: solid;
+			color: $clr-brand-lighter;
+		}
+
+		h4 {
+			text-transform: none;
+		}
+		h5 {
+			text-transform: none;
+		}
+		form {
+			margin: 40px 0;
+
+			input {
+				margin-bottom: 10px;
+				width: 100%;
+				border: {
+					width: 0;
+				}
+
+				&:last-of-type {
+					margin-bottom: 0;
+				}
+
+				@include responsive(sm) {
+					margin-bottom: 0;
+					width: auto;
+				}
+			}
+
+		}
+		.button {
+			@include button;
+			padding: 10px 20px;
+		}
+	}
+
+	.bbi-footer-wrap {
+		padding: 20px 0;
+		text-align: center;
+		border: {
+			width: 5px 0 0 0;
+			style: solid;
+			color: $clr-brand-lighter;
+		}
+		color: $clr-white;
+
+		@include responsive(sm) {
+			text-align: left;
+			padding: 40px 0;
+		}
+		.row {
+			padding: 0 0 25px;
+			&:last-child {
+				padding: 0;
+			}
+		}
+
+		a {
+			color: $clr-white;
+			padding: 0 0 3px;
+			border: {
+				width: 0 0 1px;
+				style: solid;
+				color: $clr-white;
+			}
+
+			@include hover-state {
+				text-decoration: none;
+				border: {
+					color: $clr-transparent;
+				}
+			}
+		}
+	}
+
+	.bbi-footer-col {
+
+		&:first-child {
+			margin-bottom: 35px;
+
+			img {
+				max-width: 120px;
+				display: inline-block;
+				margin-right: 20px;
+
+				@include responsive(max-xs) {
+					float: none;
+					margin: 0;
+				}
+			}
+
+			h5 {
+				margin-top: 20px;
+			}
+		}
+
+		@include responsive(sm) {
+			&:first-child {
+				margin-bottom: 0;
+			}
+
+			&:last-child {
+
+			}
+		}
+	}
+
+	@include responsive(sm) {
+		text-align: left;
+	}
+
+}
+
+.copyright {
+	@include responsive(md) {
+		display: inline-block;
+	}
+}
+.bbi-nav-footer-admin {
+	display: inline-block;
+	margin: 20px 0 0;
+
+	@include responsive(md) {
+		margin: 0 0 0 10px;
+		vertical-align: bottom;
+	}
+
+	ul {
+
+		li {
+			float: left;
+			margin-left: 10px;
+
+			&:before {
+				content: "|";
+				float: left;
+				margin-right: 10px;
+			}
+
+			&:first-child {
+				margin: 0;
+
+				&:before {
+					content: none;
+				}
+			}
+
+			a {
+				color: $clr-brand-2;
+
+				@include hover-state {
+					text-decoration: underline;
+				}
+			}
+		}
+	}
+}

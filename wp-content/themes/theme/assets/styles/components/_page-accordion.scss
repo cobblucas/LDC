@@ -1,0 +1,100 @@
+.bbi-page-accordion {
+	margin-top: 25px;
+
+	.panel {
+		background: none;
+		border: {
+			width: 1px 0 0 0;
+			color: $clr-brand;
+			radius: 0;
+		}
+		margin: 0 !important;
+		box-shadow: none;
+
+		&:last-child {
+			border: {
+				width: 1px 0;
+			}
+		}
+
+		.panel-heading {
+			padding: 0;
+			text-decoration: none;
+			border: {
+				width: 0
+			}
+			@include full-cont;
+
+			.section-title {
+				@extend h4;
+				margin: 0;
+				display: inline-block;
+				padding: 25px 10px 24px 0;
+				width: 75%;
+				width: calc(100% - 70px);
+
+			}
+
+			.more-btn {
+				float: right;
+				font: {
+					size: 12px;
+					weight: $font-bold;
+				}
+				padding: 14px 0 10px;
+				text-align: center;
+				background: $clr-brand;
+				position: relative;
+				color: $clr-white;
+				text-transform: uppercase;
+				width: 58px;
+
+				&:after {
+					top: 100%;
+					left:0;
+					content: " ";
+					height: 0;
+					width: 0;
+					position: absolute;
+					pointer-events: none;
+					border: {
+						width: 6px 29px;
+						style: solid;
+						color: $clr-brand $clr-brand $clr-white;
+					}
+
+				}
+
+			}
+
+			&[aria-expanded="true"] {
+				.more-btn {
+
+					&:before {
+						content: "close";
+					}
+
+					span {
+						display: none;
+					}
+				}
+			}
+
+		}
+
+		.panel-body {
+			padding: 0 10px 35px;
+			border: {
+				width: 0 !important;
+			}
+
+			@include responsive(sm) {
+				padding: 0 40px 35px;
+
+				img {
+					max-width: 400px;
+				}
+			}
+		}
+	}
+}

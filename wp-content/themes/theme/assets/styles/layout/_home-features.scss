@@ -1,0 +1,50 @@
+.bbi-home-features {
+
+	.row {
+
+		@include responsive(sm) {
+			display: flex;
+		}
+
+	}
+
+	.bbi-single-feature {
+
+		.bbi-feature-wrap {
+			border: {
+				width: 1px;
+				style: solid;
+				color: $clr-brand;
+			}
+		}
+
+		.feature-image {
+			position: relative;
+
+			.media-wrap {
+				position: absolute;
+				left: 0;
+				top: 0;
+				width: 100%;
+				height: 100%;
+			}
+		}
+
+		.feature-info {
+			padding: 25px;
+
+			h4 {
+				text-transform: none;
+				margin-bottom: 18px;
+			}
+
+			p {
+				color: $clr-text;
+			}
+
+			.btn.primary-btn {
+				margin-top: 20px;
+			}
+		}
+	}
+}

@@ -1,0 +1,118 @@
+//GENERAL
+$screen-xl:				1400px;
+$nav-height:			57px;
+$search-height:			41px;
+$font-size:				17;
+
+//FONTS
+$icon-font-path:		"//netdna.bootstrapcdn.com/bootstrap/3.0.0/css/bootstrap-glyphicons.css";
+$fa-font-path:       	"//cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/fonts";
+$font-main:				"proxima-nova";
+$font-serif:			"proxima-nova";
+
+//FONT WEIGHTS
+$font-thin:				100;
+$font-light:			300;
+$font-normal:			400;
+$font-medium:			500;
+$font-semibold:			600;
+$font-bold:				700;
+$font-extrabold:		800;
+$font-black:			900;
+
+//COLORS
+$clr-white:				#fff;
+$clr-grey:				#555;
+$clr-black:				#000;
+$clr-transparent:		transparent;
+
+$clr-brand:				#8cbe4f; //green
+$clr-brand-2: 			$clr-grey; //grey
+$clr-brand-3: 			#BBBBBB; //grey
+
+$clr-text:				#50535a;
+$clr-text-light: 		lighten($clr-grey , 15%);
+$clr-link: 				$clr-brand;
+$clr-bg: 				#ffffff;
+
+$clr-brand-dark:		darken($clr-brand , 10%);
+$clr-brand-darker:  	darken($clr-brand , 20%);
+$clr-brand-light:		lighten($clr-brand , 10%);
+$clr-brand-lighter:		lighten($clr-brand , 20%);
+$clr-brand-alt:			#3883e1;
+$clr-brand-2-dark:		darken($clr-brand-2 , 10%);
+$clr-brand-2-darker:	darken($clr-brand-2 , 20%);
+$clr-brand-2-light:		lighten($clr-brand-2 , 10%);
+$clr-brand-2-lighter:	lighten($clr-brand-2 , 20%);
+
+$clr-border:			lighten($clr-grey , 40%);
+
+// The following are Variables to add colors directly to elements
+
+//GENRAL BODY
+$body-bg:		 		$clr-bg;
+$body-clr:				$clr-text;
+$body-link:				$clr-link;
+$body-link-hover:		$clr-brand-2;
+
+//Header
+$header-border:			$clr-brand;
+$header-bg:				$clr-white;
+$hamburger-bg:			$clr-brand;
+
+$nav-bg:				$clr-brand-light;
+$nav-border:			$clr-brand-2;
+$navbar-bg:				$clr-brand-light;
+$nav-link:				$clr-white;
+$nav-link-hover:		$clr-brand-2;
+$nav-link-bg:			$clr-transparent;
+$nav-link-bg-hover:		$clr-brand-light;
+$nav-submenu-bg:		$clr-bg;
+$nav-submenu-border:	$clr-brand-light;
+$nav-submenu-link:		$clr-brand;
+$nav-submenu-link-hover:$clr-brand-2;
+
+//Footer
+$footer-bg:				$clr-bg;
+$footer-link:			$clr-text;
+
+// HEADINGS
+$h1-clr:				$clr-brand;
+$h2-clr:				$clr-brand;
+$h3-clr:				$clr-brand;
+$h4-clr:				$clr-brand;
+$h5-clr:				$clr-brand-2;
+$h6-clr:				$clr-text;
+
+$blockquote-clr:		$clr-text-light;
+
+//Button
+$primary-btn-bg:		$clr-brand-2;
+$primary-btn-clr:		$clr-white;
+$primary-btn-bg-hover:	$clr-brand;
+$primary-btn-clr-hover:	$clr-white;
+
+$alt-btn-bg:			$clr-brand;
+$alt-btn-clr:			$clr-white;
+$alt-btn-bg-hover:		$clr-brand-2;
+$alt-btn-clr-hover:		$clr-white;
+
+$search-input-bg:		$clr-transparent;
+$search-input-clr:		$clr-white;
+$search-btn:			$clr-transparent;
+$search-btn-hover:		$clr-transparent;
+$search-clr:			$clr-text-light;
+$search-clr-hover:		$clr-white;
+
+//Input, Select, Textarea
+$input-bg:				$clr-bg;
+$input-clr:				$clr-text;
+
+$figcaption-bg:			$clr-brand;
+$figcaption-clr:		$clr-white;
+
+$warning-bg:			$clr-bg;
+
+//Social Nav Icons
+$icon-clr:				$clr-brand;
+$icon-clr-hover:		$clr-brand-2;

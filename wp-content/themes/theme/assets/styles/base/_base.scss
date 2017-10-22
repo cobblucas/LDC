@@ -1,0 +1,268 @@
+.bbi-page-section {
+	position: relative;
+	padding: 35px 0;
+
+	@include responsive(sm) {
+		padding: 55px 0;
+
+		&.bbi-landing-subpages {
+			padding: 50px 0;
+		}
+	}
+
+	@include responsive(md) {
+		padding: 70px 0;
+	}
+
+	&.no-padding {
+		padding: 0;
+
+		.bbi-engagement-title {
+			padding: 35px 0 0;
+
+			@include responsive(sm) {
+				padding: 55px 0 0;
+			}
+
+			@include responsive(md) {
+				padding: 70px 0 0;
+			}
+		}
+	}
+
+	&.with-filter {
+		> .container-fluid {
+			position: relative;
+		}
+	}
+
+	&.brand1 {
+		background: $clr-brand;
+	}
+
+	&.brand2 {
+		background: $clr-brand-2;
+	}
+
+	&.brand3 {
+		background: $clr-brand-3;
+	}
+
+	&.white-text {
+
+		.bbi-engagement-title, .bbi-medium-cont p {
+			color: $clr-white;
+		}
+
+	}
+
+	&.bbi-engagement-footer {
+
+		&.with-bg-img {
+
+			&.with-filter {
+
+				background: {
+					color: rgba($clr-brand-light, 1) !important;
+					blend-mode: luminosity !important;
+					opacity: .3 !important;
+
+				}
+				-ms-filter-background-blend-mode: luminosity !important;
+
+				.section-filter {
+
+					@include alpha-attribute('background-color', rgba($clr-brand-light, 0.6), white);
+
+				}
+			}
+		}
+	}
+
+	&.bbi-home-features {
+
+		&.with-bg-img {
+
+			background: {
+				color: rgba($clr-black, 1) !important;
+				blend-mode: luminosity !important;
+				opacity: .3 !important;
+
+			}
+			-ms-filter-background-blend-mode: luminosity !important;
+
+			.section-filter {
+
+				@include alpha-attribute('background-color', rgba($clr-bg, 0.7), white);
+
+			}
+		}
+	}
+
+	&.bbi-landing-subpages {
+		background: $clr-bg;
+		&:before {
+			content: "";
+			background: $clr-bg;
+			position: absolute;
+			width: 1000%;
+			height: 100%;
+			top: 0;
+			left: -100%;
+			z-index: 0;
+		}
+	}
+}
+
+.bbi-medium-cont {
+	text-align: center;
+
+	p {
+		display: inline-block;
+		max-width: 815px;
+	}
+}
+
+.section-filter {
+
+	position:absolute;
+	top: 0;
+	left: 0;
+	width: 100%;
+	height: 100%;
+	z-index: 0;
+
+}
+
+#bbi-primary-content {
+	padding-top: 40px;
+	padding-bottom: 40px;
+
+	.home & {
+		padding-top: 0;
+		padding-bottom: 0;
+	}
+
+	@include responsive(md) {
+		padding-top: 55px;
+		padding-left: 50px;
+
+		.no-sidebar & {
+			padding-left: 25px;
+		}
+	}
+}
+
+.bbi-content-section {
+
+	padding: 0 0 30px;
+	@include responsive(sm) {
+		padding: 0 0 50px;
+	}
+
+	&.bbi-page-main-content {
+
+	}
+
+	&.bbi-page-buttons {
+		text-align: center;
+	}
+}
+
+.bbi-main-content {
+
+	.container-fluid {
+		width: 90%;
+
+		@include responsive(sm) {
+			width: 95%;
+		}
+	}
+
+	&.no-sidebar {
+
+		.container-fluid {
+
+			max-width: 1100px;
+		}
+	}
+
+}
+
+#bbi-pages-toolbar {
+
+	.container-fluid {
+		width: 90%;
+
+		@include responsive(sm) {
+			width: 95%;
+		}
+	}
+
+	&.no-sidebar {
+
+		.container-fluid {
+
+			max-width: 1100px;
+		}
+	}
+
+}
+
+.home {
+
+	.bbi-main-content {
+
+		&.no-sidebar {
+
+			.container-fluid {
+				max-width: 100%;
+				width: 100%;
+			}
+		}
+	}
+}
+
+.bbi-page-modules {
+	background: $clr-white;
+}
+
+.bbi-nav {
+	@include no-list;
+	li {
+		margin-bottom: 0;
+	}
+}
+
+.bbi-addthis {
+	@include full-cont;
+	margin-bottom: 30px;
+	margin-top: 30px;
+}
+
+.bbi-video-wrap {
+	max-width: 700px;
+	position: relative;
+}
+
+.bbi-post-excerpt {
+	p {
+		margin-bottom: 15px;
+	}
+	.date {
+		background: $clr-brand-2;
+		padding: 7px 15px;
+		color: $clr-white;
+		display: inline-block;
+		margin-bottom: 20px;
+		h5 {
+			color: $clr-white;
+			margin-bottom: 0px;
+		}
+	}
+}
+
+.bbi-sticky-btn {
+	margin-top: 40px;
+	text-align: center;
+}

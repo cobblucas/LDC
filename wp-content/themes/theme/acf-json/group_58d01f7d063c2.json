@@ -1,0 +1,154 @@
+{
+    "key": "group_58d01f7d063c2",
+    "title": "DO NOT DELETE: Single Link",
+    "fields": [
+        {
+            "key": "field_58d01fafd234d",
+            "label": "Link Text",
+            "name": "link_text",
+            "type": "text",
+            "value": null,
+            "instructions": "This is the text that appears in the tracking link",
+            "required": 1,
+            "conditional_logic": 0,
+            "wrapper": {
+                "width": "",
+                "class": "",
+                "id": ""
+            },
+            "default_value": "",
+            "placeholder": "",
+            "prepend": "",
+            "append": "",
+            "maxlength": ""
+        },
+        {
+            "key": "field_58d01fc8d234e",
+            "label": "Link Location",
+            "name": "link_location",
+            "type": "radio",
+            "value": null,
+            "instructions": "",
+            "required": 0,
+            "conditional_logic": 0,
+            "wrapper": {
+                "width": "",
+                "class": "",
+                "id": ""
+            },
+            "layout": "horizontal",
+            "choices": {
+                "Current Site": "Current Site",
+                "External Site": "External Site"
+            },
+            "default_value": "",
+            "other_choice": 0,
+            "save_other_choice": 0,
+            "allow_null": 0,
+            "return_format": "value"
+        },
+        {
+            "key": "field_58d01fe2d234f",
+            "label": "Select Page URL",
+            "name": "select_page_url",
+            "type": "page_link",
+            "value": null,
+            "instructions": "",
+            "required": 0,
+            "conditional_logic": [
+                [
+                    {
+                        "field": "field_58d01fc8d234e",
+                        "operator": "==",
+                        "value": "Current Site"
+                    }
+                ]
+            ],
+            "wrapper": {
+                "width": "",
+                "class": "",
+                "id": ""
+            },
+            "post_type": [
+                "page",
+                "post",
+                "ai1ec_event"
+            ],
+            "taxonomy": [],
+            "allow_null": 0,
+            "multiple": 0,
+            "allow_archives": 1
+        },
+        {
+            "key": "field_58d02018d2350",
+            "label": "External URL",
+            "name": "external_url",
+            "type": "url",
+            "value": null,
+            "instructions": "Enter full URL (http:\/\/blackbaud.com)",
+            "required": 0,
+            "conditional_logic": [
+                [
+                    {
+                        "field": "field_58d01fc8d234e",
+                        "operator": "==",
+                        "value": "External Site"
+                    }
+                ]
+            ],
+            "wrapper": {
+                "width": "60",
+                "class": "",
+                "id": ""
+            },
+            "default_value": "http:\/\/blackbaud.com",
+            "placeholder": ""
+        },
+        {
+            "key": "field_58d02044d2351",
+            "label": "Link Target",
+            "name": "link_target",
+            "type": "true_false",
+            "value": null,
+            "instructions": "Open in a new tab?",
+            "required": 0,
+            "conditional_logic": [
+                [
+                    {
+                        "field": "field_58d01fc8d234e",
+                        "operator": "==",
+                        "value": "External Site"
+                    }
+                ]
+            ],
+            "wrapper": {
+                "width": "40",
+                "class": "",
+                "id": ""
+            },
+            "default_value": 1,
+            "message": "",
+            "ui": 0,
+            "ui_on_text": "",
+            "ui_off_text": ""
+        }
+    ],
+    "location": [
+        [
+            {
+                "param": "post_type",
+                "operator": "==",
+                "value": "post"
+            }
+        ]
+    ],
+    "menu_order": 0,
+    "position": "normal",
+    "style": "default",
+    "label_placement": "top",
+    "instruction_placement": "label",
+    "hide_on_screen": "",
+    "active": 0,
+    "description": "",
+    "modified": 1508442708
+}

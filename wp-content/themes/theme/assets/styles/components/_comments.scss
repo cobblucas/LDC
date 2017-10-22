@@ -1,0 +1,30 @@
+section#comments {
+	padding: 20px;
+	background: $clr-bg;
+	margin: 35px 0;
+	max-width: 700px;
+
+	#respond {
+		#reply-title {
+			@extend h2;
+		}
+
+
+		#form-allowed-tags {
+			display: none;
+		}
+		label {
+			width: 100%;
+			@extend h4;
+			color: $clr-brand-3;
+		}
+		input, textarea, select {
+			width: 100%;
+			&[type='submit'] {
+				width: auto;
+			}
+
+			padding: 5px 10px;
+		}
+	}
+}

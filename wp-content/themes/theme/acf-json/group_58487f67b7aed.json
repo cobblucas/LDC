@@ -1,0 +1,56 @@
+{
+    "key": "group_58487f67b7aed",
+    "title": "CPT - Misc Post",
+    "fields": [
+        {
+            "key": "field_58487f706df52",
+            "label": "Select Post Type",
+            "name": "select_post_type",
+            "type": "select",
+            "value": null,
+            "instructions": "",
+            "required": 0,
+            "conditional_logic": 0,
+            "wrapper": {
+                "width": "",
+                "class": "",
+                "id": ""
+            },
+            "multiple": 0,
+            "allow_null": 0,
+            "choices": {
+                "Staff": "Staff",
+                "Board Member": "Board Member",
+                "Testimonial": "Testimonial",
+                "Sponsor": "Sponsor",
+                "Resources": "Resources",
+                "Media": "Media",
+                "Programs": "Programs",
+                "Jobs": "Jobs"
+            },
+            "default_value": [],
+            "ui": 0,
+            "ajax": 0,
+            "placeholder": "",
+            "return_format": "value"
+        }
+    ],
+    "location": [
+        [
+            {
+                "param": "post_type",
+                "operator": "==",
+                "value": "post"
+            }
+        ]
+    ],
+    "menu_order": 0,
+    "position": "normal",
+    "style": "default",
+    "label_placement": "top",
+    "instruction_placement": "label",
+    "hide_on_screen": "",
+    "active": 0,
+    "description": "",
+    "modified": 1508442545
+}

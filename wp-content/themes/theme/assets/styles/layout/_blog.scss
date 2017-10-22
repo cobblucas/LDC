@@ -1,0 +1,45 @@
+.bbi-blog-cont {
+	article {
+		margin-bottom: 25px;
+		padding-top: 25px;
+		border: {
+			width: 1px 0 0;
+			style: solid;
+			color: $clr-brand-2;
+		}
+		&:first-child {
+			padding-top: 0;
+			border: {
+				width: 0;
+			}
+		}
+		.entry-summary {
+			@extend .row;
+			img {
+				margin-bottom: 20px;
+				@include responsive(md) {
+					margin: 0;
+				}
+			}
+			.excerpt-btn {
+				display: inline-block;
+				margin-top: 15px;
+			}
+
+
+		}
+
+
+
+		.excerpt-btn {
+			@extend .btn;
+		}
+
+		a {
+			@include hover-state {
+				color: $clr-brand-dark;
+			}
+		}
+	}
+
+}

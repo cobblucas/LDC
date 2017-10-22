@@ -1,0 +1,445 @@
+//
+// All In One Event Calendar Formatting
+// --------------------------------------------------
+
+.timely {
+	font {
+		family: $font-main;
+	}
+}
+
+// Calendar Formatting for pop-u2p
+.ai1ec-popover.ai1ec-popup {
+	border: {
+		color: $gray-lighter;
+	}
+	a{
+		color: $clr-brand;
+		@include hover-state {
+			color: $clr-brand-2;
+		}
+	}
+	.ai1ec-popover-content {
+		background: {
+			color: $clr-white;
+		}
+		color: $text-color;
+	}
+	.ai1ec-event-time {
+		background: {
+			color: $gray-lighter;
+		}
+	}
+}
+// Caleander for full screen
+#ai1ec-container{
+	.ai1ec-event-title{
+		color: $clr-brand;
+	}
+
+	.ai1ec-title-buttons {
+		padding: 15px 0;
+		border: {
+			width: 0 0 1px;
+			style: solid;
+			color: $clr-brand;
+		}
+		margin-bottom: 30px;
+
+		.ai1ec-pagination {
+			margin: 0;
+		}
+	}
+
+
+	.ai1ec-dropdown-menu {
+		.ai1ec-active{
+			a {
+				color: $clr-white;
+			}
+		}
+	}
+	.ai1ec-month-view .ai1ec-today,
+	.ai1ec-week-view .ai1ec-today {
+		background: {
+			color: rgba($clr-brand,0.30) !important;
+		}
+		.ai1ec-date {
+			background: {
+				color: rgba($clr-brand,1);
+			}
+			a {
+				color: $clr-white;
+				text-shadow: $carousel-text-shadow;
+				}
+			}
+		}
+	.ai1ec-date {
+		background: {
+			color: transparent;
+		}
+		border: {
+			width: 0 1px 1px 1px !important;
+		}
+		padding-bottom: 10px;
+
+		.ai1ec-date-title {
+			border: {
+				width: 0;
+				radius: 0;
+			}
+			background: {
+				color: $clr-brand;
+			}
+			color: $clr-white !important;
+			margin: 0 10px 10px 0;
+
+			.ai1ec-month {
+				background: {
+					color: $clr-brand;
+				}
+				color: $clr-white;
+				text-shadow: none;
+				border: {
+					radius:0;
+				}
+				padding: 4px 12px 0;
+				letter-spacing:0;
+			}
+
+			.ai1ec-day {
+				font: {
+					weight: $font-bold;
+				}
+			}
+
+			.ai1ec-weekday {
+			}
+
+		}
+
+		.ai1ec-date-events {
+			margin:0;
+
+			.ai1ec-event {
+				background: {
+					color: $clr-bg;
+				}
+				border: {
+					width: 0;
+					radius: 0;
+				}
+				margin: 0 0 10px;
+				min-height: 89px;
+				box-shadow: none;
+				text-align: left;
+			}
+
+			.ai1ec-event-title {
+				@extend h4;
+				margin-bottom: 15px;
+			}
+
+			.ai1ec-event-time {
+				text-transform:uppercase;
+				color: $clr-text;
+				font: {
+					weight: $font-bold;
+				}
+
+				.ai1ec-allday-badge {
+					border: {
+						radius:0;
+					}
+					background: {
+						color: $clr-transparent;
+					}
+					color: $clr-brand-2;
+
+					font: {
+						weight: $font-bold;
+					}
+				}
+			}
+
+			.ai1ec-btn-primary {
+				@include button-alt;
+			}
+
+			.ai1ec-event-description {
+				margin-top: 25px;
+			}
+
+			.ai1ec-actions {
+				float: left;
+				margin-top: 20px;
+
+				.ai1ec-read-more {
+					@include button;
+					border: {
+						radius: 0;
+					}
+				}
+			}
+
+			.ai1ec-event-toggle {
+				position: relative;
+				top: -10px;
+				padding: 5px;
+				color: $clr-white;
+				background: {
+					color: $clr-brand;
+				}
+				text-align: center;
+
+				span {
+					@include full-cont;
+				}
+			}
+		}
+
+	}
+
+	.ai1ec-views-dropdown {
+		margin-top: 15px;
+	}
+
+	.ai1ec-agenda-buttons {
+
+		.ai1ec-btn-group {
+
+			&:last-of-type {
+				display: none;
+
+				@include responsive(sm) {
+					display: inline-block;
+				}
+			}
+		}
+
+	}
+
+	.ai1ec-calendar-toolbar {
+		border: {
+			width: 0;
+		}
+		padding: 0;
+
+		ul.ai1ec-nav {
+			@include no-list;
+
+			li {
+				padding: 0;
+
+				&:before {
+					content: none;
+				}
+
+				.ai1ec-fa, .ai1ec-caret {
+					display: none;
+				}
+
+				> a {
+					@include button;
+					background: {
+						color: $clr-brand-2;
+					}
+
+					&:after {
+						@include fa-icon;
+						content: $fa-var-arrow-circle-down;
+						margin: -4px 0 0 4px;
+					}
+				}
+			}
+		}
+	}
+}
+
+.ai1ec-agenda-view .ai1ec-categories, .ai1ec-agenda-view .ai1ec-tags {
+	float: left;
+	margin: 20px 0;
+
+	@include responsive(sm) {
+		margin: 30px 0 0 20px;
+	}
+}
+
+
+
+.ai1ec-event-details, .ai1ec-single-event .ai1ec-time .ai1ec-field-value, .ai1ec-multi-event .ai1ec-time .ai1ec-field-value {
+	font: {
+		family: $font-main;
+	}
+	color: $clr-text;
+}
+
+
+.ai1ec-event-avatar img {
+	min-height: 0;
+}
+
+.ai1ec-field-label {
+	color: $clr-brand;
+	width: auto;
+	min-width: 95px;
+	text-align: left;
+	padding-left: 15px;
+}
+
+.timely .ai1ec-btn-primary {
+	@include button;
+}
+
+.ai1ec-event-details {
+	.ai1ec-allday-badge {
+		background: {
+			color: $clr-brand;
+		}
+	}
+}
+
+.ai1ec-btn-default.ai1ec-calendar-link {
+	@extend .btn-primary;
+}
+
+.ai1ec-btn-group > .ai1ec-btn::after {
+	content: none;
+}
+
+.ai1ec-dropdown-menu > .ai1ec-active > a, .ai1ec-dropdown-menu > .ai1ec-active > a:hover, .ai1ec-dropdown-menu > .ai1ec-active > a:focus {
+	background: {
+		color: $clr-brand;
+	}
+}
+
+.timely a {
+	color: $clr-brand-2;
+}
+
+.ai1ec-agenda-widget-view {
+	.ai1ec-date {
+		background: {
+			color: transparent;
+		}
+		border: {
+			width: 0 0 1px 0 !important;
+			style: solid;
+			color: $clr-border;
+		}
+
+		padding: 0 0 10px 0;
+		margin-bottom: 10px;
+
+		.ai1ec-date-title {
+			border: {
+				width: 0;
+				radius: 0;
+			}
+			background: {
+				color: $clr-brand;
+			}
+			color: $clr-white !important;
+			margin: 0;
+			padding: 10px;
+			width: 55px;
+
+			.ai1ec-month {
+				background: {
+					color: $clr-brand;
+				}
+				color: $clr-white;
+				text-shadow: none;
+				border: {
+					radius:0;
+				}
+				padding: 0;
+				letter-spacing: 0;
+			}
+
+			.ai1ec-day {
+				font: {
+					weight: $font-bold;
+				}
+			}
+
+			.ai1ec-weekday {
+				display: none;
+			}
+
+		}
+
+		.ai1ec-date-events {
+			text-align: left;
+			display: inline-block;
+			.ai1ec-event {
+				margin: 5px 15px;
+
+				> a {
+					border: {
+						radius: 0;
+					}
+					background: {
+						color: $clr-transparent;
+					}
+				}
+
+			}
+
+			.ai1ec-load-event {
+				border: {
+					width: 0;
+				}
+				padding: 0;
+				color: $clr-text !important;
+
+				.ai1ec-allday-badge {
+					background: {
+						color: $clr-transparent;
+					}
+					border: {
+						radius: 0;
+					}
+					color:$clr-text;
+					font: {
+						weight: $font-bold;
+
+					}
+					padding: 0;
+				}
+
+				.ai1ec-event-title {
+
+				}
+			}
+
+
+		}
+
+	}
+}
+
+.ai1ec-allday {
+
+	&.ai1ec-multiday {
+		background: {
+			color: $clr-brand !important;
+		}
+
+		.ai1ec-event {
+			background: {
+				color: transparent !important;
+			}
+		}
+	}
+
+	.ai1ec-event {
+		background: {
+			color: $clr-brand-2 !important;
+		}
+
+		.ai1ec-event-title {
+			color: $clr-white !important;
+		}
+	}
+}

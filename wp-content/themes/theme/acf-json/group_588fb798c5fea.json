@@ -1,0 +1,67 @@
+{
+    "key": "group_588fb798c5fea",
+    "title": "DO NOT DELETE - Calendar Carousel",
+    "fields": [
+        {
+            "key": "field_588fb8607acba",
+            "label": "Carousel Title",
+            "name": "calendar_carousel_title",
+            "type": "text",
+            "value": null,
+            "instructions": "",
+            "required": 0,
+            "conditional_logic": 0,
+            "wrapper": {
+                "width": "",
+                "class": "",
+                "id": ""
+            },
+            "default_value": "",
+            "maxlength": "",
+            "placeholder": "",
+            "prepend": "",
+            "append": ""
+        },
+        {
+            "key": "field_588fb87c7acbb",
+            "label": "Events Category",
+            "name": "carousel_events_category",
+            "type": "taxonomy",
+            "value": null,
+            "instructions": "Choose up to 1 category. If no category is selected then all events (up to 12) will be displayed from newest to oldest.",
+            "required": 0,
+            "conditional_logic": 0,
+            "wrapper": {
+                "width": "",
+                "class": "",
+                "id": ""
+            },
+            "taxonomy": "events_categories",
+            "field_type": "radio",
+            "multiple": 0,
+            "allow_null": 0,
+            "return_format": "id",
+            "add_term": 1,
+            "load_terms": 0,
+            "save_terms": 0
+        }
+    ],
+    "location": [
+        [
+            {
+                "param": "post_type",
+                "operator": "==",
+                "value": "post"
+            }
+        ]
+    ],
+    "menu_order": 0,
+    "position": "normal",
+    "style": "default",
+    "label_placement": "top",
+    "instruction_placement": "label",
+    "hide_on_screen": "",
+    "active": 0,
+    "description": "",
+    "modified": 1508442585
+}

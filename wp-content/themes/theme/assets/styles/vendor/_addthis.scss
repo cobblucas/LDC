@@ -1,0 +1,59 @@
+#bbi-social-share {
+		float: right;
+		position: relative;
+		margin: 10px 15px 10px 0;
+
+		@include responsive(lg) {
+			&:before {
+				content: "SHARE OUR SITE ON";
+				color: $clr-brand;
+				position: absolute;
+				left: -185px;
+				top: 10px;
+				font: {
+					weight: $font-bold;
+				}
+			}
+		}
+
+
+	.bbi-share-title {
+		font: {
+			weight: $font-bold;
+		}
+	}
+
+	.addthis_inline_share_toolbox {
+		display: inline;
+	}
+
+	.at-resp-share-element .at-share-btn {
+		background: none !important;
+		margin-right: 2px;
+		border: {
+			width: 1px;
+			style: solid;
+			color: $clr-brand;
+			radius: 100% !important;
+		}
+		text-align: center;
+		padding :0;
+
+		path {
+			fill: $clr-brand;
+		}
+
+		.at-icon-wrapper {
+			width: 37px !important;
+			height: 37px !important;
+		}
+
+		.at-icon {
+			width: 30px !important;
+			height: 30px !important;
+			padding: 8px 0 0;
+		}
+	}
+}
+
+

@@ -1,0 +1,89 @@
+.bbi-page-testimonial {
+
+	position: relative;
+	color: $clr-brand-3;
+	padding-top: 50px !important;
+	border: {
+		width: 1px 0 0;
+		color: $clr-brand;
+		style: solid;
+	}
+
+	.row {
+		margin-left: 0;
+	}
+
+	.author-img {
+		padding: 0;
+		text-align: center;
+		img {
+			border: {
+				radius: 100%;
+			}
+			display: inline-block;
+		}
+
+		.imgWrap {
+
+			&:after{
+			    border: {
+				    radius: 100%;
+				}
+			}
+		}
+
+	}
+
+	h5 {
+		font: {
+			weight: $font-bold;
+		}
+	}
+
+	.quote {
+		color: $clr-brand;
+		background: $clr-white;
+		padding: 12px;
+		transform: translateX(-50%);
+		position: absolute;
+		left: 50%;
+		top: -45px;
+		font: {
+			family: $font-serif;
+		}
+
+		i {
+			@include font-size(50);
+		}
+	}
+
+	.testimonial {
+		padding-left: 25px;
+		font: {
+			family: $font-serif;
+		}
+		@include font-size(20);
+		@include responsive(sm) {
+			padding-right: 25px;
+		}
+
+		h5 {
+			text-transform: none;
+			margin-top: 30px;
+
+			&:before {
+				content: '- ';
+			}
+		}
+
+		&.no-img {
+			@include responsive(max-xs) {
+				padding-left: 0;
+			}
+
+			text-align: center;
+		}
+	}
+
+
+}

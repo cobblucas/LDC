@@ -1,0 +1,600 @@
+{
+    "key": "group_56435d6714c07",
+    "title": "Developer Settings",
+    "fields": [
+        {
+            "key": "field_55f703978480c",
+            "label": "Lock-Down",
+            "name": "",
+            "type": "tab",
+            "instructions": "",
+            "required": 0,
+            "conditional_logic": 0,
+            "wrapper": {
+                "width": "",
+                "class": "",
+                "id": ""
+            },
+            "placement": "left",
+            "endpoint": 0
+        },
+        {
+            "key": "field_56df4333fd49c",
+            "label": "Turn on prototype",
+            "name": "turn_on_prototype",
+            "type": "true_false",
+            "value": null,
+            "instructions": "",
+            "required": 0,
+            "conditional_logic": 0,
+            "wrapper": {
+                "width": "",
+                "class": "",
+                "id": ""
+            },
+            "default_value": 1,
+            "message": "Checking this box, will put the filter on the site, to display it in grayscale mode.",
+            "ui": 0,
+            "ui_on_text": "",
+            "ui_off_text": ""
+        },
+        {
+            "key": "field_5702a9c9805d3",
+            "label": "Turn on plugin install",
+            "name": "turn_on_plugin_install",
+            "type": "true_false",
+            "value": null,
+            "instructions": "",
+            "required": 0,
+            "conditional_logic": 0,
+            "wrapper": {
+                "width": "",
+                "class": "",
+                "id": ""
+            },
+            "message": "Tick this box to check for plugin updates. Remember to turn this feature off at Go Live.",
+            "default_value": 0,
+            "ui": 0,
+            "ui_on_text": "",
+            "ui_off_text": ""
+        },
+        {
+            "key": "field_564ca5f1ee118",
+            "label": "Update",
+            "name": "bb_theme_update",
+            "type": "true_false",
+            "value": null,
+            "instructions": "IMPORTANT!: If the designer\/developer unchecked this box, leave it unchecked. Checking it could wipe out important changes to the parent theme that could be wiped out by the theme updater.",
+            "required": 0,
+            "conditional_logic": 0,
+            "wrapper": {
+                "width": "",
+                "class": "",
+                "id": ""
+            },
+            "default_value": 1,
+            "message": "Uncheck this box if you want to disable the theme updater (usually true for Custom WP builds)",
+            "ui": 0,
+            "ui_on_text": "",
+            "ui_off_text": ""
+        },
+        {
+            "key": "field_55f7039f8480d",
+            "label": "Hide Advanced Custom Fields",
+            "name": "hide_acf",
+            "type": "true_false",
+            "value": null,
+            "instructions": "If the website is live or the client has ben given access to Wordpress, this should be checked!",
+            "required": 0,
+            "conditional_logic": 0,
+            "wrapper": {
+                "width": "",
+                "class": "",
+                "id": ""
+            },
+            "default_value": 0,
+            "message": "Check this box after building out your theme to make sure client cannot view the advanced custom fields page.",
+            "ui": 0,
+            "ui_on_text": "",
+            "ui_off_text": ""
+        },
+        {
+            "key": "field_58f8b85ed8bb2",
+            "label": "Branding",
+            "name": "",
+            "type": "tab",
+            "instructions": "",
+            "required": 0,
+            "conditional_logic": 0,
+            "wrapper": {
+                "width": "",
+                "class": "",
+                "id": ""
+            },
+            "placement": "left",
+            "endpoint": 0
+        },
+        {
+            "key": "field_58f8b86cd8bb3",
+            "label": "Logo Retina",
+            "name": "logo_retina",
+            "type": "image",
+            "value": null,
+            "instructions": "Upload your organization's logo optimized at 2x the regular size for retina displays. This logo will also be used for regular display screens.",
+            "required": 0,
+            "conditional_logic": 0,
+            "wrapper": {
+                "width": "",
+                "class": "",
+                "id": ""
+            },
+            "return_format": "array",
+            "preview_size": "full",
+            "library": "all",
+            "min_width": "",
+            "min_height": "",
+            "min_size": "",
+            "max_width": "",
+            "max_height": "",
+            "max_size": "",
+            "mime_types": ""
+        },
+        {
+            "key": "field_564bc7c9d1f31",
+            "label": "WP Login Screen",
+            "name": "",
+            "type": "tab",
+            "instructions": "",
+            "required": 0,
+            "conditional_logic": 0,
+            "wrapper": {
+                "width": "",
+                "class": "",
+                "id": ""
+            },
+            "placement": "left",
+            "endpoint": 0
+        },
+        {
+            "key": "field_564bc6234f2b2",
+            "label": "Background Color",
+            "name": "admin_bg_clr",
+            "type": "color_picker",
+            "value": null,
+            "instructions": "Select the background color of the login page. (optional - can be used if logo is made of white text only for example)",
+            "required": 0,
+            "conditional_logic": 0,
+            "wrapper": {
+                "width": "",
+                "class": "",
+                "id": ""
+            },
+            "default_value": "#f1f1f1"
+        },
+        {
+            "key": "field_55f2d7d29c615",
+            "label": "Fonts",
+            "name": "",
+            "type": "tab",
+            "instructions": "",
+            "required": 0,
+            "conditional_logic": 0,
+            "wrapper": {
+                "width": "",
+                "class": "",
+                "id": ""
+            },
+            "placement": "top",
+            "endpoint": 0
+        },
+        {
+            "key": "field_55f2d7d29c624",
+            "label": "Custom fonts",
+            "name": "custom_fonts",
+            "type": "textarea",
+            "value": null,
+            "instructions": "Paste custom font scripts (typekit, google font...) here.",
+            "required": 0,
+            "conditional_logic": 0,
+            "wrapper": {
+                "width": "",
+                "class": "",
+                "id": ""
+            },
+            "default_value": "",
+            "new_lines": "",
+            "maxlength": "",
+            "placeholder": "",
+            "rows": "",
+            "readonly": 0,
+            "disabled": 0
+        },
+        {
+            "key": "field_5602f229f7326",
+            "label": "Custom Post Type",
+            "name": "",
+            "type": "tab",
+            "instructions": "",
+            "required": 0,
+            "conditional_logic": 0,
+            "wrapper": {
+                "width": "",
+                "class": "",
+                "id": ""
+            },
+            "placement": "top",
+            "endpoint": 0
+        },
+        {
+            "key": "field_5602f37bb135d",
+            "label": "Unregister CPT",
+            "name": "",
+            "type": "message",
+            "instructions": "",
+            "required": 0,
+            "conditional_logic": 0,
+            "wrapper": {
+                "width": "",
+                "class": "",
+                "id": ""
+            },
+            "message": "Uncheck the CPT you want to deactivate specifically for your theme.",
+            "new_lines": "wpautop",
+            "esc_html": 0
+        },
+        {
+            "key": "field_58e4f9709d009",
+            "label": "Engagement Section",
+            "name": "engagement_section",
+            "type": "true_false",
+            "value": null,
+            "instructions": "",
+            "required": 0,
+            "conditional_logic": 0,
+            "wrapper": {
+                "width": "",
+                "class": "",
+                "id": ""
+            },
+            "message": "",
+            "default_value": 1,
+            "ui": 0,
+            "ui_on_text": "",
+            "ui_off_text": ""
+        },
+        {
+            "key": "field_56082752f36c6",
+            "label": "Page Toolbar",
+            "name": "",
+            "type": "tab",
+            "instructions": "",
+            "required": 0,
+            "conditional_logic": 0,
+            "wrapper": {
+                "width": "",
+                "class": "",
+                "id": ""
+            },
+            "placement": "top",
+            "endpoint": 0
+        },
+        {
+            "key": "field_5608275df36c7",
+            "label": "Activate Toolbar",
+            "name": "activate_toolbar",
+            "type": "true_false",
+            "value": null,
+            "instructions": "By turning this option on, you will have the ability to choose what to include in the toolbar, that will be displaying under internal banners. (options include \"breadcrumbs\", \"social share buttons\" etc..)",
+            "required": 0,
+            "conditional_logic": 0,
+            "wrapper": {
+                "width": "",
+                "class": "",
+                "id": ""
+            },
+            "default_value": 0,
+            "message": "",
+            "ui": 0,
+            "ui_on_text": "",
+            "ui_off_text": ""
+        },
+        {
+            "key": "field_56082ba0916a9",
+            "label": "Show Breadcrumbs",
+            "name": "show_breadcrumbs",
+            "type": "true_false",
+            "value": null,
+            "instructions": "",
+            "required": 0,
+            "conditional_logic": [
+                [
+                    {
+                        "field": "field_5608275df36c7",
+                        "operator": "==",
+                        "value": "1"
+                    }
+                ]
+            ],
+            "wrapper": {
+                "width": "",
+                "class": "",
+                "id": ""
+            },
+            "default_value": 0,
+            "message": "",
+            "ui": 0,
+            "ui_on_text": "",
+            "ui_off_text": ""
+        },
+        {
+            "key": "field_58dbd79a716c1",
+            "label": "Show Social Sharing",
+            "name": "show_social_sharing",
+            "type": "true_false",
+            "value": null,
+            "instructions": "",
+            "required": 0,
+            "conditional_logic": [
+                [
+                    {
+                        "field": "field_5608275df36c7",
+                        "operator": "==",
+                        "value": "1"
+                    }
+                ]
+            ],
+            "wrapper": {
+                "width": "",
+                "class": "",
+                "id": ""
+            },
+            "message": "",
+            "default_value": 0,
+            "ui": 0,
+            "ui_on_text": "",
+            "ui_off_text": ""
+        },
+        {
+            "key": "field_59077fafa0774",
+            "label": "AddThis Key",
+            "name": "addthis_key",
+            "type": "text",
+            "value": null,
+            "instructions": "",
+            "required": 0,
+            "conditional_logic": [
+                [
+                    {
+                        "field": "field_58dbd79a716c1",
+                        "operator": "==",
+                        "value": "1"
+                    }
+                ]
+            ],
+            "wrapper": {
+                "width": "",
+                "class": "",
+                "id": ""
+            },
+            "default_value": "",
+            "placeholder": "ra-59077e4767cd232c",
+            "prepend": "",
+            "append": "",
+            "maxlength": ""
+        },
+        {
+            "key": "field_56082bc3916ab",
+            "label": "Show Google Translate",
+            "name": "show_google_translate",
+            "type": "true_false",
+            "value": null,
+            "instructions": "",
+            "required": 0,
+            "conditional_logic": [
+                [
+                    {
+                        "field": "field_5608275df36c7",
+                        "operator": "==",
+                        "value": "1"
+                    }
+                ]
+            ],
+            "wrapper": {
+                "width": "",
+                "class": "",
+                "id": ""
+            },
+            "default_value": 0,
+            "message": "",
+            "ui": 0,
+            "ui_on_text": "",
+            "ui_off_text": ""
+        },
+        {
+            "key": "field_58f8ba25ab769",
+            "label": "Google Translate Code",
+            "name": "gt_code",
+            "type": "textarea",
+            "value": null,
+            "instructions": "To add more languages, generate a new snippet of code following this link: https:\/\/translate.google.com\/manager\/website\/add - then replace the entire code below.",
+            "required": 0,
+            "conditional_logic": [
+                [
+                    {
+                        "field": "field_56082bc3916ab",
+                        "operator": "==",
+                        "value": "1"
+                    }
+                ]
+            ],
+            "wrapper": {
+                "width": "",
+                "class": "",
+                "id": ""
+            },
+            "default_value": "",
+            "placeholder": "",
+            "maxlength": "",
+            "rows": "",
+            "new_lines": "wpautop"
+        },
+        {
+            "key": "field_56082bcf916ac",
+            "label": "Show Font Resizer",
+            "name": "show_font_resizer",
+            "type": "true_false",
+            "value": null,
+            "instructions": "Make sure to activate the Font Resizer script under the \"scripts\" tab.",
+            "required": 0,
+            "conditional_logic": [
+                [
+                    {
+                        "field": "field_5608275df36c7",
+                        "operator": "==",
+                        "value": "1"
+                    }
+                ]
+            ],
+            "wrapper": {
+                "width": "",
+                "class": "",
+                "id": ""
+            },
+            "default_value": 0,
+            "message": "",
+            "ui": 0,
+            "ui_on_text": "",
+            "ui_off_text": ""
+        },
+        {
+            "key": "field_57ab70a4ab74e",
+            "label": "Google API",
+            "name": "",
+            "type": "tab",
+            "instructions": "",
+            "required": 0,
+            "conditional_logic": 0,
+            "wrapper": {
+                "width": "",
+                "class": "",
+                "id": ""
+            },
+            "placement": "top",
+            "endpoint": 0
+        },
+        {
+            "key": "field_57ab70b0ab74f",
+            "label": "Google API Key",
+            "name": "google_api_key",
+            "type": "text",
+            "value": null,
+            "instructions": "Need the client to have a google account and need access to that account to generate API key\r\nThis is for the ACF Google map field to work. Ai1ec has a field to add the API key. WP Google Map has an API key field as well.",
+            "required": 0,
+            "conditional_logic": 0,
+            "wrapper": {
+                "width": "",
+                "class": "",
+                "id": ""
+            },
+            "default_value": "",
+            "maxlength": "",
+            "placeholder": "",
+            "prepend": "",
+            "append": "",
+            "readonly": 0,
+            "disabled": 0
+        },
+        {
+            "key": "field_58a31f9aa75ad",
+            "label": "Mobile Menu",
+            "name": "",
+            "type": "tab",
+            "instructions": "",
+            "required": 0,
+            "conditional_logic": 0,
+            "wrapper": {
+                "width": "",
+                "class": "",
+                "id": ""
+            },
+            "placement": "left",
+            "endpoint": 0
+        },
+        {
+            "key": "field_58a31fb2a75ae",
+            "label": "Menu Offcanvas",
+            "name": "menu_offcanvas",
+            "type": "true_false",
+            "value": null,
+            "instructions": "Check this box if the menu should be offcanvas to the right.",
+            "required": 0,
+            "conditional_logic": 0,
+            "wrapper": {
+                "width": "",
+                "class": "",
+                "id": ""
+            },
+            "default_value": 0,
+            "message": "",
+            "ui": 0,
+            "ui_on_text": "",
+            "ui_off_text": ""
+        },
+        {
+            "key": "field_58a3225afefa3",
+            "label": "Offcanvas Position",
+            "name": "offcanvas_position",
+            "type": "radio",
+            "value": null,
+            "instructions": "",
+            "required": 0,
+            "conditional_logic": [
+                [
+                    {
+                        "field": "field_58a31fb2a75ae",
+                        "operator": "==",
+                        "value": "1"
+                    }
+                ]
+            ],
+            "wrapper": {
+                "width": "",
+                "class": "",
+                "id": ""
+            },
+            "layout": "vertical",
+            "choices": {
+                "Left": "Left",
+                "Right": "Right"
+            },
+            "default_value": "Right",
+            "other_choice": 0,
+            "save_other_choice": 0,
+            "allow_null": 0,
+            "return_format": "value"
+        }
+    ],
+    "location": [
+        [
+            {
+                "param": "options_page",
+                "operator": "==",
+                "value": "developer-settings"
+            },
+            {
+                "param": "user",
+                "operator": "==",
+                "value": "1"
+            }
+        ]
+    ],
+    "menu_order": 0,
+    "position": "normal",
+    "style": "default",
+    "label_placement": "top",
+    "instruction_placement": "label",
+    "hide_on_screen": "",
+    "active": 1,
+    "description": "",
+    "modified": 1508442574
+}
