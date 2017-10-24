@@ -79,8 +79,34 @@
 }
 
 
-.bbi-page-testimonial.bbi-engage-testimonial {
+.engagement-testimonials {
 	text-align: center;
+
+	&.white {
+		background: {
+			color: $clr-white;
+		}
+	}
+
+	.bbi-page-testimonial {
+		border: {
+			width: 0;
+		}
+	}
+
+	h1 {
+		border: {
+			width: 0 0 1px;
+			style: solid;
+			color: $clr-brand;
+		}
+		padding-bottom: 25px;
+		margin-bottom: 0;
+
+		& ~ .bbi-engage-testimonial {
+			padding-top: 50px !important;
+		}
+	}
 
 	.bbi-testimonial-outer {
 		border: {
@@ -100,7 +126,7 @@
 				top: -10px;
 			}
 			.testimonial-content {
-
+				color: $clr-text;
 			}
 			.testimonial-author {
 				&:before {
@@ -504,19 +530,41 @@
 	}
 
 }
+.engagement-background {
+	video {
+		position: fixed;
+	    top: 50%;
+	    left: 50%;
+	    min-width: 100%;
+	    min-height: 100%;
+	    width: auto;
+	    height: auto;
+	    z-index: -100;
+	    transform: translateX(-50%) translateY(-50%);
+	    transition: 1s opacity;
+	}
 
-.bbi-engagement-background-photo-module {
-	text-align:center;
-	.bbi-text-wrap {
-	    padding: 40px 25px;
-	    background: {
-		    color: rgba($clr-white ,0.85);
-		}
-	    display: inline-block;
-	    @include responsive(sm) {
+	.bbi-engagement-background-photo-module {
+		position: relative;
+		.bbi-text-wrap {
 		    padding: 40px;
-		    margin-bottom: 130px;
-	    }
+
+		    @include responsive(sm) {
+			    padding: 40px 0 0;
+		    }
+
+		    h3 {
+			   color: $clr-white;
+			   @include font-size(80);
+			   text-align: center;
+		    }
+
+		    p {
+			   color: $clr-white;
+			   @include font-size(26);
+			   margin: 0 255px;
+		    }
+		}
 	}
 }
 

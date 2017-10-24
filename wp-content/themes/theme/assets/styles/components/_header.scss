@@ -2,11 +2,6 @@
 
 	position:relative;
 	padding: 15px 0 0;
-	border: {
-		width: 0 0 1px 0;
-		style: solid;
-		color: $clr-brand-2;
-	}
 
 	@include responsive(sm) {
 		background: $header-bg;

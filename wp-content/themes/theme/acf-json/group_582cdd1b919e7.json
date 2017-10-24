@@ -32,15 +32,16 @@
                 "class": "",
                 "id": ""
             },
-            "layout": "horizontal",
             "choices": {
                 "Image": "Image",
-                "Color": "Color"
+                "Color": "Color",
+                "Video": "Video"
             },
-            "default_value": "",
+            "allow_null": 0,
             "other_choice": 0,
             "save_other_choice": 0,
-            "allow_null": 0,
+            "default_value": "",
+            "layout": "horizontal",
             "return_format": "value"
         },
         {
@@ -110,6 +111,89 @@
             "max_height": "",
             "max_size": "",
             "mime_types": ""
+        },
+        {
+            "key": "field_59eec08b385d8",
+            "label": "Video Image",
+            "name": "video_poster",
+            "type": "image",
+            "value": null,
+            "instructions": "",
+            "required": 0,
+            "conditional_logic": [
+                [
+                    {
+                        "field": "field_582cdd7372985",
+                        "operator": "==",
+                        "value": "Video"
+                    }
+                ]
+            ],
+            "wrapper": {
+                "width": "",
+                "class": "",
+                "id": ""
+            },
+            "return_format": "url",
+            "preview_size": "thumbnail",
+            "library": "all",
+            "min_width": "",
+            "min_height": "",
+            "min_size": "",
+            "max_width": "",
+            "max_height": "",
+            "max_size": "",
+            "mime_types": ""
+        },
+        {
+            "key": "field_59eec0fd385d9",
+            "label": "Video WebM",
+            "name": "video_webm",
+            "type": "url",
+            "value": null,
+            "instructions": "",
+            "required": 0,
+            "conditional_logic": [
+                [
+                    {
+                        "field": "field_582cdd7372985",
+                        "operator": "==",
+                        "value": "Video"
+                    }
+                ]
+            ],
+            "wrapper": {
+                "width": "",
+                "class": "",
+                "id": ""
+            },
+            "default_value": "",
+            "placeholder": ""
+        },
+        {
+            "key": "field_59eec110385da",
+            "label": "Video MP4",
+            "name": "video_mp4",
+            "type": "url",
+            "value": null,
+            "instructions": "",
+            "required": 0,
+            "conditional_logic": [
+                [
+                    {
+                        "field": "field_582cdd7372985",
+                        "operator": "==",
+                        "value": "Video"
+                    }
+                ]
+            ],
+            "wrapper": {
+                "width": "",
+                "class": "",
+                "id": ""
+            },
+            "default_value": "",
+            "placeholder": ""
         },
         {
             "key": "field_588927da5af61",
@@ -247,5 +331,5 @@
     "hide_on_screen": "",
     "active": 0,
     "description": "",
-    "modified": 1508442682
+    "modified": 1508819254
 }

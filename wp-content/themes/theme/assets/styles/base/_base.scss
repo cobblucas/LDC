@@ -117,9 +117,28 @@
 .bbi-medium-cont {
 	text-align: center;
 
-	p {
-		display: inline-block;
-		max-width: 815px;
+	&.intro {
+		text-align: left;
+		margin: 0 auto;
+		padding: 0 15px;
+
+		@include responsive(sm) {
+			width: 750px;
+			padding: 0;
+		}
+
+		@include responsive(md) {
+			width: 970px;
+		}
+
+		@include responsive(lg) {
+			width: 1170px;
+		}
+
+		h1 {
+			text-transform: none;
+			margin: 0;
+		}
 	}
 }
 
@@ -221,10 +240,6 @@
 			}
 		}
 	}
-}
-
-.bbi-page-modules {
-	background: $clr-white;
 }
 
 .bbi-nav {

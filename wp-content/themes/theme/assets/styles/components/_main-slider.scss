@@ -104,10 +104,25 @@
 				}
 			}
 
-			h1 {
-				color :$clr-white;
-				text-transform: none;
+			h6 {
+				@include font-size(18);
+				color: $clr-white;
+				text-transform: uppercase;
+				margin-bottom: 0;
+				letter-spacing: 0.3px;
+			}
 
+			h1 {
+				color: $clr-white;
+				text-transform: none;
+				@include font-size(80);
+				margin-bottom: 0;
+			}
+
+			h3 {
+				color: $clr-white;
+				@include font-size(26);
+				margin-bottom: 0;
 			}
 		}
 
@@ -130,7 +145,10 @@
 		}
 
 		.caption-overlay {
-			@include alpha-attribute('background-color', rgba($clr-brand-darker, 0.5), white);
+			//@include alpha-attribute('background-color', rgba($clr-brand-darker, 0.5), white);
+			background: {
+				color: $clr-transparent;
+			}
 			padding: 15px 15px 55px;
 			margin-bottom: -25px;
 

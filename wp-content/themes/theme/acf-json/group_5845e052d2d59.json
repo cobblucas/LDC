@@ -555,7 +555,7 @@
                                     "name": "full_width_content_copy",
                                     "type": "textarea",
                                     "value": null,
-                                    "instructions": "(Character Limit: 750)",
+                                    "instructions": "(Character Limit: 1000)",
                                     "required": 0,
                                     "conditional_logic": 0,
                                     "wrapper": {
@@ -565,7 +565,7 @@
                                     },
                                     "default_value": "",
                                     "placeholder": "",
-                                    "maxlength": 750,
+                                    "maxlength": 1000,
                                     "rows": "",
                                     "new_lines": "wpautop"
                                 },
@@ -1068,7 +1068,7 @@
                             "key": "field_5922fcb7c3cda",
                             "label": "Module Content",
                             "name": "page_module_content",
-                            "type": "textarea",
+                            "type": "text",
                             "value": null,
                             "instructions": "",
                             "required": 0,
@@ -1080,9 +1080,59 @@
                             },
                             "default_value": "",
                             "placeholder": "",
-                            "maxlength": "",
-                            "rows": "",
-                            "new_lines": "wpautop"
+                            "prepend": "",
+                            "append": "",
+                            "maxlength": ""
+                        },
+                        {
+                            "key": "field_59eec8b52ec10",
+                            "label": "Add Button",
+                            "name": "background_photo_module_add_button",
+                            "type": "true_false",
+                            "value": null,
+                            "instructions": "",
+                            "required": 0,
+                            "conditional_logic": 0,
+                            "wrapper": {
+                                "width": "",
+                                "class": "",
+                                "id": ""
+                            },
+                            "message": "",
+                            "default_value": 0,
+                            "ui": 0,
+                            "ui_on_text": "",
+                            "ui_off_text": ""
+                        },
+                        {
+                            "key": "field_59eec8e62ec11",
+                            "label": "Background Photo Module Link",
+                            "name": "background_photo_module_link",
+                            "type": "clone",
+                            "value": null,
+                            "instructions": "",
+                            "required": 0,
+                            "conditional_logic": [
+                                [
+                                    {
+                                        "field": "field_59eec8b52ec10",
+                                        "operator": "==",
+                                        "value": "1"
+                                    }
+                                ]
+                            ],
+                            "wrapper": {
+                                "width": "",
+                                "class": "",
+                                "id": ""
+                            },
+                            "clone": [
+                                "group_57c61ddfac29f"
+                            ],
+                            "display": "group",
+                            "layout": "block",
+                            "prefix_label": 0,
+                            "prefix_name": 0
                         }
                     ],
                     "min": "",
@@ -1111,5 +1161,5 @@
     "hide_on_screen": "",
     "active": 1,
     "description": "",
-    "modified": 1508506784
+    "modified": 1508855224
 }

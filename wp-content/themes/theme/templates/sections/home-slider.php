@@ -42,13 +42,15 @@
 				  		<div class="caption-wrap">
 				  			<div class="caption-overlay">
 						  		<?php if(get_sub_field('caption_heading')) { ?>
-						  			<h1><?php the_sub_field('caption_heading'); ?></h1>
+						  			<h6><?php the_sub_field('caption_heading'); ?></h6>
 						  		<?php } ?>
 						  		<div class="inner-caption">
-							  		<?php if(get_sub_field('caption_paragraph')) { ?>
-										<?php the_sub_field('caption_paragraph'); ?>
+							  		<?php if(get_sub_field('caption_title')) { ?>
+										<h1><?php the_sub_field('caption_title'); ?></h1>
 									<?php } ?>
-
+									<?php if(get_sub_field('caption_paragraph')) { ?>
+										<h3><?php the_sub_field('caption_paragraph'); ?></h3>
+									<?php } ?>
 								</div>
 							</div>
 

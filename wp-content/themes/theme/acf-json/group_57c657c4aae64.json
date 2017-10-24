@@ -55,8 +55,8 @@
                     "return_format": "url",
                     "preview_size": "thumbnail",
                     "library": "all",
-                    "min_width": 1400,
-                    "min_height": 720,
+                    "min_width": 1440,
+                    "min_height": 550,
                     "min_size": "",
                     "max_width": "",
                     "max_height": "",
@@ -162,9 +162,9 @@
                     "append": ""
                 },
                 {
-                    "key": "field_5589b59fc2cd4",
-                    "label": "Caption Paragraph",
-                    "name": "caption_paragraph",
+                    "key": "field_59eea9cb521c0",
+                    "label": "Caption Title",
+                    "name": "caption_title",
                     "type": "text",
                     "value": null,
                     "instructions": "",
@@ -184,10 +184,38 @@
                         "id": ""
                     },
                     "default_value": "",
-                    "maxlength": 200,
                     "placeholder": "Optional (Character limit: 200)",
                     "prepend": "",
-                    "append": ""
+                    "append": "",
+                    "maxlength": 200
+                },
+                {
+                    "key": "field_5589b59fc2cd4",
+                    "label": "Caption Paragraph",
+                    "name": "caption_paragraph",
+                    "type": "wysiwyg",
+                    "value": null,
+                    "instructions": "",
+                    "required": 0,
+                    "conditional_logic": [
+                        [
+                            {
+                                "field": "field_57c63ab0b2db4",
+                                "operator": "==",
+                                "value": "1"
+                            }
+                        ]
+                    ],
+                    "wrapper": {
+                        "width": "",
+                        "class": "",
+                        "id": ""
+                    },
+                    "default_value": "",
+                    "tabs": "all",
+                    "toolbar": "full",
+                    "media_upload": 1,
+                    "delay": 0
                 },
                 {
                     "key": "field_57c63872ac27f",
@@ -309,5 +337,5 @@
     "hide_on_screen": "",
     "active": 0,
     "description": "",
-    "modified": 1508442740
+    "modified": 1508813355
 }

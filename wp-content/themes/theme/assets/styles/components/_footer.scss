@@ -4,17 +4,17 @@
 		weight: $font-semibold;
 	}
 	text-transform: uppercase;
-	color: $clr-white;
+	color: $clr-brand;
 }
 
 
 #bbi-footer {
 
 	color: $clr-text;
-	background: $clr-brand-2;
+	background: $clr-white;
 
 	h1, h2, h3, h4, h5, h6 {
-		color: $clr-white;
+		color: $clr-brand;
 	}
 
 	.bbi-newsletter {
@@ -63,12 +63,7 @@
 	.bbi-footer-wrap {
 		padding: 20px 0;
 		text-align: center;
-		border: {
-			width: 5px 0 0 0;
-			style: solid;
-			color: $clr-brand-lighter;
-		}
-		color: $clr-white;
+		color: $clr-text;
 
 		@include responsive(sm) {
 			text-align: left;
@@ -82,12 +77,12 @@
 		}
 
 		a {
-			color: $clr-white;
+			color: $clr-text;
 			padding: 0 0 3px;
 			border: {
 				width: 0 0 1px;
 				style: solid;
-				color: $clr-white;
+				color: $clr-text;
 			}
 
 			@include hover-state {

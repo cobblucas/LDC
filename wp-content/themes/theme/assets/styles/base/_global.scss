@@ -18,9 +18,6 @@ html {
 }
 
 body {
-	background: {
-		color: $clr-white;
-	}
 	min-width: 320px;
 	overflow-x: hidden;
 	color: $body-clr;
@@ -75,6 +72,19 @@ body {
 	@include responsive(sm) {
 		width: 95%;
 	}
+}
+
+.blink {
+	animation: cursor-blink 1s step-end infinite;
+}
+
+@keyframes "cursor-blink" {
+  from, to {
+    color: transparent;
+  }
+  50% {
+    color: $clr-brand;
+  }
 }
 
 .navbar {

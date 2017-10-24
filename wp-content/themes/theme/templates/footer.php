@@ -1,20 +1,6 @@
 
 <footer id="bbi-footer">
 
-	<div class="bbi-newsletter">
-
-		<div class="container-mid">
-
-			<div class="row">
-
-				<?php the_field('newsletter_code', 'option'); ?>
-
-			</div>
-
-		</div>
-
-	</div>
-
 	<div class="bbi-footer-wrap">
 
 		<div class="container-mid">
