@@ -646,6 +646,45 @@
             "endpoint": 0
         },
         {
+            "key": "field_59ef9e89dad9f",
+            "label": "Footer Map",
+            "name": "footer_map",
+            "type": "google_map",
+            "value": null,
+            "instructions": "",
+            "required": 0,
+            "conditional_logic": 0,
+            "wrapper": {
+                "width": "",
+                "class": "",
+                "id": ""
+            },
+            "center_lat": "",
+            "center_lng": "",
+            "zoom": "",
+            "height": ""
+        },
+        {
+            "key": "field_59f0a67e65947",
+            "label": "Footer Location",
+            "name": "footer_location",
+            "type": "text",
+            "value": null,
+            "instructions": "",
+            "required": 0,
+            "conditional_logic": 0,
+            "wrapper": {
+                "width": "",
+                "class": "",
+                "id": ""
+            },
+            "default_value": "",
+            "placeholder": "",
+            "prepend": "",
+            "append": "",
+            "maxlength": ""
+        },
+        {
             "key": "field_5972560b10689",
             "label": "Statement Of Purpose",
             "name": "statement_of_purpose",
@@ -666,10 +705,10 @@
             "delay": 0
         },
         {
-            "key": "field_58781d77b89ad",
-            "label": "Address",
-            "name": "footer_info",
-            "type": "wysiwyg",
+            "key": "field_59efa62843599",
+            "label": "Footer Logo",
+            "name": "footer_logo",
+            "type": "image",
             "value": null,
             "instructions": "",
             "required": 0,
@@ -679,17 +718,22 @@
                 "class": "",
                 "id": ""
             },
-            "default_value": "",
-            "tabs": "all",
-            "toolbar": "full",
-            "media_upload": 1,
-            "delay": 0
+            "return_format": "url",
+            "preview_size": "thumbnail",
+            "library": "all",
+            "min_width": "",
+            "min_height": "",
+            "min_size": "",
+            "max_width": "",
+            "max_height": "",
+            "max_size": "",
+            "mime_types": ""
         },
         {
-            "key": "field_597256491068a",
-            "label": "Newsletter",
-            "name": "newsletter_code",
-            "type": "textarea",
+            "key": "field_59efa64a4359a",
+            "label": "Footer Blurb",
+            "name": "footer_blurb",
+            "type": "text",
             "value": null,
             "instructions": "",
             "required": 0,
@@ -701,9 +745,9 @@
             },
             "default_value": "",
             "placeholder": "",
-            "maxlength": "",
-            "rows": "",
-            "new_lines": ""
+            "prepend": "",
+            "append": "",
+            "maxlength": ""
         }
     ],
     "location": [
@@ -723,5 +767,5 @@
     "hide_on_screen": "",
     "active": 1,
     "description": "",
-    "modified": 1508442510
+    "modified": 1508943500
 }

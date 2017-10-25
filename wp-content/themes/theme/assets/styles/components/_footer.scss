@@ -67,34 +67,75 @@
 
 		@include responsive(sm) {
 			text-align: left;
-			padding: 40px 0;
+			padding: 0;
 		}
 		.row {
-			padding: 0 0 25px;
-			&:last-child {
-				padding: 0;
-			}
+			display: flex;
 		}
 
-		a {
-			color: $clr-text;
-			padding: 0 0 3px;
-			border: {
-				width: 0 0 1px;
-				style: solid;
+		.bbi-nav-footer-admin {
+			a {
 				color: $clr-text;
-			}
-
-			@include hover-state {
-				text-decoration: none;
+				padding: 0 0 3px;
 				border: {
-					color: $clr-transparent;
+					width: 0 0 1px;
+					style: solid;
+					color: $clr-text;
+				}
+
+				@include hover-state {
+					text-decoration: none;
+					border: {
+						color: $clr-transparent;
+					}
 				}
 			}
 		}
 	}
 
 	.bbi-footer-col {
+
+		&.left {
+
+		}
+
+		&.right {
+			background: url('http://localhost/lucas/wp-content/uploads/pattern_1.png') center center;
+			padding: 0;
+			text-align: center;
+			display: flex;
+			align-items: center;
+			justify-content: center;
+
+			.footer-location {
+			    position: absolute;
+			    left: 10px;
+			    top: -5px;
+			    margin-bottom: 0;
+			    @include font-size(14);
+			    transform-origin: 0 100%;
+			    transform: rotateZ(90deg);
+			    font: {
+				    style: italic;
+			    }
+
+			    .location-color {
+					text-transform: uppercase;
+					color: $clr-brand-2;
+					font: {
+						weight: bold;
+						style: normal;
+					}
+			    }
+			}
+
+			.footer-details {
+				max-width: 85%;
+				h1 {
+					color: $clr-text;
+				}
+			}
+		}
 
 		&:first-child {
 			margin-bottom: 35px;
@@ -126,17 +167,31 @@
 		}
 	}
 
+	.footer-bottom {
+		padding: 75px 0 35px;
+		text-align: center;
+		color: $clr-text;
+		background: {
+			color: darken($clr-grey, 25%);
+		}
+		img {
+			margin: 0 auto 25px;
+		}
+		h3 {
+			font: {
+				weight: normal;
+				style: italic;
+			}
+			color: lighten($clr-grey, 10%);
+		}
+	}
+
 	@include responsive(sm) {
 		text-align: left;
 	}
 
 }
 
-.copyright {
-	@include responsive(md) {
-		display: inline-block;
-	}
-}
 .bbi-nav-footer-admin {
 	display: inline-block;
 	margin: 20px 0 0;

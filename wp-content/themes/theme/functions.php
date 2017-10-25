@@ -74,12 +74,12 @@ function acf_location_rules_match_user($match, $rule, $options) {
     return $match;
 }
 
-function fix_gmaps_api_key() {
+function my_acf_init() {
 	if(mb_strlen(acf_get_setting("google_api_key")) <= 0){
 		acf_update_setting("google_api_key", "AIzaSyAruQyoaby0Hx_3fMmzUrC-Vt9SND4Qr3A");
 	}
 }
-add_action( 'admin_enqueue_scripts', 'fix_gmaps_api_key' );
+add_action( 'admin_enqueue_scripts', 'my_acf_init' );
 
 # WordPress database filters.
 if (function_exists('get_field') && get_field('hide_acf', 'option')) {
