@@ -480,15 +480,12 @@
 
 		@include responsive(sm) {
 			padding: 0;
-			background: {
-				color: $clr-white;
-			}
 			display: flex;
 		}
 
 		.bbi-text-wrap {
 			background: {
-				color: $clr-white;
+				color: lighten($clr-grey, 63%);
 			}
 			padding: 20px 15px;
 
