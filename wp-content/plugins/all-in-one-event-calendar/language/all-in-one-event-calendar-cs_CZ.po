@@ -10,6 +10,18 @@ msgstr ""
 "X-Generator: GlotPress/1.0-alpha-1100\n"
 "Project-Id-Version: 2.3\n"
 
+#: app/model/settings.php:870
+msgid "<div class=\"ai1ec-twitterinfo-wrap\"><b>Twitter</b><br>This feature allows your events to be automatically tweeted before they happen. Great way to add regular content to your twitter roll and keep your audience informed of all your great events. This feature is not yet enabled in your product. Please purchase it as a standalone for a low annual subscription or inside the Core+ bundle. <a target=\"_blank\" href=\"https://time.ly/wordpress-calendar-plugin/addons/\">Click here.</a></div>"
+msgstr ""
+
+#: app/view/admin/settings.php:158
+msgid "Twitter"
+msgstr ""
+
+#: public/admin/box_support.php:44
+msgid "More Features"
+msgstr ""
+
 #: app/view/admin/add-new-event.php:35
 msgid "Empower your calendar, build your community"
 msgstr ""
@@ -22,7 +34,7 @@ msgstr ""
 msgid "Samples"
 msgstr ""
 
-#: app/model/settings.php:880
+#: app/model/settings.php:893
 msgid ""
 "Optional. Use this JavaScript-based shortcut to place the\n"
 "                        calendar a DOM element other than the usual page content container\n"
@@ -70,43 +82,43 @@ msgstr ""
 "<b>Dosáhli jste maximálního počtu feedů, které můžete naimportovat.</b><br>\n"
 "→\t→\tZaregistrujte se, prosím, pro EventBoost plán <a href=\"https://time.ly/eventboost/\" target=\"_blank\">zde</a>."
 
-#: app/view/admin/settings.php:209
+#: app/view/admin/settings.php:215
 msgid "Calendar Type:"
 msgstr "Typ kalendáře:"
 
-#: app/view/admin/settings.php:211
+#: app/view/admin/settings.php:217
 msgid "Tourism"
 msgstr "Turistika"
 
-#: app/view/admin/settings.php:212
+#: app/view/admin/settings.php:218
 msgid "Media"
 msgstr "Média"
 
-#: app/view/admin/settings.php:213
+#: app/view/admin/settings.php:219
 msgid "Community Hubs"
 msgstr "Komunitní huby"
 
-#: app/view/admin/settings.php:214
+#: app/view/admin/settings.php:220
 msgid "Education"
 msgstr "Vzdělání"
 
-#: app/view/admin/settings.php:215
+#: app/view/admin/settings.php:221
 msgid "Venue/Business"
 msgstr "Místo konání"
 
-#: app/view/admin/settings.php:216
+#: app/view/admin/settings.php:222
 msgid "Artist/Performer"
 msgstr "Umělec/Účinkující"
 
-#: app/view/admin/settings.php:217
+#: app/view/admin/settings.php:223
 msgid "Church/Spiritual"
 msgstr "Církev/Duchovní"
 
-#: app/view/admin/settings.php:218
+#: app/view/admin/settings.php:224
 msgid "Association/Group"
 msgstr "Sdružení/Skupina"
 
-#: app/view/admin/settings.php:219
+#: app/view/admin/settings.php:225
 msgid "Other"
 msgstr "Ostatní"
 
@@ -118,10 +130,10 @@ msgstr ""
 msgid "This post was imported from a CSV/ICS file."
 msgstr "Tento příspěvek byl importován z CSV/ICS souboru."
 
-#: app/view/admin/tickets.php:71 app/view/admin/tickets.php:86
-#: app/view/admin/tickets.php:96 app/view/admin/tickets.php:107
-msgid "Time.ly Ticketing"
-msgstr "Time.ly prodej vstupenek"
+#: app/view/admin/tickets.php:77 app/view/admin/tickets.php:93
+#: app/view/admin/tickets.php:104 app/view/admin/tickets.php:116
+msgid "Timely Ticketing"
+msgstr ""
 
 #: public/admin/box_ask_customer_review.php:175
 msgid "Time.ly team"
@@ -271,27 +283,27 @@ msgstr "Nepodařilo se získat Detaily Události ze služby Time.ly Ticketing"
 msgid "Ticketing is currently not available for this website. Please, try again later."
 msgstr ""
 
-#: app/view/admin/settings.php:173
+#: app/view/admin/settings.php:179
 msgid "Please, Sign In to Timely Network."
 msgstr "Prosíme, přihlašte se k Timely Network."
 
-#: app/view/admin/settings.php:199
+#: app/view/admin/settings.php:205
 msgid "I confirm that I have read, understand and agree with the <a href=\"https://time.ly/tos\">terms of service</a>."
 msgstr "Potvrzuji, že jsem četl, porozuměl a souhlasím s <a href=\"https://time.ly/tos\"> podmínkami služby</a>."
 
-#: app/view/admin/settings.php:202
+#: app/view/admin/settings.php:208
 msgid "<h4>Attention Required:</h4>If you choose to sign-out of the API Timely Network this will close all the created tickets and remove user access to them. In this case, on the event page, users will see the status “Event closed”."
 msgstr "<h4>Věnujte pozornost:</h4>Pokud zvolíte odhlášení odAPI Timely Network, budou uzavřeny všechny vytvořené lístky (tickety) a všechny uživatelské přístupy k nim. Pokud se tak stane, uvidí uživatelé na stránce s událostmi oznámení \"Událost ukončena\" (“Event closed”)."
 
-#: app/view/admin/tickets.php:75
-msgid "You need to sign up for a Timely Network account in order to use Ticketing or Import Feeds<br /><br />"
+#: app/view/admin/tickets.php:81
+msgid "You need to sign up for a Timely Network account in order to use Ticketing.<br /><br />"
 msgstr ""
 
-#: app/view/admin/tickets.php:78
+#: app/view/admin/tickets.php:84
 msgid "<a href=\"edit.php?post_type=ai1ec_event&page=all-in-one-event-calendar-settings\" class=\"ai1ec-btn ai1ec-btn-primary ai1ec-btn-lg\">Sign In to Timely Network</a>"
 msgstr "<a href=\"edit.php?post_type=ai1ec_event&page=all-in-one-event-calendar-settings\" class=\"ai1ec-btn ai1ec-btn-primary ai1ec-btn-lg\">Přihlásit do Timely Network</a>"
 
-#: app/view/admin/tickets.php:79
+#: app/view/admin/tickets.php:85
 msgid "<b>Signing up for a Timely Network account is currently unavailable. Please, try again later.</b>"
 msgstr "<b>Přihlašování k účtu na Timely Network je aktuálně nedostupné. Prosíme, zkuste to později.</b>"
 
@@ -372,15 +384,15 @@ msgstr "Prodej ukončen"
 msgid "Canceled"
 msgstr "Zrušeno"
 
-#: app/model/settings.php:917
+#: app/model/settings.php:930
 msgid "Use this option if calendar is unresponsive. <a target=\"_blank\" href=\"https://time.ly/document/user-guide/troubleshooting/disable-gzip-compression/\">Read more</a> about the issue. (From version 2.1 onwards, gzip is disabled by default for maximum compatibility.)"
 msgstr ""
 
-#: app/model/settings.php:944
+#: app/model/settings.php:957
 msgid "Use advanced JS cache."
 msgstr "Použijte rozšířenou JS cache."
 
-#: app/model/settings.php:947
+#: app/model/settings.php:960
 msgid "Cache dynamically generated JS files. Improves performance."
 msgstr "Ukládat dynamicky generované soubory JS do cache pro zlepšení výkonu."
 
@@ -400,127 +412,127 @@ msgstr "<span class=\"ai1ec-info-text\">Autor této události: %s.</span>"
 msgid "Browse All Add-ons"
 msgstr "Procházet všechny doplňky"
 
-#: app/view/admin/tickets.php:112
+#: app/view/admin/tickets.php:121
 msgid "Please provide your PayPal details."
 msgstr "Prosím poskytněte detaily vašeho účtu PayPal."
 
-#: app/view/admin/tickets.php:114
+#: app/view/admin/tickets.php:123
 msgid "PayPal"
 msgstr "PayPal"
 
-#: app/view/admin/tickets.php:115
+#: app/view/admin/tickets.php:124
 msgid "Preferred currency for tickets:"
 msgstr "Preferovaná měna lístků:"
 
-#: app/view/admin/tickets.php:141
+#: app/view/admin/tickets.php:150
 msgid "United States Dollar"
 msgstr "Americký dolar"
 
-#: app/view/admin/tickets.php:142
+#: app/view/admin/tickets.php:151
 msgid "Canadian Dollar"
 msgstr "Kanadský dolar"
 
-#: app/view/admin/tickets.php:143
+#: app/view/admin/tickets.php:152
 msgid "Australian Dollar"
 msgstr "Australský dolar"
 
-#: app/view/admin/tickets.php:144
+#: app/view/admin/tickets.php:153
 msgid "Brazilian Real"
 msgstr "Brazilský real"
 
-#: app/view/admin/tickets.php:144 app/view/admin/tickets.php:152
+#: app/view/admin/tickets.php:153 app/view/admin/tickets.php:161
 msgid "Note: This currency is supported as a payment currency and a currency balance for in-country PayPal accounts only."
 msgstr "Poznámka: Tato měna je jako měna plateb a zůstatků podporována pouze pro lokální účty PayPal."
 
-#: app/view/admin/tickets.php:145
+#: app/view/admin/tickets.php:154
 msgid "Czech Koruna"
 msgstr "Česká koruna"
 
-#: app/view/admin/tickets.php:146
+#: app/view/admin/tickets.php:155
 msgid "Danish Krone"
 msgstr "Dánská koruna"
 
-#: app/view/admin/tickets.php:147
+#: app/view/admin/tickets.php:156
 msgid "Euro"
 msgstr "Euro"
 
-#: app/view/admin/tickets.php:148
+#: app/view/admin/tickets.php:157
 msgid "Hong Kong Dollar"
 msgstr "Hongkongský dolar"
 
-#: app/view/admin/tickets.php:149
+#: app/view/admin/tickets.php:158
 msgid "Hungarian Forint"
 msgstr "Maďarský forint"
 
-#: app/view/admin/tickets.php:149 app/view/admin/tickets.php:163
+#: app/view/admin/tickets.php:158 app/view/admin/tickets.php:172
 msgid "Note: Decimal amounts are not supported for this currency. Passing a decimal amount will throw an error."
 msgstr "Poznámka: Částky za desetinnou čárkou nejsou pro tuto měnu podporovány. Vyplnění desetinné částky bude mít za následek chybu."
 
-#: app/view/admin/tickets.php:150
+#: app/view/admin/tickets.php:159
 msgid "Israeli New Sheqel"
 msgstr "Izraelský nový šekel"
 
-#: app/view/admin/tickets.php:151
+#: app/view/admin/tickets.php:160
 msgid "Japanese Yen"
 msgstr "Japonský jen"
 
-#: app/view/admin/tickets.php:151
+#: app/view/admin/tickets.php:160
 msgid "Note: This currency does not support decimals. Passing a decimal amount will throw an error. 1,000,000"
 msgstr "Poznámka: Tato měna nepodporuje desetinné části. Vyplněním desetinné části způsobí chybu. 1,000,000"
 
-#: app/view/admin/tickets.php:152
+#: app/view/admin/tickets.php:161
 msgid "Malaysian Ringgit"
 msgstr "Malajský ringgit"
 
-#: app/view/admin/tickets.php:153
+#: app/view/admin/tickets.php:162
 msgid "Mexican Peso"
 msgstr "Mexické peso"
 
-#: app/view/admin/tickets.php:154
+#: app/view/admin/tickets.php:163
 msgid "Norwegian Krone"
 msgstr "Norská koruna"
 
-#: app/view/admin/tickets.php:155
+#: app/view/admin/tickets.php:164
 msgid "New Zealand Dollar"
 msgstr "Novozélandský dolar"
 
-#: app/view/admin/tickets.php:156
+#: app/view/admin/tickets.php:165
 msgid "Philippine Peso"
 msgstr "Filipínské peso"
 
-#: app/view/admin/tickets.php:157
+#: app/view/admin/tickets.php:166
 msgid "Polish Zloty"
 msgstr "Polský zlotý"
 
-#: app/view/admin/tickets.php:158
+#: app/view/admin/tickets.php:167
 msgid "Pound Sterling"
 msgstr "Libra šterlinků"
 
-#: app/view/admin/tickets.php:159
+#: app/view/admin/tickets.php:168
 msgid "Russian Ruble"
 msgstr "Ruský rubl"
 
-#: app/view/admin/tickets.php:159
+#: app/view/admin/tickets.php:168
 msgid "For in-border payments (payments made within Russia), the Russian Ruble is the only accepted currency. If you use another currency for in-border payments, the transaction will fail"
 msgstr "Pro platby v rámci Ruska je jedinou akceptovatelnou měnou Ruský rubl. Jestliže zvolíte jinou měnu pro lokální transakci, tato transakce selže"
 
-#: app/view/admin/tickets.php:160
+#: app/view/admin/tickets.php:169
 msgid "Singapore Dollar"
 msgstr "Singapurský dolar"
 
-#: app/view/admin/tickets.php:161
+#: app/view/admin/tickets.php:170
 msgid "Swedish Krona"
 msgstr "Švédská koruna"
 
-#: app/view/admin/tickets.php:162
+#: app/view/admin/tickets.php:171
 msgid "Swiss Franc"
 msgstr "Švýcarský frank"
 
-#: app/view/admin/tickets.php:163
+#: app/view/admin/tickets.php:172
 msgid "Taiwan New Dollar"
 msgstr "Tchajwanský nový dolar"
 
-#: app/view/admin/tickets.php:164
+#: app/view/admin/tickets.php:173
 msgid "Thai Baht"
 msgstr "Thajský baht"
 
@@ -588,15 +600,11 @@ msgstr "Bezplatná událost"
 msgid "Registration URL:"
 msgstr "URL registrace:"
 
-#: public/admin/box_support.php:19
+#: public/admin/box_support.php:20
 msgid "Guide"
 msgstr "Průvodce"
 
-#: public/admin/box_support.php:27
-msgid "Forum"
-msgstr "Fórum"
-
-#: public/admin/box_support.php:35
+#: public/admin/box_support.php:36
 msgid "Videos"
 msgstr "Videa"
 
@@ -1108,15 +1116,19 @@ msgstr "Zachovat původní kategorie událostí a štítky"
 msgid "On refresh, preserve previously imported events that are missing from the feed"
 msgstr "Při obnovení zachovat dřívější události, které v importu již chybí"
 
-#: public/admin/box_support.php:51
+#: public/admin/box_support.php:28
+msgid "Support"
+msgstr "Podpora"
+
+#: public/admin/box_support.php:52
 msgid "Timely News"
 msgstr "Timely novinky"
 
-#: public/admin/box_support.php:55
+#: public/admin/box_support.php:56
 msgid "view all news"
 msgstr "zobrazit všechny novinky"
 
-#: public/admin/box_support.php:103
+#: public/admin/box_support.php:131
 msgid "Follow @_Timely"
 msgstr "Sledovat @_Timely"
 
@@ -1248,16 +1260,16 @@ msgstr "Prosím čekejte&#8230;"
 msgid "Apply"
 msgstr "Použít"
 
-#: app/view/admin/settings.php:205 public/admin/box_repeat.php:116
+#: app/view/admin/settings.php:211 public/admin/box_repeat.php:116
 #: public/admin/plugins/ics/import_feed.php:127
 msgid "Cancel"
 msgstr "Zrušit"
 
-#: public/admin/box_support.php:4
+#: public/admin/box_support.php:5
 msgid "Timely"
 msgstr "Timely"
 
-#: public/admin/box_support.php:11
+#: public/admin/box_support.php:12
 msgid "Timely’s All-in-One Event Calendar is a<br />revolutionary new way to find and share events."
 msgstr "All-in-One Event Calendar od Timely je<br />revoluční nový způsob, jak vyhledávat a sdílet události."
 
@@ -2498,11 +2510,11 @@ msgstr "Nyní nejsou žádné nadcházející události k zobrazení."
 msgid "Read more"
 msgstr "Číst více"
 
-#: app/view/admin/tickets.php:111
+#: app/view/admin/tickets.php:120
 msgid "Sales"
 msgstr "Prodeje"
 
-#: app/view/admin/tickets.php:113
+#: app/view/admin/tickets.php:122
 msgid "Cheque"
 msgstr "Šek"
 
@@ -2510,32 +2522,32 @@ msgstr "Šek"
 msgid "Paypal"
 msgstr "Paypal"
 
-#: app/view/admin/tickets.php:117
+#: app/view/admin/tickets.php:126
 msgid "Save Changes"
 msgstr "Uložit změny"
 
-#: app/view/admin/tickets.php:118
+#: app/view/admin/tickets.php:127
 msgid "Date"
 msgstr "Datum"
 
-#: app/view/admin/tickets.php:119
+#: app/view/admin/tickets.php:128
 msgid "Event"
 msgstr "Akce"
 
-#: app/view/admin/tickets.php:120
+#: app/view/admin/tickets.php:129
 msgid "Purchaser"
 msgstr "Kupující"
 
-#: app/view/admin/tickets.php:121 app/view/calendar/view/abstract.php:107
+#: app/view/admin/tickets.php:130 app/view/calendar/view/abstract.php:107
 #: app/view/event/ticket.php:39
 msgid "Tickets"
 msgstr "Vstupenky"
 
-#: app/view/admin/tickets.php:124
+#: app/view/admin/tickets.php:133
 msgid "Total"
 msgstr "Celkem"
 
-#: app/view/admin/settings.php:206 app/view/admin/tickets.php:125
+#: app/view/admin/settings.php:212 app/view/admin/tickets.php:134
 msgid "Sign Out"
 msgstr "Odhlásit"
 
@@ -2577,23 +2589,23 @@ msgstr "Objevila se chyba při nahrávání kalendáře. Prosím, kontaktujte ad
 msgid "Calendar was unable to initialize %s view and has reverted to Agenda view. Please check if you have installed the latest versions of calendar add-ons."
 msgstr "Kalendáři se nepodařilo inicializovat zobrazení %s a vrací se k zobrazení Agenda. Prosím, zkontrolujte, že máte instalovány poslední verze doplňků kalendáře."
 
-#: app/view/admin/settings.php:198
+#: app/view/admin/settings.php:204
 msgid "Phone Number:"
 msgstr "Telefonní číslo:"
 
-#: app/view/admin/settings.php:207
+#: app/view/admin/settings.php:213
 msgid "Sign Up"
 msgstr "Registrovat"
 
-#: app/view/admin/settings.php:208
+#: app/view/admin/settings.php:214
 msgid "Sign In"
 msgstr "Přihlásit"
 
-#: app/view/admin/settings.php:231
+#: app/view/admin/settings.php:237
 msgid "Save Settings"
 msgstr "Uložit nastavení"
 
-#: app/view/admin/settings.php:238
+#: app/view/admin/settings.php:244
 msgid "If the form below is not working please follow <a href=\"%s\">this link</a>."
 msgstr "Pokud formulář uvedený níže nefunguje, přejděte na <a href=\"%s\">tento odkaz</a>, prosím."
 
@@ -2691,7 +2703,7 @@ msgstr "Externí služby"
 msgid "Cache Report"
 msgstr "Vyrovnávací paměť"
 
-#: app/view/admin/settings.php:184 app/view/admin/tickets.php:116
+#: app/view/admin/settings.php:190 app/view/admin/tickets.php:125
 #: public/admin/box_ask_customer_review.php:113
 #: public/admin/box_ask_customer_review.php:127
 #: public/admin/box_ask_customer_review.php:141
@@ -2701,39 +2713,39 @@ msgstr "Vyrovnávací paměť"
 msgid "This field is required."
 msgstr "Toto pole je vyžadováno."
 
-#: app/view/admin/settings.php:185 app/view/event/ticket.php:25
+#: app/view/admin/settings.php:191 app/view/event/ticket.php:25
 msgid "Register"
 msgstr "Registrovat"
 
-#: app/view/admin/settings.php:186
+#: app/view/admin/settings.php:192
 msgid "Sign in"
 msgstr "Přihlásit se"
 
-#: app/view/admin/settings.php:190
+#: app/view/admin/settings.php:196
 msgid "Sign out"
 msgstr "Odhlásit"
 
-#: app/view/admin/settings.php:193
+#: app/view/admin/settings.php:199
 msgid "Hide form"
 msgstr "Skrýt formulář"
 
-#: app/view/admin/settings.php:194
+#: app/view/admin/settings.php:200
 msgid "Show form"
 msgstr "Zobrazit formulář"
 
-#: app/view/admin/settings.php:192
+#: app/view/admin/settings.php:198
 msgid "Full Name:"
 msgstr "Jméno:"
 
-#: app/view/admin/settings.php:195
+#: app/view/admin/settings.php:201
 msgid "Email:"
 msgstr "E-mail:"
 
-#: app/view/admin/settings.php:196
+#: app/view/admin/settings.php:202
 msgid "Password:"
 msgstr "Heslo:"
 
-#: app/view/admin/settings.php:197
+#: app/view/admin/settings.php:203
 msgid "Confirm Password:"
 msgstr "Potvrdit heslo:"
 
@@ -2802,7 +2814,7 @@ msgid "All-in-One Event Calendar: Settings"
 msgstr "All-in-One Event Calendar: Nastavení"
 
 #: app/view/admin/settings.php:68 app/view/admin/settings.php:69
-#: app/view/admin/tickets.php:110 lib/date/timezone.php:366
+#: app/view/admin/tickets.php:119 lib/date/timezone.php:366
 msgid "Settings"
 msgstr "Nastavení"
 
@@ -2910,19 +2922,19 @@ msgstr "poslední"
 msgid "month(s)"
 msgstr "měsíc(ů)"
 
-#: app/model/settings.php:959
+#: app/model/settings.php:972
 msgid "<strong>Link CSS</strong> in <code>&lt;head&gt;</code> section when file cache is unavailable."
 msgstr "<strong>Odkaz CSS</strong> v <code>&lt;head&gt;</code> sekci, když soubor s cache není dostupný."
 
-#: app/model/settings.php:962
+#: app/model/settings.php:975
 msgid "Use this option if file cache is unavailable and you would prefer to serve CSS as a link rather than have it output inline."
 msgstr "Použijte tuto možnost, pokud je souborová cache nedostupná a preferovali byste raději předání CSS jako linku než vygenerovaného."
 
-#: app/model/settings.php:974
+#: app/model/settings.php:987
 msgid "Current <strong>robots.txt</strong> on this site"
 msgstr "Aktuální <strong>robots.txt</strong> na těchto stránkách"
 
-#: app/model/settings.php:978
+#: app/model/settings.php:991
 msgid ""
 "The Robot Exclusion Standard, also known as the Robots Exclusion Protocol or\n"
 "                        <code><a href=\"https://en.wikipedia.org/wiki/Robots.txt\" target=\"_blank\">robots.txt</a></code>\n"
@@ -2931,19 +2943,19 @@ msgid ""
 "                        You can change it manually by editing <code>robots.txt</code> in your root WordPress directory."
 msgstr ""
 
-#: app/model/settings.php:995
+#: app/model/settings.php:1008
 msgid "<strong>Publicize, promote, and share my events</strong> marked as public on the Timely network. (<a href=\"%s\" target=\"_blank\">Learn more &#187;</a>)"
 msgstr "<strong>Zveřejnit, propagovat a sdílet mé akce</strong> označené jako veřejné v sítí Timely. (<a href=\"%s\" target=\"_blank\">Learn more &#187;</a>)"
 
-#: app/model/settings.php:1018
+#: app/model/settings.php:1031
 msgid "Templates cache improves site performance"
 msgstr "Vyrovnávací paměť šablon zlepšuje výkon stránek"
 
-#: app/model/settings.php:1031
+#: app/model/settings.php:1044
 msgid "Display events in <strong>calendar time zone</strong>"
 msgstr "Zobrazit události v <strong>časovém pásmu kalendáře</strong>"
 
-#: app/model/settings.php:1034
+#: app/model/settings.php:1047
 msgid "If this box is checked events will appear in the calendar time zone with time zone information displayed on the event details page."
 msgstr "Pokud je zatrhnuto, události se zobrazí v časovém pásmu kalendáře spolu s informací o zobrazeném časovém pásmu na stránce detailu události."
 
@@ -3047,27 +3059,27 @@ msgstr "Zobrazit staré <strong>Vložit událost</strong> tlačítko nad kalend�
 msgid "Install the <a target=\"_blank\" href=\"https://time.ly/\">Interactive Frontend Extension</a> for the <strong>frontend Post Your Event form</strong>."
 msgstr ""
 
-#: app/model/settings.php:878
+#: app/model/settings.php:891
 msgid "Move calendar into this DOM element"
 msgstr "Přesunout kalendář do tohoto DOM elementu."
 
-#: app/model/settings.php:899
+#: app/model/settings.php:912
 msgid "<strong>Skip <tt>in_the_loop()</tt> check </strong> that protects against multiple calendar output"
 msgstr "<strong>Přeskočit kontrolu <tt>in_the_loop()</tt></strong>, která zabraňuje vícenásobnému zobrazování kalendáře"
 
-#: app/model/settings.php:902
+#: app/model/settings.php:915
 msgid "Try enabling this option if your calendar does not appear on the calendar page. It is needed for compatibility with a small number of themes that call <tt>the_content()</tt> from outside of The Loop. Leave disabled otherwise."
 msgstr "Zkuste povolit tuto možnost, pokud se váš kalendář nezobrazuje na kalendářové stránce. Je to potřeba pro kompatibilitu s malým počtem šablon, které volají <tt>the_content()</tt> z vnějšku Cyklu. V opačném případě nechte zakázané."
 
-#: app/model/settings.php:914
+#: app/model/settings.php:927
 msgid "Disable <strong>gzip</strong> compression."
 msgstr "Deaktivovat <strong>gzip</strong> kompresi."
 
-#: app/model/settings.php:929
+#: app/model/settings.php:942
 msgid "Use frontend rendering."
 msgstr "Použít před-renderování"
 
-#: app/model/settings.php:932
+#: app/model/settings.php:945
 msgid "Renders calendar views on the client rather than the server; can improve performance."
 msgstr "Organizovat události"
 
@@ -3369,11 +3381,11 @@ msgstr "Seznam účastníků"
 msgid "Guest Name"
 msgstr "Jméno hosta"
 
-#: app/controller/javascript.php:571 app/view/admin/tickets.php:123
+#: app/controller/javascript.php:571 app/view/admin/tickets.php:132
 msgid "Status"
 msgstr "Stav"
 
-#: app/controller/javascript.php:572 app/view/admin/tickets.php:122
+#: app/controller/javascript.php:572 app/view/admin/tickets.php:131
 #: app/view/event/ticket.php:71
 msgid "Email"
 msgstr "Email"
@@ -3481,7 +3493,7 @@ msgid "Info"
 msgstr "Informace"
 
 #: app/controller/extension-license.php:53 app/view/admin/add-ons.php:26
-#: app/view/admin/add-ons.php:27 public/admin/box_support.php:43
+#: app/view/admin/add-ons.php:27 app/view/admin/settings.php:156
 msgid "Add-ons"
 msgstr "Doplňky"
 
