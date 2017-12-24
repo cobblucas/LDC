@@ -98,43 +98,43 @@ msgstr ""
 "<b>Du har nået grænsen for hvor mange feeds du kan importere.</b><br>\n"
 "        Tilmeld dig en \"EventBoost\"-plan <a href=\"https://time.ly/eventboost/\" target=\"_blank\">her</a>."
 
-#: app/view/admin/settings.php:215
+#: app/view/admin/settings.php:214
 msgid "Calendar Type:"
 msgstr "Kalendertype:"
 
-#: app/view/admin/settings.php:217
+#: app/view/admin/settings.php:216
 msgid "Tourism"
 msgstr "Turisme"
 
-#: app/view/admin/settings.php:218
+#: app/view/admin/settings.php:217
 msgid "Media"
 msgstr "Medier"
 
-#: app/view/admin/settings.php:219
+#: app/view/admin/settings.php:218
 msgid "Community Hubs"
 msgstr "Fællesskabscenter"
 
-#: app/view/admin/settings.php:220
+#: app/view/admin/settings.php:219
 msgid "Education"
 msgstr "Uddannelse"
 
-#: app/view/admin/settings.php:221
+#: app/view/admin/settings.php:220
 msgid "Venue/Business"
 msgstr "Spillested/Virksomhed"
 
-#: app/view/admin/settings.php:222
+#: app/view/admin/settings.php:221
 msgid "Artist/Performer"
 msgstr "Musiker/Scenekunstner"
 
-#: app/view/admin/settings.php:223
+#: app/view/admin/settings.php:222
 msgid "Church/Spiritual"
 msgstr "Kirke/Åndeligt"
 
-#: app/view/admin/settings.php:224
+#: app/view/admin/settings.php:223
 msgid "Association/Group"
 msgstr "Forening/Gruppe"
 
-#: app/view/admin/settings.php:225
+#: app/view/admin/settings.php:224
 msgid "Other"
 msgstr "Andet"
 
@@ -305,15 +305,15 @@ msgstr "Vi kunne ikke hente detaljer om begivenheden fra Time.ly billetsystem"
 msgid "Ticketing is currently not available for this website. Please, try again later."
 msgstr "Billetsystemet er ikke tilgængeligt for denne webside lige nu. Prøv igen senere."
 
-#: app/view/admin/settings.php:179
+#: app/view/admin/settings.php:178
 msgid "Please, Sign In to Timely Network."
 msgstr "Log ind på Timelys netværk."
 
-#: app/view/admin/settings.php:205
+#: app/view/admin/settings.php:204
 msgid "I confirm that I have read, understand and agree with the <a href=\"https://time.ly/tos\">terms of service</a>."
 msgstr "Jeg bekræfter at have læst, forstået og accepteret <a href=\"https://time.ly/tos\">servicevilkår</a>."
 
-#: app/view/admin/settings.php:208
+#: app/view/admin/settings.php:207
 msgid "<h4>Attention Required:</h4>If you choose to sign-out of the API Timely Network this will close all the created tickets and remove user access to them. In this case, on the event page, users will see the status “Event closed”."
 msgstr "<h4>Vigtig meddelese:</h4> Hvis du vælger at logge ud af applikationen Timely Netværk vil alle oprettede billetter blive lukket og brugeradgangen fjernet. I dette tilfælde vil brugeren, på begivenhedens side, se statusen \"Begivenhed lukket\"."
 
@@ -678,7 +678,7 @@ msgstr "Klik her for tekniske detaljer"
 msgid "API URL: %s.<br/>Detail: %s"
 msgstr "API URL: %s.<br/>Detail: %s"
 
-#: app/model/api/api-abstract.php:545
+#: app/model/api/api-abstract.php:542
 msgid "Error decoding the response"
 msgstr "Fejl i afkodning af svaret"
 
@@ -1284,7 +1284,7 @@ msgstr "Vent venligst&#8230;"
 msgid "Apply"
 msgstr "Tilføj"
 
-#: app/view/admin/settings.php:211 public/admin/box_repeat.php:116
+#: app/view/admin/settings.php:210 public/admin/box_repeat.php:116
 #: public/admin/plugins/ics/import_feed.php:127
 msgid "Cancel"
 msgstr "Fortryd"
@@ -2570,7 +2570,7 @@ msgstr "Billetter"
 msgid "Total"
 msgstr "Total"
 
-#: app/view/admin/settings.php:212 app/view/admin/tickets.php:134
+#: app/view/admin/settings.php:211 app/view/admin/tickets.php:134
 msgid "Sign Out"
 msgstr "Log ud"
 
@@ -2612,23 +2612,23 @@ msgstr "Der opstod en fejl med at hente kalenderen. Kontakt venligst sidens admi
 msgid "Calendar was unable to initialize %s view and has reverted to Agenda view. Please check if you have installed the latest versions of calendar add-ons."
 msgstr "Kalenderen kunne ikke oprette %s visning og er gået tilbage til Listevisning. Tjek om du har installeret seneste versioner af kalendertilføjelserne."
 
-#: app/view/admin/settings.php:204
+#: app/view/admin/settings.php:203
 msgid "Phone Number:"
 msgstr "Telefonnr.:"
 
-#: app/view/admin/settings.php:213
+#: app/view/admin/settings.php:212
 msgid "Sign Up"
 msgstr "Tilmeld"
 
-#: app/view/admin/settings.php:214
+#: app/view/admin/settings.php:213
 msgid "Sign In"
 msgstr "Log ind"
 
-#: app/view/admin/settings.php:237
+#: app/view/admin/settings.php:236
 msgid "Save Settings"
 msgstr "Gem indstillinger"
 
-#: app/view/admin/settings.php:244
+#: app/view/admin/settings.php:243
 msgid "If the form below is not working please follow <a href=\"%s\">this link</a>."
 msgstr "Hvis formularen nedenunder ikke virker, følg da <a href=\"%s\">dette link</a>."
 
@@ -2726,7 +2726,7 @@ msgstr "Eksterne tjenester"
 msgid "Cache Report"
 msgstr "Cache-rapport"
 
-#: app/view/admin/settings.php:190 app/view/admin/tickets.php:125
+#: app/view/admin/settings.php:189 app/view/admin/tickets.php:125
 #: public/admin/box_ask_customer_review.php:113
 #: public/admin/box_ask_customer_review.php:127
 #: public/admin/box_ask_customer_review.php:141
@@ -2736,39 +2736,39 @@ msgstr "Cache-rapport"
 msgid "This field is required."
 msgstr "Dette felt er påkrævet."
 
-#: app/view/admin/settings.php:191 app/view/event/ticket.php:25
+#: app/view/admin/settings.php:190 app/view/event/ticket.php:25
 msgid "Register"
 msgstr "Registrer"
 
-#: app/view/admin/settings.php:192
+#: app/view/admin/settings.php:191
 msgid "Sign in"
 msgstr "Log ind"
 
-#: app/view/admin/settings.php:196
+#: app/view/admin/settings.php:195
 msgid "Sign out"
 msgstr "Log ud"
 
-#: app/view/admin/settings.php:199
+#: app/view/admin/settings.php:198
 msgid "Hide form"
 msgstr "Skjul formularen"
 
-#: app/view/admin/settings.php:200
+#: app/view/admin/settings.php:199
 msgid "Show form"
 msgstr "Vis formularen"
 
-#: app/view/admin/settings.php:198
+#: app/view/admin/settings.php:197
 msgid "Full Name:"
 msgstr "Fulde navn:"
 
-#: app/view/admin/settings.php:201
+#: app/view/admin/settings.php:200
 msgid "Email:"
 msgstr "Email:"
 
-#: app/view/admin/settings.php:202
+#: app/view/admin/settings.php:201
 msgid "Password:"
 msgstr "Password:"
 
-#: app/view/admin/settings.php:203
+#: app/view/admin/settings.php:202
 msgid "Confirm Password:"
 msgstr "Bekræft password:"
 

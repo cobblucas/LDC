@@ -1,8 +1,8 @@
 === Advanced Custom Fields: Table Field ===
 Contributors: Johann Heyne
 Tags: acf table
-Requires at least: 4.7
-Tested up to: 4.8.1
+Requires at least: 4.8
+Tested up to: 4.9
 Stable tag: trunk
 License: GPLv2 or later
 
@@ -17,8 +17,12 @@ The table field works also with the repeater and flexible field types.
 * table header (option)
 * add and remove table columns and rows
 * change order of columns and rows by dragging
+* to move to the next cells editor press key: tab
+* to move to the previous cells editor press key: shift + tab
 
-To display the table fields data as an html table you can start with the following code.
+=== Output Table HTML ===
+
+To render the table fields data as an html table in one of your template files you can start with the following basic code example:
 
 `
 $table = get_field( 'your_table_field_name' );
@@ -66,6 +70,57 @@ if ( $table ) {
 	echo '</table>';
 }
 `
+=== Line Breaks ===
+
+This is about displaying line breaks in the admin tables and getting line breaks as `<br>` when outputting the tables HTML.
+
+= Converting Line Breaks for HTML Output =
+
+To convert line breaks to `<br>` in tables HTML output the PHP function `nl2br()` can be used:
+
+For line breaks in **table header cells** replace…
+`
+echo $th['c'];
+`
+with…
+`
+echo nl2br( $th['c'] );
+`
+
+For line breaks in **table body cells** replace…
+`
+echo $td['c'];
+`
+with…
+`
+echo nl2br( $td['c'] );
+`
+
+= Displaying Line Breaks in Editing Tables =
+
+To display natural line breaks in the editing tables in the admin area, add the following styles to the admin area.
+
+`
+.acf-table-header-cont,
+.acf-table-body-cont {
+    white-space: pre-line;
+}
+`
+
+One way to add these styles to the WordPress admin area is adding the following code to your functions.php file of the theme.
+
+`
+add_action('admin_head', 'acf_table_styles');
+
+function acf_table_styles() {
+  echo '<style>
+    .acf-table-header-cont,
+    .acf-table-body-cont {
+        white-space: pre-line;
+    }
+  </style>';
+}
+`
 
 == Installation ==
 
@@ -87,6 +142,10 @@ However, only when activated as a plugin will updates be available.
 
 
 == Changelog ==
+
+= 1.2.1 =
+* Fixes not using user locale for translation
+* Adds description for handling line breaks to plugins page
 
 = 1.2 =
 * Adds support for tab navigation. Uses shift + tab for backward navigation.
