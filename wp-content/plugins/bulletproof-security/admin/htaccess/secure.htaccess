@@ -29,7 +29,7 @@ DirectoryIndex index.php index.html /index.php
 # BRUTE FORCE LOGIN PAGE PROTECTION
 # PLACEHOLDER ONLY
 # Use BPS Custom Code to add Brute Force Login protection code and to save it permanently.
-# See this link: http://forum.ait-pro.com/forums/topic/protect-login-page-from-brute-force-login-attacks/
+# See this link: https://forum.ait-pro.com/forums/topic/protect-login-page-from-brute-force-login-attacks/
 # for more information.
 
 # BPS ERROR LOGGING AND TRACKING
@@ -83,7 +83,7 @@ RewriteRule ^index\.php$ - [L]
 RewriteCond %{REQUEST_METHOD} ^(TRACE|DELETE|TRACK|DEBUG) [NC]
 RewriteRule ^(.*)$ - [F]
 RewriteCond %{REQUEST_METHOD} ^(HEAD) [NC]
-RewriteRule ^(.*)$ /wp-content/plugins/bulletproof-security/405.php [R,L]
+RewriteRule ^(.*)$ /wp-content/plugins/bulletproof-security/405.php [L]
 
 # PLUGINS/THEMES AND VARIOUS EXPLOIT FILTER SKIP RULES
 # To add plugin/theme skip/bypass rules use BPS Custom Code.
@@ -124,6 +124,7 @@ RewriteRule . - [S=4]
 RewriteCond %{QUERY_STRING} action=rp&key=(.*) [NC]
 RewriteRule . - [S=3]
 
+# CUSTOM CODE TIMTHUMB FORBID RFI and MISC FILE SKIP/BYPASS RULE
 # TIMTHUMB FORBID RFI and MISC FILE SKIP/BYPASS RULE
 # Use BPS Custom Code to modify/edit/change this code and to save it permanently.
 # Remote File Inclusion (RFI) security rules
@@ -135,9 +136,10 @@ RewriteRule .* index.php [F]
 # Example: Whitelist additional misc files: (example\.php|another-file\.php|phpthumb\.php|thumb\.php|thumbs\.php)
 RewriteCond %{REQUEST_URI} (timthumb\.php|phpthumb\.php|thumb\.php|thumbs\.php) [NC]
 # Example: Whitelist additional website domains: RewriteCond %{HTTP_REFERER} ^.*(YourWebsite.com|AnotherWebsite.com).*
-RewriteCond %{HTTP_REFERER} ^.*demo2.local.*
+RewriteCond %{HTTP_REFERER} ^.*lucascobb.com.*
 RewriteRule . - [S=1]
 
+# CUSTOM CODE BPSQSE BPS QUERY STRING EXPLOITS
 # BEGIN BPSQSE BPS QUERY STRING EXPLOITS
 # The libwww-perl User Agent is forbidden - Many bad bots use libwww-perl modules, but some good bots use it too.
 # Good sites such as W3C use it for their W3C-LinkChecker. 
@@ -160,7 +162,7 @@ RewriteCond %{QUERY_STRING} [a-zA-Z0-9_]=/([a-z0-9_.]//?)+ [NC,OR]
 RewriteCond %{QUERY_STRING} \=PHP[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12} [NC,OR]
 RewriteCond %{QUERY_STRING} (\.\./|%2e%2e%2f|%2e%2e/|\.\.%2f|%2e\.%2f|%2e\./|\.%2e%2f|\.%2e/) [NC,OR]
 RewriteCond %{QUERY_STRING} ftp\: [NC,OR]
-RewriteCond %{QUERY_STRING} (http|https)\: [NC,OR]
+RewriteCond %{QUERY_STRING} (http|https)\: [NC,OR] 
 RewriteCond %{QUERY_STRING} \=\|w\| [NC,OR]
 RewriteCond %{QUERY_STRING} ^(.*)/self/(.*)$ [NC,OR]
 RewriteCond %{QUERY_STRING} ^(.*)cPath=(http|https)://(.*)$ [NC,OR]
@@ -190,6 +192,7 @@ RewriteCond %{QUERY_STRING} (;|<|>|'|"|\)|%0A|%0D|%22|%27|%3C|%3E|%00).*(/\*|uni
 RewriteCond %{QUERY_STRING} (sp_executesql) [NC]
 RewriteRule ^(.*)$ - [F]
 # END BPSQSE BPS QUERY STRING EXPLOITS
+
 RewriteCond %{REQUEST_FILENAME} !-f
 RewriteCond %{REQUEST_FILENAME} !-d
 RewriteRule . /index.php [L]

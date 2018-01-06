@@ -1,0 +1,44 @@
+# PROTECT WP-CONFIG
+<Files wp-config.php>
+	
+	# Apache < 2.3
+	<IfModule !mod_authz_core.c>
+		Order allow,deny
+		Deny from all
+		Satisfy All
+	</IfModule>
+	
+	# Apache >= 2.3
+	<IfModule mod_authz_core.c>
+		Require all denied
+	</IfModule>
+	
+</Files>
+
+# BEGIN WordPress
+<IfModule mod_rewrite.c>
+RewriteEngine On
+RewriteBase /
+RewriteRule ^index\.php$ - [L]
+RewriteCond %{REQUEST_FILENAME} !-f
+RewriteCond %{REQUEST_FILENAME} !-d
+RewriteRule . /index.php [L]
+</IfModule>
+
+# END WordPress
+
+<IfModule mod_php5.c>
+php_value post_max_size           4M
+#php_value upload_max_filesize     40M
+php_value memory_limit            500M
+</IfModule>
+
+# Block WordPress xmlrpc.php requests
+<Files xmlrpc.php>
+order deny,allow
+deny from all
+allow from 123.123.123.123
+</Files>
+
+
+Options -Indexes
