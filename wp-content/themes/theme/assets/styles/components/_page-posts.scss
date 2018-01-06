@@ -32,6 +32,24 @@
 		color: $clr-brand-2;
 		margin-bottom: 20px;
 	}
+
+	.navigation {
+		margin-top: 30px;
+		h2.screen-reader-text {
+			margin: 0;
+		}
+		.nav-links {
+			display: flex;
+			justify-content: space-between;
+			margin-top: 25px;
+			padding: 15px 0;
+			border: {
+				width: 1px 0 1px 0;
+				style: solid;
+				color: $clr-brand;
+			}
+		}
+	}
 }
 
 .bb-pagination {
