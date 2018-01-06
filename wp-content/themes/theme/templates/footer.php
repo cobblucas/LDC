@@ -31,7 +31,7 @@
 				<div class="footer-bottom col-sm-12">
 					<img src="<?php the_field('footer_logo', 'option'); ?>">
 					<h3><?php the_field('footer_blurb', 'option'); ?></h3>
-					<div class="copyright">&copy; <?php echo date('Y'); ?> <?php bloginfo('name'); ?>, All Rights Reserved.</div>
+					<div class="copyright">&copy; <?php echo date('Y'); ?> <?php bloginfo('name'); ?>, View the <a href="/privacy-policy/">Privacy Policy</a>. All Rights Reserved.</div>
 				</div>
 			</div>
 		</div>
