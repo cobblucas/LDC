@@ -954,7 +954,7 @@ function bpsPro_presave_mscan_options() {
 		$mscan_scan_database = $MScan_options['mscan_scan_database'] == '' ? 'On' : $MScan_options['mscan_scan_database'];
 		$mscan_scan_images = $MScan_options['mscan_scan_images'] == '' ? 'Off' : $MScan_options['mscan_scan_images'];
 		$mscan_scan_skipped_files = $MScan_options['mscan_scan_skipped_files'] == '' ? 'Off' : $MScan_options['mscan_scan_skipped_files'];
-		$mscan_scan_delete_tmp_files = $MScan_options['mscan_scan_delete_tmp_files'] == '' ? 'On' : $MScan_options['mscan_scan_delete_tmp_files'];
+		$mscan_scan_delete_tmp_files = $MScan_options['mscan_scan_delete_tmp_files'] == '' ? 'Off' : $MScan_options['mscan_scan_delete_tmp_files'];
 		$mscan_scan_frequency = $MScan_options['mscan_scan_frequency'] == '' ? 'Off' : $MScan_options['mscan_scan_frequency'];
 
 		$MS_Options = array(
@@ -1005,6 +1005,20 @@ function bpsPro_new_version_db_options_files_autoupdate() {
 	if ( current_user_can('manage_options') ) {
 		global $bps_version, $bps_last_version, $wp_version, $wpdb, $aitpro_bullet, $pagenow, $current_user;
 	
+		// 2.9: BPS plugin 30 day review/rating request Dismiss Notice
+		$bps_rate_options = 'bulletproof_security_options_rate_free';
+		$gmt_offset = get_option( 'gmt_offset' ) * 3600;
+		$bps_free_rate_review = mktime(0, 0, 0, date("m")+1, date("d")+1, date("Y"));
+	
+		$BPS_Rate_Option = array( 'bps_free_rate_review' => $bps_free_rate_review + $gmt_offset );
+	
+		if ( ! get_option( $bps_rate_options ) ) {	
+		
+			foreach( $BPS_Rate_Option as $key => $value ) {
+				update_option('bulletproof_security_options_rate_free', $BPS_Rate_Option);
+			}
+		}
+
 		// 2.4: new function created to handle all BPS MU Tools must-use plugin processing
 		bpsPro_mu_tools_plugin_copy();
 		// 2.4: Pre-save MScan Options
@@ -1021,6 +1035,7 @@ function bpsPro_new_version_db_options_files_autoupdate() {
 			}
 		}
 
+		// 2.9: Added new JTC option: bps_jtc_custom_form_error. Defaults to standard JTC CAPTCHA error message.
 		// 2.5: Change default setting to Login Form CAPTCHA Off. Has New Feature Dismiss Notice.
 		// 2.4: pre-save JTC-Lite db options
 		$jtc_options = get_option('bulletproof_security_options_login_security_jtc');
@@ -1047,6 +1062,7 @@ function bpsPro_new_version_db_options_files_autoupdate() {
 		$jtc2 = ! $jtc_options['bps_tooltip_captcha_hover_text'] ? 'Type/Enter:  jtc' : $jtc_options['bps_tooltip_captcha_hover_text'];
 		$jtc3 = ! $jtc_options['bps_tooltip_captcha_title'] ? 'Hover or click the text box below' : $jtc_options['bps_tooltip_captcha_title'];
 		$jtc4 = ! $jtc_options['bps_jtc_login_form'] ? '0' : $jtc_options['bps_jtc_login_form'];
+		$jtc5 = ! $jtc_options['bps_jtc_custom_form_error'] ? '' : $jtc_options['bps_jtc_custom_form_error'];
 
 		$jtc_db_options = array(
 		'bps_tooltip_captcha_key' 			=> $jtc1, 
@@ -1068,7 +1084,8 @@ function bpsPro_new_version_db_options_files_autoupdate() {
 		'bps_jtc_comment_form_label' 		=> $jtc_options['bps_jtc_comment_form_label'], 
 		'bps_jtc_comment_form_input' 		=> $jtc_options['bps_jtc_comment_form_input'], 
 		'bps_jtc_custom_roles' 				=> $jtc_options19, 
-		'bps_enable_jtc_woocommerce' 		=> '' 
+		'bps_enable_jtc_woocommerce' 		=> '', 
+		'bps_jtc_custom_form_error' 		=> $jtc5 
 		);
 
 		if ( ! get_option('bulletproof_security_options_login_security_jtc') ) {	

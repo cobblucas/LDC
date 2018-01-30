@@ -296,15 +296,377 @@ function bpsSpinnerTableRefresh() {
 
 <?php
 
-	if ( is_admin() && wp_script_is( 'bps-accordion', $list = 'queue' ) && current_user_can('manage_options') ) {	
 
 	// Reusable variables
 	$DBBoptions = get_option('bulletproof_security_options_db_backup');	
+
+// Form Processing: DB Backup Create Job Form
+// Note: Needs to above all Forms to display current data.
+if ( isset( $_POST['Submit-DBB-Create-Job'] ) && current_user_can('manage_options') ) {
+	check_admin_referer('bulletproof_security_db_backup_create_job');
+	
+	?>
+	
+	<style>
+	<!--
+	.ui-accordion.bps-accordion .ui-accordion-content {overflow:hidden;}
+	-->
+	</style>
+	
+		<script type="text/javascript">
+		/* <![CDATA[ */
+		jQuery(document).ready(function($){
+			$( "#bps-accordion-1" ).accordion({
+			collapsible: true,
+			active: 0,
+			autoHeight: true,
+			clearStyle: true,
+			heightStyle: "content"
+			});
+		});
+		/* ]]> */
+		</script>
+	
+	<?php
+
+	if ( $DBBoptions['bps_db_backup_status_display'] == 'No DB Backups' || $DBBoptions['bps_db_backup_status_display'] == '' ) {
+		$bps_db_backup_status_display = 'Backup Job Created';
+	} else {
+		$bps_db_backup_status_display = $DBBoptions['bps_db_backup_status_display'];
+	}
+
+	if ( $_POST['dbb_backup_on_off'] == 'Off' ) {
+		wp_clear_scheduled_hook('bpsPro_DBB_check');
+	}
+	
+	// some of these options are "one-shot" options
+	$DBB_Create_Job_Options = array( 
+	'bps_db_backup' 						=> $_POST['dbb_backup_on_off'], 
+	'bps_db_backup_description' 			=> esc_html($_POST['DBBDescription']), 
+	'bps_db_backup_folder' 					=> $_POST['DBBFolder'], 
+	'bps_db_backup_download_link' 			=> $_POST['DBBDownloadLink'], 
+	'bps_db_backup_job_type' 				=> $_POST['dbb_backup_job_type'], 
+	'bps_db_backup_frequency' 				=> $_POST['dbb_backup_job_frequency'], 		 
+	'bps_db_backup_start_time_hour' 		=> $_POST['dbb_backup_job_start_time_hour'], 
+	'bps_db_backup_start_time_weekday' 		=> $_POST['dbb_backup_job_start_time_weekday'], 
+	'bps_db_backup_start_time_month_date' 	=> $_POST['dbb_backup_job_start_time_month_date'], 
+	'bps_db_backup_email_zip' 				=> $_POST['dbb_backup_email_zip'], 
+	'bps_db_backup_delete' 					=> $_POST['dbb_backup_delete'], 
+	'bps_db_backup_status_display' 			=> $bps_db_backup_status_display // one-shot/one-time option - used for one-time Dashboard status display
+	);
+	
+	foreach( $DBB_Create_Job_Options as $key => $value ) {
+		update_option('bulletproof_security_options_db_backup', $DBB_Create_Job_Options);
+	}
+	
+	$DBB_Create_Job = $_POST['dbb'];
+	$DBBtable_name = $wpdb->prefix . "bpspro_db_backup";
+	$timeNow = time();
+	$gmt_offset = get_option( 'gmt_offset' ) * 3600;
+	$timestamp = date_i18n(get_option('date_format'), strtotime("11/15-1976")) . ' ' . date_i18n(get_option('time_format'), $timeNow + $gmt_offset);
+	$bpsDBBLog = WP_CONTENT_DIR . '/bps-backup/logs/db_backup_log.txt';
+	
+	if ( $_POST['dbb_backup_job_type'] == 'Manual' ) {
+		$bps_frequency = 'Manual';
+		$bps_last_job = 'Backup Job Created';
+		$bps_next_job = 'Manual';
+		$bps_email_zip = 'Manual';
+		$bps_email_zip_log = 'Manual';
+	}
+
+	if ( $_POST['dbb_backup_job_type'] == 'Scheduled' ) {
+		$bps_frequency = $_POST['dbb_backup_job_frequency'];
+		$bps_last_job = 'Backup Job Created';
+		$bps_next_job = $_POST['dbb_backup_job_start_time_weekday'] . ' ' .  $_POST['dbb_backup_job_start_time_month_date'] . ' ' .  $_POST['dbb_backup_job_start_time_hour'];
+		$bps_next_job = trim( str_replace( 'NA', "", $bps_next_job ) );	
+		
+		if ( $_POST['dbb_backup_email_zip'] == 'Delete' ) {
+			$bps_email_zip_log = 'Yes & Delete';
+			$bps_email_zip = 'Delete';	
+		} else {
+			$bps_email_zip_log = $_POST['dbb_backup_email_zip'];
+			$bps_email_zip = $_POST['dbb_backup_email_zip'];
+		}
+
+		if ( $_POST['dbb_backup_email_zip'] == 'EmailOnly' ) {
+			$bps_email_zip_log = 'Send Email Only';
+			$bps_email_zip = 'EmailOnly';	
+		} else {
+			$bps_email_zip_log = $_POST['dbb_backup_email_zip'];
+			$bps_email_zip = $_POST['dbb_backup_email_zip'];
+		}
+	}
+
+	$log_title = "\r\n" . '[Create Backup Job Settings Logged: ' . $timestamp . ']' . "\r\n" . 'Description|Backup Job Name: ' . $_POST['DBBDescription'] . "\r\n" . 'DB Backup Folder Location: ' . $_POST['DBBFolder'] . "\r\n" . 'DB Backup File Download Link|URL: ' . $_POST['DBBDownloadLink'] . "\r\n" . 'Backup Job Type: ' . $_POST['dbb_backup_job_type'] . "\r\n" . 'Frequency: ' . $_POST['dbb_backup_job_frequency'] . "\r\n" . 'Time When Scheduled Backup is Run: ' . $bps_next_job . "\r\n" . 'Send Scheduled Backup Zip Files Via Email: ' . $bps_email_zip_log . "\r\n" . 'Automatically Delete Old Backup Files Older Than: ' . $_POST['dbb_backup_delete'] .' day(s) old'. "\r\n" . 'Scheduled Backups (override): ' . $_POST['dbb_backup_on_off'] . "\r\n";
+	
+	if ( empty( $DBB_Create_Job ) ) {
+		echo '<div id="message" class="updated" style="background-color:#dfecf2;border:1px solid #999;-moz-border-radius-topleft:3px;-webkit-border-top-left-radius:3px;-khtml-border-top-left-radius:3px;border-top-left-radius:3px;-moz-border-radius-topright:3px;-webkit-border-top-right-radius:3px;-khtml-border-top-right-radius:3px;border-top-right-radius:3px;-webkit-box-shadow: 3px 3px 5px -1px rgba(153,153,153,0.7);-moz-box-shadow: 3px 3px 5px -1px rgba(153,153,153,0.7);box-shadow: 3px 3px 5px -1px rgba(153,153,153,0.7);"><p>';	
+		echo '<strong><font color="#fb0101">'.__('Error: You did not select any DB Tables to backup. Backup Job was not created.', 'bulletproof-security').'</font></strong><br>';
+		echo '</p></div>';
+	}
+	
+	if ( ! empty( $DBB_Create_Job ) ) {
+		
+		if ( is_writable( $bpsDBBLog ) ) {
+		if ( ! $handle = fopen( $bpsDBBLog, 'a' ) ) {
+        	exit;
+    	}
+    	if ( fwrite( $handle, $log_title ) === FALSE ) {
+        	exit;
+    	}
+    	fclose($handle);
+		}
+
+		echo '<div id="message" class="updated" style="background-color:#dfecf2;border:1px solid #999;-moz-border-radius-topleft:3px;-webkit-border-top-left-radius:3px;-khtml-border-top-left-radius:3px;border-top-left-radius:3px;-moz-border-radius-topright:3px;-webkit-border-top-right-radius:3px;-khtml-border-top-right-radius:3px;border-top-right-radius:3px;-webkit-box-shadow: 3px 3px 5px -1px rgba(153,153,153,0.7);-moz-box-shadow: 3px 3px 5px -1px rgba(153,153,153,0.7);box-shadow: 3px 3px 5px -1px rgba(153,153,153,0.7);"><p>';
+		
+		$Table_array = array();
+		
+		foreach ( $DBB_Create_Job as $key => $value ) {
+
+			$Table_array[] = $key;
+			$comma_separated = implode(', ', $Table_array);	
+			$NoDupes = implode(', ', array_unique(explode(', ', $comma_separated)));
+			
+			$log_contents = 'Table Name: ' . $key . "\r\n";
+					
+			if ( is_writable( $bpsDBBLog ) ) {
+			if ( ! $handle = fopen( $bpsDBBLog, 'a' ) ) {
+         		exit;
+    		}
+    		if ( fwrite( $handle, $log_contents ) === FALSE ) {
+        		exit;
+    		}
+    		fclose($handle);
+			}
+		}
+
+		/** Date & Time Calculations **/
+		if ( $_POST['dbb_backup_job_start_time_hour'] == 'NA' ) {
+			
+			$hour = date( "H", time() );
+		
+		} else {
+			
+			$form_hours = array( '12AM', '1AM', '2AM', '3AM', '4AM', '5AM', '6AM', '7AM', '8AM', '9AM', '10AM', '11AM', '12PM', '1PM', '2PM', '3PM', '4PM', '5PM', '6PM', '7PM', '8PM', '9PM', '10PM', '11PM' );
+			$military_hours = array( '0', '1', '2', '3', '4', '5', '6', '7', '8', '9', '10', '11', '12', '13', '14', '15', '16', '17', '18', '19', '20', '21', '22', '23' );		
+			$hour = str_replace( $form_hours, $military_hours, $_POST['dbb_backup_job_start_time_hour'] );			
+		}
+
+		if ( $_POST['dbb_backup_job_start_time_month_date'] == 'NA' ) {
+			$day = date( "j", time() );	
+		
+		} else {
+			
+			$day = $_POST['dbb_backup_job_start_time_month_date'];		
+		}
+		
+		$clock = mktime( $hour, 0, 0, date( "n", time() ), $day, date( "Y", time() ) );
+
+		$form_weekday = array( 'Sunday', 'Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday' );
+		$form_numeric = array( '0', '1', '2', '3', '4', '5', '6' );		
+		$weekday_numeric = str_replace( $form_weekday, $form_numeric, $_POST['dbb_backup_job_start_time_weekday'] );	
+		
+		$day_of_week_now_numeric = date( "w", time() );
+		
+		if ( $day_of_week_now_numeric == $weekday_numeric || $_POST['dbb_backup_job_start_time_weekday'] == 'NA' ) {
+   			$weekday_days = 0;
+		
+		} else {
+
+			$dwn = $day_of_week_now_numeric;
+			$dwf = $weekday_numeric;
+	
+			// Bulky stuff, but the "for" loops code was overly complex, problematic and limiting for some scenarios
+			// sometimes simpler is better - minimal finite data so no big deal
+			if ( $dwn == '0' && $dwf == '1' || $dwn == '1' && $dwf == '2' || $dwn == '2' && $dwf == '3' || $dwn == '3' && $dwf == '4' || $dwn == '4' && $dwf == '5' || $dwn == '5' && $dwf == '6' || $dwn == '6' && $dwf == '0' ) {
+				$weekday_days = 1;
+			}
+
+			if ( $dwn == '0' && $dwf == '2' || $dwn == '1' && $dwf == '3' || $dwn == '2' && $dwf == '4' || $dwn == '3' && $dwf == '5' || $dwn == '4' && $dwf == '6' || $dwn == '5' && $dwf == '0' || $dwn == '6' && $dwf == '1' ) {
+				$weekday_days = 2;
+			}
+
+			if ( $dwn == '0' && $dwf == '3' || $dwn == '1' && $dwf == '4' || $dwn == '2' && $dwf == '5' || $dwn == '3' && $dwf == '6' || $dwn == '4' && $dwf == '0' || $dwn == '5' && $dwf == '1' || $dwn == '6' && $dwf == '2' ) {
+				$weekday_days = 3;
+			}
+
+			if ( $dwn == '0' && $dwf == '4' || $dwn == '1' && $dwf == '5' || $dwn == '2' && $dwf == '6' || $dwn == '3' && $dwf == '0' || $dwn == '4' && $dwf == '1' || $dwn == '5' && $dwf == '2' || $dwn == '6' && $dwf == '3' ) {
+				$weekday_days = 4;
+			}
+
+			if ( $dwn == '0' && $dwf == '5' || $dwn == '1' && $dwf == '6' || $dwn == '2' && $dwf == '0' || $dwn == '3' && $dwf == '1' || $dwn == '4' && $dwf == '2' || $dwn == '5' && $dwf == '3' || $dwn == '6' && $dwf == '4' ) {
+				$weekday_days = 5;
+			}
+	
+			if ( $dwn == '0' && $dwf == '6' || $dwn == '1' && $dwf == '0' || $dwn == '2' && $dwf == '1' || $dwn == '3' && $dwf == '2' || $dwn == '4' && $dwf == '3' || $dwn == '5' && $dwf == '4' || $dwn == '6' && $dwf == '5' ) {
+				$weekday_days = 6;
+			}
+		}
+		
+		$bps_next_job_unix = $clock + ($weekday_days * 24 * 60 * 60); 
+
+		$DBBInsertRows = $wpdb->insert( $DBBtable_name, array( 'bps_table_name' => $NoDupes, 'bps_desc' => esc_html($_POST['DBBDescription']), 'bps_job_type' => $_POST['dbb_backup_job_type'], 'bps_frequency' => $bps_frequency, 'bps_last_job' => $bps_last_job, 'bps_next_job' => $bps_next_job, 'bps_next_job_unix' => $bps_next_job_unix, 'bps_email_zip' => $bps_email_zip, 'bps_job_created' => current_time('mysql') ) );
+		
+		$text = '<strong><font color="green">'.__('Backup Job ', 'bulletproof-security').$_POST['DBBDescription'].__(' Created Successfully.', 'bulletproof-security').'</font></strong><br>';
+		echo $text;
+		echo '<strong>'.__('Backup Job Settings Logged successfully in the DB Backup Log', 'bulletproof-security').'</strong><br>';
+		echo '</p></div>';
+			
+		$DBBLog_Options = array( 'bps_dbb_log_date_mod' => bpsPro_DBB_Log_LastMod() );
+	
+		foreach( $DBBLog_Options as $key => $value ) {
+			update_option('bulletproof_security_options_DBB_log', $DBBLog_Options);
+		}
+	}
+}
+
+// Form Processing: Backup Jobs ~ Manual|Scheduled - DB Backup Run|Delete Jobs Form
+function bpsPro_dbbackup_form_processing() {
+
+if ( isset( $_POST['Submit-DBB-Run-Job'] ) && current_user_can('manage_options') ) {
+	check_admin_referer('bulletproof_security_db_backup_run_job');
+	
+	global $wpdb;	
+	$timeNow = time();
+	$gmt_offset = get_option( 'gmt_offset' ) * 3600;
+	$timestamp = date_i18n(get_option('date_format'), strtotime("11/15-1976")) . ' ' . date_i18n(get_option('time_format'), $timeNow + $gmt_offset);	
+	$DBBoptions = get_option('bulletproof_security_options_db_backup');
+
+	$DBBjobs = $_POST['DBBjobs'];
+	$DBBtable_name = $wpdb->prefix . "bpspro_db_backup";
+
+	switch( $_POST['Submit-DBB-Run-Job'] ) {
+		case __('Run Job|Delete Job', 'bulletproof-security'):
+		
+		$delete_jobs = array();
+		$run_jobs = array();
+		
+		if ( ! empty( $DBBjobs ) ) {
+			
+			foreach ( $DBBjobs as $key => $value ) {
+				
+				if ( $value == 'deletejob' ) {
+					$delete_jobs[] = $key;
+				
+				} elseif ( $value == 'runjob' ) {
+					$run_jobs[] = $key;
+				}
+			}
+		}
+			
+		if ( ! empty( $delete_jobs ) ) {
+			
+		?>
+		
+		<style>
+		<!--
+		.ui-accordion.bps-accordion .ui-accordion-content {overflow:hidden;}
+		-->
+		</style>
+		
+			<script type="text/javascript">
+			/* <![CDATA[ */
+			jQuery(document).ready(function($){
+				$( "#bps-accordion-1" ).accordion({
+				collapsible: true,
+				active: 0,
+				autoHeight: true,
+				clearStyle: true,
+				heightStyle: "content"
+				});
+			});
+			/* ]]> */
+			</script>
+		
+		<?php
+
+			echo '<div id="message" class="updated" style="background-color:#dfecf2;border:1px solid #999;-moz-border-radius-topleft:3px;-webkit-border-top-left-radius:3px;-khtml-border-top-left-radius:3px;border-top-left-radius:3px;-moz-border-radius-topright:3px;-webkit-border-top-right-radius:3px;-khtml-border-top-right-radius:3px;border-top-right-radius:3px;-webkit-box-shadow: 3px 3px 5px -1px rgba(153,153,153,0.7);-moz-box-shadow: 3px 3px 5px -1px rgba(153,153,153,0.7);box-shadow: 3px 3px 5px -1px rgba(153,153,153,0.7);"><p>';
+
+			foreach ( $delete_jobs as $delete_job ) {
+				
+				$DBBackupRows = $wpdb->get_results( $wpdb->prepare( "SELECT * FROM $DBBtable_name WHERE bps_id = %d", $delete_job ) );
+			
+				foreach ( $DBBackupRows as $row ) {
+					
+					$delete_row = $wpdb->query( $wpdb->prepare( "DELETE FROM $DBBtable_name WHERE bps_id = %d", $delete_job ) );
+					
+					wp_clear_scheduled_hook('bpsPro_DBB_check');
+					
+					$textDelete = '<strong><font color="green">'.__('Backup Job: ', 'bulletproof-security').$row->bps_desc.__(' has been deleted successfully.', 'bulletproof-security').'</font></strong><br>';
+					echo $textDelete;
+	
+				}
+			}
+			echo '</p></div>';
+		}
+		
+		if ( ! empty( $run_jobs ) ) {
+			
+		?>
+		
+		<style>
+		<!--
+		.ui-accordion.bps-accordion .ui-accordion-content {overflow:hidden;}
+		-->
+		</style>
+		
+			<script type="text/javascript">
+			/* <![CDATA[ */
+			jQuery(document).ready(function($){
+				$( "#bps-accordion-1" ).accordion({
+				collapsible: true,
+				active: 1,
+				autoHeight: true,
+				clearStyle: true,
+				heightStyle: "content"
+				});
+			});
+			/* ]]> */
+			</script>
+		
+		<?php
+
+			$db_backup = $DBBoptions['bps_db_backup_folder'] . '/' . DB_NAME . '.sql';
+				
+			echo '<div id="message" class="updated" style="background-color:#dfecf2;border:1px solid #999;-moz-border-radius-topleft:3px;-webkit-border-top-left-radius:3px;-khtml-border-top-left-radius:3px;border-top-left-radius:3px;-moz-border-radius-topright:3px;-webkit-border-top-right-radius:3px;-khtml-border-top-right-radius:3px;border-top-right-radius:3px;-webkit-box-shadow: 3px 3px 5px -1px rgba(153,153,153,0.7);-moz-box-shadow: 3px 3px 5px -1px rgba(153,153,153,0.7);box-shadow: 3px 3px 5px -1px rgba(153,153,153,0.7);"><p>';
+
+			foreach ( $run_jobs as $run_job ) {
+				
+				$DBBackupRows = $wpdb->get_results( $wpdb->prepare( "SELECT * FROM $DBBtable_name WHERE bps_id = %d", $run_job ) );
+			
+				foreach ( $DBBackupRows as $row ) {
+
+					$job_name = $row->bps_desc;
+					$job_type = $row->bps_job_type;
+					$email_zip = $row->bps_email_zip;
+					
+					$build_query_1 = "SHOW TABLES FROM `".DB_NAME."` WHERE `Tables_in_".DB_NAME."` LIKE '";
+					$build_query_2 = str_replace( ', ', "' OR `Tables_in_".DB_NAME."` LIKE '", $row->bps_table_name );
+					$build_query_3 = "'";
+					$tables = $wpdb->get_results( $build_query_1.$build_query_2.$build_query_3, ARRAY_A );
+					
+					bpsPro_db_backup( $db_backup, $tables, $job_name, $job_type, $email_zip );
+					
+					$update_rows = $wpdb->update( $DBBtable_name, array( 'bps_last_job' => $timestamp ), array( 'bps_id' => $row->bps_id ) );
+
+					$textRunJob = '<strong><font color="green">'.__('Backup Job: ', 'bulletproof-security').$row->bps_desc.__(' has completed.', 'bulletproof-security').'<br>'.__('Your DB Backup Log contains the Backup Job Completion Time, Total Memory Used and other information about this Backup.', 'bulletproof-security').'</font></strong><br>';
+					echo $textRunJob;
+
+				}			
+			}
+			echo '</p></div>';			
+		}
+		break;
+	} // end Switch
+}
+}
+bpsPro_dbbackup_form_processing();
+
 	$timeNow = time();
 	$gmt_offset = get_option( 'gmt_offset' ) * 3600;
 	$timestamp = date_i18n(get_option('date_format'), strtotime("11/15-1976")) . ' ' . date_i18n(get_option('time_format'), $timeNow + $gmt_offset);
 
-	// Form: DB Backup Run Jobs|Delete Jobs Form
+	// Form: Backup Jobs ~ Manual|Scheduled - DB Backup Run|Delete Jobs Form
 	echo '<form name="bpsDBBackupRunJob" action="'.admin_url( 'admin.php?page=bulletproof-security/admin/db-backup-security/db-backup-security.php' ).'" method="post">';
 	wp_nonce_field('bulletproof_security_db_backup_run_job');
 
@@ -346,12 +708,12 @@ function bpsSpinnerTableRefresh() {
 
 		foreach ( $DBBTableRows as $row ) {
 			
-			echo '<th scope="row" style="border-bottom:none;">'.esc_html($row->bps_desc).'</th>';
+			echo '<th scope="row" style="border-bottom:none;">'.$row->bps_desc.'</th>';
 			echo "<td><input type=\"checkbox\" id=\"deletejob\" name=\"DBBjobs[$row->bps_id]\" value=\"deletejob\" class=\"deletejobALL\" /><br><span style=\"font-size:10px;\">".__('Delete', 'bulletproof-security')."</span></td>";
 			echo "<td><input type=\"checkbox\" id=\"runjob\" name=\"DBBjobs[$row->bps_id]\" value=\"runjob\" /><br><span style=\"font-size:10px;\">".__('Run', 'bulletproof-security')."</span></td>";			
-			echo '<td>'.esc_html($row->bps_job_type).'</td>';
-			echo '<td>'.esc_html($row->bps_frequency).'</td>';
-			echo '<td>'.esc_html($row->bps_last_job).'</td>';
+			echo '<td>'.$row->bps_job_type.'</td>';
+			echo '<td>'.$row->bps_frequency.'</td>';
+			echo '<td>'.$row->bps_last_job.'</td>';
 
 			if ( $row->bps_frequency == 'Hourly' && $row->bps_next_job == '' ) {
 				$bps_next_job_visual = 'Hourly';
@@ -383,7 +745,6 @@ function bpsSpinnerTableRefresh() {
 
 	echo "<p><input type=\"submit\" name=\"Submit-DBB-Run-Job\" value=\"".esc_attr__('Run Job|Delete Job', 'bulletproof-security')."\" class=\"button bps-button\" onclick=\"bpsSpinnerDBBackup()\" /></p></form>";
 
-	} // end if ( is_admin() && wp_script_is( 'bps-accordion', $list = 'queue' )...
 ?>
 
 <?php
@@ -409,112 +770,72 @@ jQuery(document).ready(function($){
 /* ]]> */
 </script>
 
-<?php
-
-// Form Processing: DB Backup Run|Delete Jobs Form
-function bpsPro_dbbackup_form_processing() {
-
-if ( isset( $_POST['Submit-DBB-Run-Job'] ) && current_user_can('manage_options') ) {
-	check_admin_referer('bulletproof_security_db_backup_run_job');
-	
-global $wpdb;	
-$timeNow = time();
-$gmt_offset = get_option( 'gmt_offset' ) * 3600;
-$timestamp = date_i18n(get_option('date_format'), strtotime("11/15-1976")) . ' ' . date_i18n(get_option('time_format'), $timeNow + $gmt_offset);	
-$DBBoptions = get_option('bulletproof_security_options_db_backup');
-
-	$DBBjobs = $_POST['DBBjobs'];
-	$DBBtable_name = $wpdb->prefix . "bpspro_db_backup";
-
-	switch( $_POST['Submit-DBB-Run-Job'] ) {
-		case __('Run Job|Delete Job', 'bulletproof-security'):
-		
-		$delete_jobs = array();
-		$run_jobs = array();
-		
-		if ( ! empty( $DBBjobs ) ) {
-			
-			foreach ( $DBBjobs as $key => $value ) {
-				
-				if ( $value == 'deletejob' ) {
-					$delete_jobs[] = $key;
-				
-				} elseif ( $value == 'runjob' ) {
-					$run_jobs[] = $key;
-				}
-			}
-		}
-			
-		if ( ! empty( $delete_jobs ) ) {
-			
-			echo '<div id="message" class="updated" style="background-color:#dfecf2;border:1px solid #999;-moz-border-radius-topleft:3px;-webkit-border-top-left-radius:3px;-khtml-border-top-left-radius:3px;border-top-left-radius:3px;-moz-border-radius-topright:3px;-webkit-border-top-right-radius:3px;-khtml-border-top-right-radius:3px;border-top-right-radius:3px;-webkit-box-shadow: 3px 3px 5px -1px rgba(153,153,153,0.7);-moz-box-shadow: 3px 3px 5px -1px rgba(153,153,153,0.7);box-shadow: 3px 3px 5px -1px rgba(153,153,153,0.7);"><p>';
-
-			foreach ( $delete_jobs as $delete_job ) {
-				
-				$DBBackupRows = $wpdb->get_results( $wpdb->prepare( "SELECT * FROM $DBBtable_name WHERE bps_id = %d", $delete_job ) );
-			
-				foreach ( $DBBackupRows as $row ) {
-					
-					$delete_row = $wpdb->query( $wpdb->prepare( "DELETE FROM $DBBtable_name WHERE bps_id = %d", $delete_job ) );
-					
-					wp_clear_scheduled_hook('bpsPro_DBB_check');
-					
-					$textDelete = '<strong><font color="green">'.__('Backup Job: ', 'bulletproof-security').esc_html($row->bps_desc).__(' has been deleted successfully.', 'bulletproof-security').'</font></strong><br>';
-					echo $textDelete;
-	
-				}
-			}
-			echo '<div class="bps-message-button" style="width:90px;"><a href="'.admin_url( 'admin.php?page=bulletproof-security/admin/db-backup-security/db-backup-security.php' ).'">'.esc_attr__('Refresh Status', 'bulletproof-security').'</a></div>';
-			echo '</p></div>';
-		}
-		
-		if ( ! empty( $run_jobs ) ) {
-			
-			$db_backup = $DBBoptions['bps_db_backup_folder'] . '/' . DB_NAME . '.sql';
-				
-			echo '<div id="message" class="updated" style="background-color:#dfecf2;border:1px solid #999;-moz-border-radius-topleft:3px;-webkit-border-top-left-radius:3px;-khtml-border-top-left-radius:3px;border-top-left-radius:3px;-moz-border-radius-topright:3px;-webkit-border-top-right-radius:3px;-khtml-border-top-right-radius:3px;border-top-right-radius:3px;-webkit-box-shadow: 3px 3px 5px -1px rgba(153,153,153,0.7);-moz-box-shadow: 3px 3px 5px -1px rgba(153,153,153,0.7);box-shadow: 3px 3px 5px -1px rgba(153,153,153,0.7);"><p>';			
-
-			foreach ( $run_jobs as $run_job ) {
-				
-				$DBBackupRows = $wpdb->get_results( $wpdb->prepare( "SELECT * FROM $DBBtable_name WHERE bps_id = %d", $run_job ) );
-			
-				foreach ( $DBBackupRows as $row ) {
-
-					$job_name = $row->bps_desc;
-					$job_type = $row->bps_job_type;
-					$email_zip = $row->bps_email_zip;
-					
-					$build_query_1 = "SHOW TABLES FROM `".DB_NAME."` WHERE `Tables_in_".DB_NAME."` LIKE '";
-					$build_query_2 = str_replace( ', ', "' OR `Tables_in_".DB_NAME."` LIKE '", $row->bps_table_name );
-					$build_query_3 = "'";
-					$tables = $wpdb->get_results( $build_query_1.$build_query_2.$build_query_3, ARRAY_A );
-					
-					bpsPro_db_backup( $db_backup, $tables, $job_name, $job_type, $email_zip );
-					
-					$update_rows = $wpdb->update( $DBBtable_name, array( 'bps_last_job' => $timestamp ), array( 'bps_id' => $row->bps_id ) );
-
-					$textRunJob = '<strong><font color="green">'.__('Backup Job: ', 'bulletproof-security').$row->bps_desc.__(' has completed.', 'bulletproof-security').'<br>'.__('Your DB Backup Log contains the Backup Job Completion Time, Total Memory Used and other information about this Backup.', 'bulletproof-security').'<br>'.__('Click the Refresh Status button below to refresh the DB Backup Timestamp.', 'bulletproof-security').'</font></strong><br>';
-					echo $textRunJob;
-
-				}			
-			}
-			echo '<div class="bps-message-button" style="width:90px;margin-top:10px;"><a href="'.admin_url( 'admin.php?page=bulletproof-security/admin/db-backup-security/db-backup-security.php' ).'">'.esc_attr__('Refresh Status', 'bulletproof-security').'</a></div>';
-			echo '</p></div>';			
-		}
-		break;
-	} // end Switch
-}
-}
-bpsPro_dbbackup_form_processing();
-
-?>
-
 </div>
 <h3><?php _e('Backup Files ~ Download|Delete', 'bulletproof-security'); ?></h3>
 <div id="dbb-accordion-inner">
 
 <?php
-	if ( is_admin() && wp_script_is( 'bps-accordion', $list = 'queue' ) && current_user_can('manage_options') ) {	
+// Form Processing: DB Backup File Delete Files Form (downloads are links and not processed)
+if ( isset( $_POST['Submit-DBB-Files'] ) && current_user_can('manage_options') ) {
+	check_admin_referer('bulletproof_security_db_backup_delete_files');
+	
+	?>
+	
+	<style>
+	<!--
+	.ui-accordion.bps-accordion .ui-accordion-content {overflow:hidden;}
+	-->
+	</style>
+	
+		<script type="text/javascript">
+		/* <![CDATA[ */
+		jQuery(document).ready(function($){
+			$( "#bps-accordion-1" ).accordion({
+			collapsible: true,
+			active: 1,
+			autoHeight: true,
+			clearStyle: true,
+			heightStyle: "content"
+			});
+		});
+		/* ]]> */
+		</script>
+	
+	<?php
+
+	$DBBFiles = $_POST['DBBfiles'];
+
+	switch( $_POST['Submit-DBB-Files'] ) {
+		case __('Delete Files', 'bulletproof-security'):
+		
+		$delete_files = array();
+		
+		if ( ! empty( $DBBFiles ) ) {
+			
+			foreach ( $DBBFiles as $key => $value ) {
+				
+				if ( $value == 'deletefile' ) {
+					$delete_files[] = $key;
+					
+				}
+			}
+		}
+			
+		if ( ! empty( $delete_files ) ) {
+			
+			echo '<div id="message" class="updated" style="background-color:#dfecf2;border:1px solid #999;-moz-border-radius-topleft:3px;-webkit-border-top-left-radius:3px;-khtml-border-top-left-radius:3px;border-top-left-radius:3px;-moz-border-radius-topright:3px;-webkit-border-top-right-radius:3px;-khtml-border-top-right-radius:3px;border-top-right-radius:3px;-webkit-box-shadow: 3px 3px 5px -1px rgba(153,153,153,0.7);-moz-box-shadow: 3px 3px 5px -1px rgba(153,153,153,0.7);box-shadow: 3px 3px 5px -1px rgba(153,153,153,0.7);"><p>';
+
+			foreach ( $delete_files as $delete_file ) {
+				
+				unlink( $DBBoptions['bps_db_backup_folder'] . '/' . $delete_file );
+				$textDelete = '<strong><font color="green">'.__('Backup File: ', 'bulletproof-security').$delete_file.__(' has been deleted successfully.', 'bulletproof-security').'</font></strong><br>';
+				echo $textDelete;
+			}
+			echo '</p></div>';	
+		}
+		break;
+	}
+}
 
 	// Form: DB Backup File Delete & Download Files Form
 	echo '<form name="bpsDBBackupFiles" action="'.admin_url( 'admin.php?page=bulletproof-security/admin/db-backup-security/db-backup-security.php' ).'" method="post">';
@@ -527,20 +848,20 @@ bpsPro_dbbackup_form_processing();
 		
 		$iterator = new DirectoryIterator($source);
 
-	echo '<div id="DBBFilescheckall">';
-	echo '<table class="widefat" style="text-align:left;">';
-	echo '<thead>';
-	echo '<tr>';
-	echo '<th scope="col" style="width:20%;font-size:1.13em;background-color:transparent;"><strong>'.__('Backup Filename', 'bulletproof-security').'</strong></th>';
-	echo '<th scope="col" style="width:5%;font-size:1.13em;"><strong><div style="position:relative; bottom:-9px; left:0px;">'.__('Delete', 'bulletproof-security').'</span></strong><br><input type="checkbox" class="checkallDeleteFiles" style="text-align:left;margin-left:0px;" /></th>';	
-	echo '<th scope="col" style="width:5%;font-size:1.13em;background-color:transparent;"><strong>'.__('Download', 'bulletproof-security').'</strong></th>';
-	echo '<th scope="col" style="width:45%;font-size:1.13em;background-color:transparent;"><strong>'.__('Backup Folder', 'bulletproof-security').'</strong></th>';
-	echo '<th scope="col" style="width:10%;font-size:1.13em;background-color:transparent;"><strong>'.__('Size', 'bulletproof-security').'</strong></th>';
-	echo '<th scope="col" style="width:15%;font-size:1.13em;background-color:transparent;"><strong>'.__('Date|Time', 'bulletproof-security').'</strong></th>';
-	echo '</tr>';
-	echo '</thead>';
-	echo '<tbody>';
-	echo '<tr>';		
+		echo '<div id="DBBFilescheckall" style="max-height:270px;overflow:auto;">';
+		echo '<table class="widefat" style="text-align:left;">';
+		echo '<thead>';
+		echo '<tr>';
+		echo '<th scope="col" style="width:20%;font-size:1.13em;background-color:transparent;"><strong>'.__('Backup Filename', 'bulletproof-security').'</strong></th>';
+		echo '<th scope="col" style="width:5%;font-size:1.13em;"><strong><div style="position:relative; bottom:-9px; left:0px;">'.__('Delete', 'bulletproof-security').'</span></strong><br><input type="checkbox" class="checkallDeleteFiles" style="text-align:left;margin-left:0px;" /></th>';	
+		echo '<th scope="col" style="width:5%;font-size:1.13em;background-color:transparent;"><strong>'.__('Download', 'bulletproof-security').'</strong></th>';
+		echo '<th scope="col" style="width:45%;font-size:1.13em;background-color:transparent;"><strong>'.__('Backup Folder', 'bulletproof-security').'</strong></th>';
+		echo '<th scope="col" style="width:10%;font-size:1.13em;background-color:transparent;"><strong>'.__('Size', 'bulletproof-security').'</strong></th>';
+		echo '<th scope="col" style="width:15%;font-size:1.13em;background-color:transparent;"><strong>'.__('Date|Time', 'bulletproof-security').'</strong></th>';
+		echo '</tr>';
+		echo '</thead>';
+		echo '<tbody>';
+		echo '<tr>';		
 
 		foreach ( $iterator as $file ) {
 			
@@ -549,45 +870,41 @@ bpsPro_dbbackup_form_processing();
 				$fileSize = filesize( $source.DIRECTORY_SEPARATOR.$file->getFilename() );
 				$last_modified = filemtime( $source.DIRECTORY_SEPARATOR.$file->getFilename() );  
 
-			echo '<th scope="row" style="border-bottom:none;font-size:1.13em;">'.$file->getFilename().'</th>';
-			echo "<td><input type=\"checkbox\" id=\"deletefile\" name=\"DBBfiles[".$file->getFilename()."]\" value=\"deletefile\" class=\"deletefileALL\" /><br><span style=\"font-size:10px;\">".__('Delete', 'bulletproof-security')."</span></td>";
-			echo '<td><div style="margin:0px;padding:2px 6px 2px 6px;background-color:#e8e8e8;border:1px solid gray;"><a href="'.$DBBoptions['bps_db_backup_download_link'] . $file->getFilename().'" style="font-size:1em;text-decoration:none;">'.__('Download', 'bulletproof-security').'</a></div></td>';			
-			echo '<td>'.$DBBoptions['bps_db_backup_folder'].'</td>';
-
-			if ( number_format( $fileSize, 2, '.', '' ) >= 1048576 ) {
-				echo '<td>'.number_format( $fileSize / ( 1024 * 1024 ), 2 ).' MB</td>';				
-			} else {
-				echo '<td>'.number_format( $fileSize / 1024, 2 ).' KB</td>';
-			}
-			echo '<td>'.date( 'Y-m-d g:i a', $last_modified + $gmt_offset ).'</td>';
-			echo '</tr>';
-			
-			} else {	
-
-			if ( ! $file->isDot() && $count <= 0 && $file->getFilename() != '.htaccess' ) {
-			
-			echo '<th scope="row" style="border-bottom:none;">'.__('No Backup Jobs have been Run yet. No Files in Backup.', 'bulletproof-security').'</th>';
-			echo '<td></td>';		
-			echo '<td></td>'; 
-			echo '<td></td>';		
-			echo '<td></td>'; 
-			echo '<td></td>';
-			echo '</tr>';						
-			}
+				echo '<th scope="row" style="border-bottom:none;font-size:1.13em;">'.$file->getFilename().'</th>';
+				echo "<td><input type=\"checkbox\" id=\"deletefile\" name=\"DBBfiles[".$file->getFilename()."]\" value=\"deletefile\" class=\"deletefileALL\" /><br><span style=\"font-size:10px;\">".__('Delete', 'bulletproof-security')."</span></td>";
+				echo '<td><div style="margin:0px;padding:2px 6px 2px 6px;background-color:#e8e8e8;border:1px solid gray;"><a href="'.$DBBoptions['bps_db_backup_download_link'] . $file->getFilename().'" style="font-size:1em;text-decoration:none;">'.__('Download', 'bulletproof-security').'</a></div></td>';			
+				echo '<td>'.$DBBoptions['bps_db_backup_folder'].'</td>';
+				
+				if ( number_format( $fileSize, 2, '.', '' ) >= 1048576 ) {
+					echo '<td>'.number_format( $fileSize / ( 1024 * 1024 ), 2 ).' MB</td>';				
+				} else {
+					echo '<td>'.number_format( $fileSize / 1024, 2 ).' KB</td>';
+				}
+				echo '<td>'.date( 'Y-m-d g:i a', $last_modified + $gmt_offset ).'</td>';
+				echo '</tr>';
+				
+				} else {	
+	
+				if ( !$file->isDot() && $count <= 0 && $file->getFilename() != '.htaccess' ) {
+				
+				echo '<th scope="row" style="border-bottom:none;">'.__('No Backup Jobs have been Run yet. No Files in Backup.', 'bulletproof-security').'</th>';
+				echo '<td></td>';		
+				echo '<td></td>'; 
+				echo '<td></td>';		
+				echo '<td></td>'; 
+				echo '<td></td>';
+				echo '</tr>';						
+				}
 			}
 		}
 	
-	echo '</tbody>';
-	echo '</table>';
-	echo '</div>';		
+		echo '</tbody>';
+		echo '</table>';
+		echo '</div>';		
 	}
 
 	echo "<p><input type=\"submit\" name=\"Submit-DBB-Files\" value=\"".esc_attr__('Delete Files', 'bulletproof-security')."\" class=\"button bps-button\" onclick=\"return confirm('".__('Click OK to Delete Backup File(s) or click Cancel', 'bulletproof-security')."')\" /></p></form>";
 
-	} // end if ( is_admin() && wp_script_is( 'bps-accordion', $list = 'queue' )...
-?>  
-
-<?php
 if ( $UIoptions['bps_ui_theme_skin'] == 'blue' ) { ?>
 
 <script type="text/javascript">
@@ -610,67 +927,28 @@ jQuery(document).ready(function($){
 /* ]]> */
 </script>
 
-<?php
-
-// Form Processing: DB Backup File Delete Files Form (downloads are links and not processed)
-if ( isset( $_POST['Submit-DBB-Files'] ) && current_user_can('manage_options') ) {
-	check_admin_referer('bulletproof_security_db_backup_delete_files');
-	
-	$DBBFiles = $_POST['DBBfiles'];
-
-	switch( $_POST['Submit-DBB-Files'] ) {
-		case __('Delete Files', 'bulletproof-security'):
-		
-		$delete_files = array();
-		$download_files = array();
-		
-		if ( ! empty( $DBBFiles ) ) {
-			
-			foreach ( $DBBFiles as $key => $value ) {
-				
-				if ( $value == 'deletefile' ) {
-					$delete_files[] = $key;
-					
-				}
-			}
-		}
-			
-		if ( ! empty( $delete_files ) ) {
-			
-			echo '<div id="message" class="updated" style="background-color:#dfecf2;border:1px solid #999;-moz-border-radius-topleft:3px;-webkit-border-top-left-radius:3px;-khtml-border-top-left-radius:3px;border-top-left-radius:3px;-moz-border-radius-topright:3px;-webkit-border-top-right-radius:3px;-khtml-border-top-right-radius:3px;border-top-right-radius:3px;-webkit-box-shadow: 3px 3px 5px -1px rgba(153,153,153,0.7);-moz-box-shadow: 3px 3px 5px -1px rgba(153,153,153,0.7);box-shadow: 3px 3px 5px -1px rgba(153,153,153,0.7);"><p>';
-
-			foreach ( $delete_files as $delete_file ) {
-				
-				unlink( $DBBoptions['bps_db_backup_folder'] . '/' . $delete_file );
-				$textDelete = '<strong><font color="green">'.__('Backup File: ', 'bulletproof-security').$delete_file.__(' has been deleted successfully.', 'bulletproof-security').'</font><strong><br>';
-				echo $textDelete;
-
-			}
-			echo '<div class="bps-message-button" style="width:90px;"><a href="'.admin_url( 'admin.php?page=bulletproof-security/admin/db-backup-security/db-backup-security.php' ).'">'.esc_attr__('Refresh Status', 'bulletproof-security').'</a></div>';
-			echo '</p></div>';	
-		}
-		break;
-	}
-}
-
-?>
-
 </div>
 <h3><?php _e('Create Backup Jobs', 'bulletproof-security'); ?></h3>
 <div id="dbb-accordion-inner">
 
 <?php
-	if ( is_admin() && wp_script_is( 'bps-accordion', $list = 'queue' ) && current_user_can('manage_options') ) {	
-	
+
+// Form Processing: Rename|Create|Reset DB Backup Folder Location and DB Backup File Download Link|URL
+if ( isset( $_POST['Submit-DBB-Reset'] ) && current_user_can('manage_options') ) {
+	require_once( WP_PLUGIN_DIR . '/bulletproof-security/admin/db-backup-security/db-backup-functions.php' );		
+	bpsPro_reset_db_backup_folder();
+}
+
 	echo '<div id="dbb-special">';
 	// Form: DB Backup Create Job Form
 	echo '<form name="bpsDBBackupCreateJob" action="'.admin_url( 'admin.php?page=bulletproof-security/admin/db-backup-security/db-backup-security.php' ).'" method="post">';
 	wp_nonce_field('bulletproof_security_db_backup_create_job');
 
-	//$DBBoptions = get_option('bulletproof_security_options_db_backup');
 	$DBTables = 0;
 	$size = 0;
 	$getDBTables = $wpdb->get_results( $wpdb->prepare( "SHOW TABLE STATUS WHERE Rows >= %d", $DBTables ) );
+	// Get new current DB option values.
+	$DBBoptions = get_option('bulletproof_security_options_db_backup');
 
 	echo '<table class="widefat" style="text-align:left;">';
 	echo '<thead>';
@@ -722,14 +1000,13 @@ if ( isset( $_POST['Submit-DBB-Files'] ) && current_user_can('manage_options') )
 	echo '<input type="text" name="DBBDescription" class="dbb-text-500" value="'.esc_html($DBBDescription).'" /><br>';
 
 	echo '<label for="bps-dbb">'.__('DB Backup Folder Location:', 'bulletproof-security').'</label><br>';
-	echo '<label for="bps-dbb"><font color="#2ea2cc"><strong>'.__('Recommended: Use The Default Obfuscated & Secure BPS Backup Folder', 'bulletproof-security').'</strong></font></label><br>';
+	echo '<label for="bps-dbb"><font color="#2ea2cc"><strong>'.__('Recommended: Use The Default Obfuscated & Secure BPS Backup Folder.', 'bulletproof-security').'</strong></font></label><br>';
 	echo '<input type="text" name="DBBFolder" class="dbb-text-500" value="'; if ( @preg_match( '|[<>\"\';]|', $_POST['DBBFolder'] ) ) { echo esc_html($DBBoptions['bps_db_backup_folder']); } else { echo esc_html(trim(stripslashes($DBBFolder))); } echo '" /><br>';	
 
 	echo '<label for="bps-dbb">'.__('DB Backup File Download Link|URL:', 'bulletproof-security').'</label><br>';
 	echo '<label for="bps-dbb"><font color="#2ea2cc"><strong>'.__('Note: If you see 404 errors when trying to download zip files or if you have', 'bulletproof-security').'</strong></font></label><br>';
 	echo '<label for="bps-dbb"><font color="#2ea2cc"><strong>'.__('changed the DB Backup Folder Location above, click the Read Me help button.', 'bulletproof-security').'</strong></font></label><br>';
 	echo '<input type="text" name="DBBDownloadLink" class="dbb-text-500" value="'; if ( @preg_match( '|[<>\"\';]|', $_POST['DBBDownloadLink'] ) ) { echo esc_url($DBBoptions['bps_db_backup_download_link']); } else { echo esc_url(trim($DBBDownloadLink)); } echo '" /><br>';
-	
 
 	echo '<label for="bps-dbb">'.__('Backup Job Type: Manual or Scheduled', 'bulletproof-security').'</label><br>';
 	echo '<select name="dbb_backup_job_type" class="form-340">';
@@ -851,11 +1128,10 @@ if ( isset( $_POST['Submit-DBB-Files'] ) && current_user_can('manage_options') )
 	echo '<option value="On"'. selected('On', $DBBoptions['bps_db_backup']).'>'.__('All Scheduled Backups On', 'bulletproof-security').'</option>';
 	echo '<option value="Off"'. selected('Off', $DBBoptions['bps_db_backup']).'>'.__('All Scheduled Backups Off', 'bulletproof-security').'</option>';
 	echo '</select><br><br>';
-	
-	echo "<p><input type=\"submit\" name=\"Submit-DBB-Create-Job\" value=\"".__('Create Backup Job|Save Settings', 'bulletproof-security')."\" class=\"button bps-button\" onclick=\"return confirm('".__('Click OK to Create this Backup Job or click Cancel', 'bulletproof-security')."')\" /></p></form>";
+
+	echo "<p><input type=\"submit\" name=\"Submit-DBB-Create-Job\" value=\"".esc_attr__('Create Backup Job|Save Settings', 'bulletproof-security')."\" class=\"button bps-button\" onclick=\"return confirm('".__('Click OK to Create this Backup Job or click Cancel', 'bulletproof-security')."')\" /></p></form>";
 
 	echo '</div>';
-
 	echo '</td>';
 	echo '<td style="border:none">';
 	echo '<div id="DBBOptions" style="margin:0px 0px 0px 0px;float:left;">';
@@ -874,8 +1150,8 @@ if ( isset( $_POST['Submit-DBB-Files'] ) && current_user_can('manage_options') )
 	echo '<label for="bps-dbb">'.__('Rename|Create|Reset DB Backup Folder Name:', 'bulletproof-security').'</label><br>';
 	echo '<label for="bps-dbb"><font color="#2ea2cc"><strong>'.__('Randomly Generated New DB Backup Folder Name.', 'bulletproof-security').'</strong></font></label><br>';
 	echo '<label for="bps-dbb"><font color="#2ea2cc"><strong>'.__('Valid Folder Naming Characters: a-z A-Z 0-9 - _', 'bulletproof-security').'</strong></font></label><br>';
-	echo '<input type="text" name="DBBFolderReset" class="regular-text-short-fixed" style="width:325px;margin:0px 0px 10px 0px;" value="'; if ( @preg_match( '|[^a-zA-Z0-9-_]|', $_POST['DBBFolderReset'] ) ) { echo esc_html($db_backup_folder_obs); } else { echo esc_html(trim(stripslashes($DBBFolderReset))); } echo '" /><br>';	
-
+	echo '<input type="text" name="DBBFolderReset" class="regular-text-short-fixed" style="width:325px;margin:0px 0px 10px 0px;" value="'; if ( @preg_match( '|[^a-zA-Z0-9-_]|', $_POST['DBBFolderReset'] ) ) { echo esc_html($db_backup_folder_obs); } else { echo esc_html(trim(stripslashes($DBBFolderReset))); } echo '" /><br>';
+	
 	echo "<p><input type=\"submit\" name=\"Submit-DBB-Reset\" value=\"".esc_attr__('Rename|Create|Reset', 'bulletproof-security')."\" class=\"button bps-button\" onclick=\"return confirm('".__('The Rename|Create|Reset Tool renames the DB Backup folder if it already exists or creates a new DB Backup folder if it does not already exist.\n\n-------------------------------------------------------------\n\nIf you have DB Backup files they will not be affected/changed. The DB Backup File Download Link|URL path will also be changed and have the new DB Backup folder name in the URL path.\n\n-------------------------------------------------------------\n\nClick OK to proceed or click Cancel', 'bulletproof-security')."')\" /></p></form>";
 
 	echo '</div>';
@@ -884,17 +1160,8 @@ if ( isset( $_POST['Submit-DBB-Files'] ) && current_user_can('manage_options') )
 	echo '</tbody>';
 	echo '</table>';	
 	
-	}
-	echo '</div>';
-// Form Processing: Rename|Create|Reset DB Backup Folder Location and DB Backup File Download Link|URL
-if ( isset( $_POST['Submit-DBB-Reset'] ) && current_user_can('manage_options') ) {
-require_once( WP_PLUGIN_DIR . '/bulletproof-security/admin/db-backup-security/db-backup-functions.php' );		
-bpsPro_reset_db_backup_folder();
-}
+	echo '</div>'; // #dbb-special
 
-?>
-
-<?php
 if ( $UIoptions['bps_ui_theme_skin'] == 'blue' ) { ?>
 
 <script type="text/javascript">
@@ -916,206 +1183,6 @@ jQuery(document).ready(function($){
 });
 /* ]]> */
 </script>
-
-<?php
-
-// Form Processing: DB Backup Create Job Form
-if ( isset($_POST['Submit-DBB-Create-Job']) && current_user_can('manage_options') ) {
-	check_admin_referer('bulletproof_security_db_backup_create_job');
-	
-	if ( $DBBoptions['bps_db_backup_status_display'] == 'No DB Backups' || $DBBoptions['bps_db_backup_status_display'] == '' ) {
-		$bps_db_backup_status_display = 'Backup Job Created';
-	} else {
-		$bps_db_backup_status_display = $DBBoptions['bps_db_backup_status_display'];
-	}
-
-	if ( $_POST['dbb_backup_on_off'] == 'Off' ) {
-		wp_clear_scheduled_hook('bpsPro_DBB_check');
-	}
-	
-	// some of these options are "one-shot" options
-	$DBB_Create_Job_Options = array( 
-	'bps_db_backup' 						=> $_POST['dbb_backup_on_off'], 
-	'bps_db_backup_description' 			=> esc_html($_POST['DBBDescription']), 
-	'bps_db_backup_folder' 					=> $_POST['DBBFolder'], 
-	'bps_db_backup_download_link' 			=> $_POST['DBBDownloadLink'], 
-	'bps_db_backup_job_type' 				=> $_POST['dbb_backup_job_type'], 
-	'bps_db_backup_frequency' 				=> $_POST['dbb_backup_job_frequency'], 		 
-	'bps_db_backup_start_time_hour' 		=> $_POST['dbb_backup_job_start_time_hour'], 
-	'bps_db_backup_start_time_weekday' 		=> $_POST['dbb_backup_job_start_time_weekday'], 
-	'bps_db_backup_start_time_month_date' 	=> $_POST['dbb_backup_job_start_time_month_date'], 
-	'bps_db_backup_email_zip' 				=> $_POST['dbb_backup_email_zip'], 
-	'bps_db_backup_delete' 					=> $_POST['dbb_backup_delete'], 
-	'bps_db_backup_status_display' 			=> $bps_db_backup_status_display // one-shot/one-time option - used for one-time Dashboard status display
-	);
-	
-		foreach( $DBB_Create_Job_Options as $key => $value ) {
-			update_option('bulletproof_security_options_db_backup', $DBB_Create_Job_Options);
-		}
-	
-	$DBB_Create_Job = $_POST['dbb'];
-	$DBBtable_name = $wpdb->prefix . "bpspro_db_backup";
-	$timeNow = time();
-	$gmt_offset = get_option( 'gmt_offset' ) * 3600;
-	$timestamp = date_i18n(get_option('date_format'), strtotime("11/15-1976")) . ' ' . date_i18n(get_option('time_format'), $timeNow + $gmt_offset);
-	$bpsDBBLog = WP_CONTENT_DIR . '/bps-backup/logs/db_backup_log.txt';
-	
-		if ( $_POST['dbb_backup_job_type'] == 'Manual' ) {
-			$bps_frequency = 'Manual';
-			$bps_last_job = 'Backup Job Created';
-			$bps_next_job = 'Manual';
-			$bps_email_zip = 'Manual';
-			$bps_email_zip_log = 'Manual';
-		}
-	
-		if ( $_POST['dbb_backup_job_type'] == 'Scheduled' ) {
-			$bps_frequency = $_POST['dbb_backup_job_frequency'];
-			$bps_last_job = 'Backup Job Created';
-			$bps_next_job = $_POST['dbb_backup_job_start_time_weekday'] . ' ' .  $_POST['dbb_backup_job_start_time_month_date'] . ' ' .  $_POST['dbb_backup_job_start_time_hour'];
-			$bps_next_job = trim( str_replace( 'NA', "", $bps_next_job ) );	
-			
-			if ( $_POST['dbb_backup_email_zip'] == 'Delete' ) {
-				$bps_email_zip_log = 'Yes & Delete';
-				$bps_email_zip = 'Delete';	
-			} else {
-				$bps_email_zip_log = $_POST['dbb_backup_email_zip'];
-				$bps_email_zip = $_POST['dbb_backup_email_zip'];
-			}
-
-			if ( $_POST['dbb_backup_email_zip'] == 'EmailOnly' ) {
-				$bps_email_zip_log = 'Send Email Only';
-				$bps_email_zip = 'EmailOnly';	
-			} else {
-				$bps_email_zip_log = $_POST['dbb_backup_email_zip'];
-				$bps_email_zip = $_POST['dbb_backup_email_zip'];
-			}
-		}
-
-	$log_title = "\r\n" . '[Create Backup Job Settings Logged: ' . $timestamp . ']' . "\r\n" . 'Description|Backup Job Name: ' . $_POST['DBBDescription'] . "\r\n" . 'DB Backup Folder Location: ' . $_POST['DBBFolder'] . "\r\n" . 'DB Backup File Download Link|URL: ' . $_POST['DBBDownloadLink'] . "\r\n" . 'Backup Job Type: ' . $_POST['dbb_backup_job_type'] . "\r\n" . 'Frequency: ' . $_POST['dbb_backup_job_frequency'] . "\r\n" . 'Time When Scheduled Backup is Run: ' . $bps_next_job . "\r\n" . 'Send Scheduled Backup Zip Files Via Email: ' . $bps_email_zip_log . "\r\n" . 'Automatically Delete Old Backup Files Older Than: ' . $_POST['dbb_backup_delete'] .' day(s) old'. "\r\n" . 'Scheduled Backups (override): ' . $_POST['dbb_backup_on_off'] . "\r\n";
-	
-	if ( empty( $DBB_Create_Job ) ) {
-		echo '<div id="message" class="updated" style="background-color:#dfecf2;border:1px solid #999;-moz-border-radius-topleft:3px;-webkit-border-top-left-radius:3px;-khtml-border-top-left-radius:3px;border-top-left-radius:3px;-moz-border-radius-topright:3px;-webkit-border-top-right-radius:3px;-khtml-border-top-right-radius:3px;border-top-right-radius:3px;-webkit-box-shadow: 3px 3px 5px -1px rgba(153,153,153,0.7);-moz-box-shadow: 3px 3px 5px -1px rgba(153,153,153,0.7);box-shadow: 3px 3px 5px -1px rgba(153,153,153,0.7);"><p>';	
-		echo '<strong><font color="#fb0101">'.__('Error: You did not select any DB Tables to backup. Backup Job was not created.', 'bulletproof-security').'</font></strong><br>';
-		echo '</p></div>';
-	}
-	
-	if ( ! empty( $DBB_Create_Job ) ) {
-		
-		if ( is_writable( $bpsDBBLog ) ) {
-		if ( ! $handle = fopen( $bpsDBBLog, 'a' ) ) {
-        	exit;
-    	}
-    	if ( fwrite( $handle, $log_title ) === FALSE ) {
-        	exit;
-    	}
-    	fclose($handle);
-		}
-
-		echo '<div id="message" class="updated" style="background-color:#dfecf2;border:1px solid #999;-moz-border-radius-topleft:3px;-webkit-border-top-left-radius:3px;-khtml-border-top-left-radius:3px;border-top-left-radius:3px;-moz-border-radius-topright:3px;-webkit-border-top-right-radius:3px;-khtml-border-top-right-radius:3px;border-top-right-radius:3px;-webkit-box-shadow: 3px 3px 5px -1px rgba(153,153,153,0.7);-moz-box-shadow: 3px 3px 5px -1px rgba(153,153,153,0.7);box-shadow: 3px 3px 5px -1px rgba(153,153,153,0.7);"><p>';
-		
-		$Table_array = array();
-		
-		foreach ( $DBB_Create_Job as $key => $value ) {
-
-			$Table_array[] = $key;
-			$comma_separated = implode(', ', $Table_array);	
-			$NoDupes = implode(', ', array_unique(explode(', ', $comma_separated)));
-			
-			$log_contents = 'Table Name: ' . $key . "\r\n";
-					
-			if ( is_writable( $bpsDBBLog ) ) {
-			if ( ! $handle = fopen( $bpsDBBLog, 'a' ) ) {
-         		exit;
-    		}
-    		if ( fwrite( $handle, $log_contents ) === FALSE ) {
-        		exit;
-    		}
-    		fclose($handle);
-			}
-		}
-
-		/** Date & Time Calculations **/
-		if ( $_POST['dbb_backup_job_start_time_hour'] == 'NA' ) {
-			
-			$hour = date( "H", time() );
-		
-		} else {
-			
-			$form_hours = array( '12AM', '1AM', '2AM', '3AM', '4AM', '5AM', '6AM', '7AM', '8AM', '9AM', '10AM', '11AM', '12PM', '1PM', '2PM', '3PM', '4PM', '5PM', '6PM', '7PM', '8PM', '9PM', '10PM', '11PM' );
-			$military_hours = array( '0', '1', '2', '3', '4', '5', '6', '7', '8', '9', '10', '11', '12', '13', '14', '15', '16', '17', '18', '19', '20', '21', '22', '23' );		
-			$hour = str_replace( $form_hours, $military_hours, $_POST['dbb_backup_job_start_time_hour'] );			
-		}
-
-		if ( $_POST['dbb_backup_job_start_time_month_date'] == 'NA' ) {
-			$day = date( "j", time() );	
-		
-		} else {
-			
-			$day = $_POST['dbb_backup_job_start_time_month_date'];		
-		}
-		
-		$clock = mktime( $hour, 0, 0, date( "n", time() ), $day, date( "Y", time() ) );
-
-		$form_weekday = array( 'Sunday', 'Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday' );
-		$form_numeric = array( '0', '1', '2', '3', '4', '5', '6' );		
-		$weekday_numeric = str_replace( $form_weekday, $form_numeric, $_POST['dbb_backup_job_start_time_weekday'] );	
-		
-		$day_of_week_now_numeric = date( "w", time() );
-		
-		if ( $day_of_week_now_numeric == $weekday_numeric || $_POST['dbb_backup_job_start_time_weekday'] == 'NA' ) {
-   			$weekday_days = 0;
-		
-		} else {
-
-			$dwn = $day_of_week_now_numeric;
-			$dwf = $weekday_numeric;
-	
-			// Bulky stuff, but the "for" loops code was overly complex, problematic and limiting for some scenarios
-			// sometimes simpler is better - minimal finite data so no big deal
-			if ( $dwn == '0' && $dwf == '1' || $dwn == '1' && $dwf == '2' || $dwn == '2' && $dwf == '3' || $dwn == '3' && $dwf == '4' || $dwn == '4' && $dwf == '5' || $dwn == '5' && $dwf == '6' || $dwn == '6' && $dwf == '0' ) {
-				$weekday_days = 1;
-			}
-
-			if ( $dwn == '0' && $dwf == '2' || $dwn == '1' && $dwf == '3' || $dwn == '2' && $dwf == '4' || $dwn == '3' && $dwf == '5' || $dwn == '4' && $dwf == '6' || $dwn == '5' && $dwf == '0' || $dwn == '6' && $dwf == '1' ) {
-				$weekday_days = 2;
-			}
-
-			if ( $dwn == '0' && $dwf == '3' || $dwn == '1' && $dwf == '4' || $dwn == '2' && $dwf == '5' || $dwn == '3' && $dwf == '6' || $dwn == '4' && $dwf == '0' || $dwn == '5' && $dwf == '1' || $dwn == '6' && $dwf == '2' ) {
-				$weekday_days = 3;
-			}
-
-			if ( $dwn == '0' && $dwf == '4' || $dwn == '1' && $dwf == '5' || $dwn == '2' && $dwf == '6' || $dwn == '3' && $dwf == '0' || $dwn == '4' && $dwf == '1' || $dwn == '5' && $dwf == '2' || $dwn == '6' && $dwf == '3' ) {
-				$weekday_days = 4;
-			}
-
-			if ( $dwn == '0' && $dwf == '5' || $dwn == '1' && $dwf == '6' || $dwn == '2' && $dwf == '0' || $dwn == '3' && $dwf == '1' || $dwn == '4' && $dwf == '2' || $dwn == '5' && $dwf == '3' || $dwn == '6' && $dwf == '4' ) {
-				$weekday_days = 5;
-			}
-	
-			if ( $dwn == '0' && $dwf == '6' || $dwn == '1' && $dwf == '0' || $dwn == '2' && $dwf == '1' || $dwn == '3' && $dwf == '2' || $dwn == '4' && $dwf == '3' || $dwn == '5' && $dwf == '4' || $dwn == '6' && $dwf == '5' ) {
-				$weekday_days = 6;
-			}
-		}
-		
-		$bps_next_job_unix = $clock + ($weekday_days * 24 * 60 * 60); 
-
-		$DBBInsertRows = $wpdb->insert( $DBBtable_name, array( 'bps_table_name' => $NoDupes, 'bps_desc' => esc_html($_POST['DBBDescription']), 'bps_job_type' => $_POST['dbb_backup_job_type'], 'bps_frequency' => $bps_frequency, 'bps_last_job' => $bps_last_job, 'bps_next_job' => $bps_next_job, 'bps_next_job_unix' => $bps_next_job_unix, 'bps_email_zip' => $bps_email_zip, 'bps_job_created' => current_time('mysql') ) );
-		
-		$text = '<strong><font color="green">'.__('Backup Job ', 'bulletproof-security').esc_html($_POST['DBBDescription']).__(' Created Successfully.', 'bulletproof-security').'</font></strong><br>';
-		echo $text;
-		echo '<strong>'.__('Backup Job Settings Logged successfully in the DB Backup Log', 'bulletproof-security').'</strong><br>';
-		echo '<div class="bps-message-button" style="width:90px;"><a href="'.admin_url( 'admin.php?page=bulletproof-security/admin/db-backup-security/db-backup-security.php' ).'">'.esc_attr__('Refresh Status', 'bulletproof-security').'</a></div>';	
-		echo '</p></div>';
-			
-		$DBBLog_Options = array( 'bps_dbb_log_date_mod' => bpsPro_DBB_Log_LastMod() );
-	
-		foreach( $DBBLog_Options as $key => $value ) {
-			update_option('bulletproof_security_options_DBB_log', $DBBLog_Options);
-		}
-	}
-}
-
-?>
 
 </div>
 </div>
@@ -1147,25 +1214,25 @@ if ( isset($_POST['Submit-DBB-Create-Job']) && current_user_can('manage_options'
 
 // Get File Size of the DB Backup Log File
 function bpsPro_DBB_LogSize() {
-$filename = WP_CONTENT_DIR . '/bps-backup/logs/db_backup_log.txt';
+	$filename = WP_CONTENT_DIR . '/bps-backup/logs/db_backup_log.txt';
 
-if ( file_exists($filename) ) {
-	$logSize = filesize($filename);
-	
-	if ( $logSize < 2097152 ) {
- 		$text = '<span style="font-size:13px;"><strong>'. __('DB Backup Log File Size: ', 'bulletproof-security').'<font color="#2ea2cc">'. round($logSize / 1024, 2) .' KB</font></strong></span><br>';
-		echo $text;
-	} else {
- 		$text = '<span style="font-size:13px;"><strong>'. __('DB Backup Log File Size: ', 'bulletproof-security').'<font color="#fb0101">'. round($logSize / 1024, 2) .' KB<br>'.__('The Email Logging options will only send log files up to 2MB in size.', 'bulletproof-security').'</font></strong><br>'.__('Copy and paste the DB Backup Log file contents into a Notepad text file on your computer and save it.', 'bulletproof-security').'<br>'.__('Then click the Delete Log button to delete the contents of this Log file.', 'bulletproof-security').'</span><br>';		
-		echo $text;
-	}
+	if ( file_exists($filename) ) {
+		$logSize = filesize($filename);
+		
+		if ( $logSize < 2097152 ) {
+			$text = '<span style="font-size:13px;"><strong>'. __('DB Backup Log File Size: ', 'bulletproof-security').'<font color="#2ea2cc">'. round($logSize / 1024, 2) .' KB</font></strong></span><br>';
+			echo $text;
+		} else {
+			$text = '<span style="font-size:13px;"><strong>'. __('DB Backup Log File Size: ', 'bulletproof-security').'<font color="#fb0101">'. round($logSize / 1024, 2) .' KB<br>'.__('The Email Logging options will only send log files up to 2MB in size.', 'bulletproof-security').'</font></strong><br>'.__('Copy and paste the DB Backup Log file contents into a Notepad text file on your computer and save it.', 'bulletproof-security').'<br>'.__('Then click the Delete Log button to delete the contents of this Log file.', 'bulletproof-security').'</span><br>';		
+			echo $text;
+		}
 	}
 }
 bpsPro_DBB_LogSize();
 
 // Get the Current/Last Modifed Date of the DB Backup Log File
 function bpsPro_DBB_Log_LastMod() {
-$filename = WP_CONTENT_DIR . '/bps-backup/logs/db_backup_log.txt';
+	$filename = WP_CONTENT_DIR . '/bps-backup/logs/db_backup_log.txt';
 
 	if ( file_exists($filename) ) {
 		$gmt_offset = get_option( 'gmt_offset' ) * 3600;
@@ -1184,10 +1251,10 @@ if ( isset( $_POST['Submit-Delete-DBB-Log'] ) && current_user_can('manage_option
 	$DBBLogMaster = WP_PLUGIN_DIR . '/bulletproof-security/admin/htaccess/db_backup_log.txt';
 	
 	copy($DBBLogMaster, $DBBLog);
-		echo $bps_topDiv;
-		$text = '<font color="green"><strong>'.__('Success! Your DB Backup Log file has been deleted and replaced with a new blank DB Backup Log file.', 'bulletproof-security').'</strong></font>';
-		echo $text;	
-		echo $bps_bottomDiv;
+	echo $bps_topDiv;
+	$text = '<font color="green"><strong>'.__('Success! Your DB Backup Log file has been deleted and replaced with a new blank DB Backup Log file.', 'bulletproof-security').'</strong></font>';
+	echo $text;	
+	echo $bps_bottomDiv;
 }
 ?>
 
@@ -1203,53 +1270,53 @@ if ( isset( $_POST['Submit-Delete-DBB-Log'] ) && current_user_can('manage_option
 function bpsPro_DBB_get_contents() {
 	
 	if ( current_user_can('manage_options') ) {
-$dbb_log = WP_CONTENT_DIR . '/bps-backup/logs/db_backup_log.txt';
-$bps_wpcontent_dir = str_replace( ABSPATH, '', WP_CONTENT_DIR );
+		$dbb_log = WP_CONTENT_DIR . '/bps-backup/logs/db_backup_log.txt';
+		$bps_wpcontent_dir = str_replace( ABSPATH, '', WP_CONTENT_DIR );
 
-	if ( file_exists($dbb_log) ) {
-		$dbb_log = file_get_contents($dbb_log);
-		return htmlspecialchars($dbb_log);
-	
-	} else {
-	
-	_e('The DB Backup Log File Was Not Found! Check that the file really exists here - /', 'bulletproof-security').$bps_wpcontent_dir.__('/bps-backup/logs/db_backup_log.txt and is named correctly.', 'bulletproof-security');
-	}
+		if ( file_exists($dbb_log) ) {
+			$dbb_log = file_get_contents($dbb_log);
+			return htmlspecialchars($dbb_log);
+		
+		} else {
+		
+		_e('The DB Backup Log File Was Not Found! Check that the file really exists here - /', 'bulletproof-security').$bps_wpcontent_dir.__('/bps-backup/logs/db_backup_log.txt and is named correctly.', 'bulletproof-security');
+		}
 	}
 }
 
 // Form: DB Backup Log editor
 if ( current_user_can('manage_options') ) {
-$dbb_log = WP_CONTENT_DIR . '/bps-backup/logs/db_backup_log.txt';
-$write_test = "";
+	$dbb_log = WP_CONTENT_DIR . '/bps-backup/logs/db_backup_log.txt';
+	$write_test = "";
 	
 	if ( is_writable($dbb_log) ) {
-    if ( !$handle = fopen($dbb_log, 'a+b' ) ) {
-    exit;
-    }
-    
-	if ( fwrite($handle, $write_test) === FALSE ) {
-	exit;
-    }
-	
-	$text = '<font color="green" style="font-size:12px;"><strong>'.__('File Open and Write test successful! Your DB Backup Log file is writable.', 'bulletproof-security').'</strong></font><br>';
-	echo $text;
-	}
+		if ( !$handle = fopen($dbb_log, 'a+b' ) ) {
+		exit;
+		}
+		
+		if ( fwrite($handle, $write_test) === FALSE ) {
+		exit;
+		}
+		
+		$text = '<font color="green" style="font-size:12px;"><strong>'.__('File Open and Write test successful! Your DB Backup Log file is writable.', 'bulletproof-security').'</strong></font><br>';
+		echo $text;
+		}
 	}
 	
 	if ( isset( $_POST['Submit-DBB-Log'] ) && current_user_can('manage_options') ) {
 		check_admin_referer( 'bulletproof_security_save_dbb_log' );
 		$newcontentdbb = stripslashes( $_POST['newcontentdbb'] );
 	
-	if ( is_writable($dbb_log) ) {
-		$handle = fopen($dbb_log, 'w+b');
-		fwrite($handle, $newcontentdbb);
-	$text = '<font color="green style="font-size:12px;""><strong>'.__('Success! Your DB Backup Log file has been updated.', 'bulletproof-security').'</strong></font><br>';
-	echo $text;	
-    fclose($handle);
+		if ( is_writable($dbb_log) ) {
+			$handle = fopen($dbb_log, 'w+b');
+			fwrite($handle, $newcontentdbb);
+		$text = '<font color="green style="font-size:12px;""><strong>'.__('Success! Your DB Backup Log file has been updated.', 'bulletproof-security').'</strong></font><br>';
+		echo $text;	
+		fclose($handle);
+		}
 	}
-}
 
-$scrolltodbblog = isset($_REQUEST['scrolltodbblog']) ? (int) $_REQUEST['scrolltodbblog'] : 0;
+	$scrolltodbblog = isset($_REQUEST['scrolltodbblog']) ? (int) $_REQUEST['scrolltodbblog'] : 0;
 ?>
 </div>
 
@@ -1300,7 +1367,7 @@ jQuery(document).ready(function($){
 </div>
 
 <?php
-	if ( is_admin() && wp_script_is( 'bps-accordion', $list = 'queue' ) && current_user_can('manage_options') && preg_match( '/page=bulletproof-security/', esc_html( $_SERVER['REQUEST_URI'], @$matches ) ) ) {	
+	if ( is_admin() && current_user_can('manage_options') && preg_match( '/page=bulletproof-security/', esc_html( $_SERVER['REQUEST_URI'], @$matches ) ) ) {	
 
 echo '<div id="DBPrefixText" style="width:90%;padding-bottom:20px;">';
 $text = '<span style="font-size:1.13em;">'.__('Your current WordPress Database Table Prefix is: ', 'bulletproof-security').'<strong><font color="#2ea2cc">'.$wpdb->base_prefix .'</span><br><br><span class="bps-dbb-small-text">'.__('NOTES: ', 'bulletproof-security').'<br>'.__('1. It is recommended that you backup your database before using this tool.', 'bulletproof-security').'<br>'.__('2. If you want to create your own DB Table Prefix name or add additional characters to the randomly generated DB Table Prefix name below then ONLY use lowercase letters, numbers and underscores in your DB Table Prefix name.', 'bulletproof-security').'<br>'.__('3. The maximum length limitation of a DB Table name, including the table prefix is 64 characters. See the DB Table Names & Character Length Table to the right.', 'bulletproof-security').'<br>'.__('4. To change your DB Table Prefix name back to the WordPress default DB Table Prefix name, enter wp_ for the DB Table Prefix name.', 'bulletproof-security').'</span></font></strong>';
@@ -1311,8 +1378,6 @@ echo '</div>';
 if ( isset( $_POST['Submit-DB-Table-Prefix'] ) && current_user_can('manage_options') ) {
 	check_admin_referer( 'bulletproof_security_table_prefix_changer' );
 	set_time_limit(300);
-
-	$time_start = microtime( true );
 
 	if ( preg_match( '|[^a-z0-9_]|', $_POST['DBTablePrefix'] ) ) {
 		
@@ -1349,39 +1414,39 @@ if ( isset( $_POST['Submit-DB-Table-Prefix'] ) && current_user_can('manage_optio
 			@chmod($wpconfig_file, 0644);
 		}
 
-	if ( ! is_writable($wpconfig_file) ) {
-		echo $bps_topDiv;
-		$text = '<strong><font color="#fb0101">'.__('Error: The wp-config.php file is not writable. Unable to write to the wp-config.php file.', 'bulletproof-security').'</font><br>'.__('Your DB Table Prefix was not changed. You will need to make the wp-config.php file writable first by changing either the file permissions or Ownership of the wp-config.php file (if you have a DSO Server) before you can use the DB Table Prefix Changer tool to change your DB Table Prefix.', 'bulletproof-security').'</strong>';
-		echo $text;
-		echo $bps_bottomDiv;
-	return;
-	}
+		if ( ! is_writable($wpconfig_file) ) {
+			echo $bps_topDiv;
+			$text = '<strong><font color="#fb0101">'.__('Error: The wp-config.php file is not writable. Unable to write to the wp-config.php file.', 'bulletproof-security').'</font><br>'.__('Your DB Table Prefix was not changed. You will need to make the wp-config.php file writable first by changing either the file permissions or Ownership of the wp-config.php file (if you have a DSO Server) before you can use the DB Table Prefix Changer tool to change your DB Table Prefix.', 'bulletproof-security').'</strong>';
+			echo $text;
+			echo $bps_bottomDiv;
+		return;
+		}
 
-	$base_prefix = $wpdb->base_prefix;
-	$MetaKeys = $wpdb->get_results( $wpdb->prepare( "SELECT * FROM $wpdb->usermeta WHERE meta_key LIKE %s", "$base_prefix%" ) );
-	$userRoles = '_user_roles';
-	$UserRolesRows = $wpdb->get_results( $wpdb->prepare( "SELECT * FROM $wpdb->options WHERE option_name LIKE %s", "%$userRoles" ) );
-	$DBTables = 0;
-	$getDBTables = $wpdb->get_results( $wpdb->prepare( "SHOW TABLE STATUS WHERE Rows >= %d", $DBTables ) );
+		$base_prefix = $wpdb->base_prefix;
+		$MetaKeys = $wpdb->get_results( $wpdb->prepare( "SELECT * FROM $wpdb->usermeta WHERE meta_key LIKE %s", "$base_prefix%" ) );
+		$userRoles = '_user_roles';
+		$UserRolesRows = $wpdb->get_results( $wpdb->prepare( "SELECT * FROM $wpdb->options WHERE option_name LIKE %s", "%$userRoles" ) );
+		$DBTables = 0;
+		$getDBTables = $wpdb->get_results( $wpdb->prepare( "SHOW TABLE STATUS WHERE Rows >= %d", $DBTables ) );
+		
+		foreach ( $getDBTables as $Table ) {
+			$new_table_name = preg_replace( "/^$wpdb->base_prefix/", $DBTablePrefix, $Table->Name );
+			$rename_table = $wpdb->query( "RENAME TABLE $Table->Name TO $new_table_name" );
+		}
+				
+		foreach ( $UserRolesRows as $data ) {
+			$update_user_roles = $wpdb->update( $DBTablePrefix . 'options', array( 'option_name' => $DBTablePrefix . 'user_roles' ), array( 'option_name' => $data->option_name ) );
+		}
 	
-	foreach ( $getDBTables as $Table ) {
-		$new_table_name = preg_replace( "/^$wpdb->base_prefix/", $DBTablePrefix, $Table->Name );
-		$rename_table = $wpdb->query( "RENAME TABLE $Table->Name TO $new_table_name" );
-	}
-			
-	foreach ( $UserRolesRows as $data ) {
-		$update_user_roles = $wpdb->update( $DBTablePrefix . 'options', array( 'option_name' => $DBTablePrefix . 'user_roles' ), array( 'option_name' => $data->option_name ) );
-	}
-
-	foreach ( $MetaKeys as $mdata ) {
-		$new_meta_key = preg_replace( "/^$wpdb->base_prefix/", $DBTablePrefix, $mdata->meta_key );
-		$update_meta_keys = $wpdb->update( $DBTablePrefix . 'usermeta', array( 'meta_key' => $new_meta_key ), array( 'meta_key' => $mdata->meta_key ) );
-	}
-
-	$contents = file_get_contents($wpconfig_file);
-	$pattern = '/\$table_prefix(.*)=(.*);/';
-
-		$stringReplace = @file_get_contents($wpconfig_file);
+		foreach ( $MetaKeys as $mdata ) {
+			$new_meta_key = preg_replace( "/^$wpdb->base_prefix/", $DBTablePrefix, $mdata->meta_key );
+			$update_meta_keys = $wpdb->update( $DBTablePrefix . 'usermeta', array( 'meta_key' => $new_meta_key ), array( 'meta_key' => $mdata->meta_key ) );
+		}
+	
+		$contents = file_get_contents($wpconfig_file);
+		$pattern = '/\$table_prefix(.*)=(.*);/';
+	
+			$stringReplace = @file_get_contents($wpconfig_file);
 		
 		if ( preg_match( $pattern, $contents, $matches ) ) {
 			$stringReplace = preg_replace('/\$table_prefix(.*)=(.*);/', "\$table_prefix = '$DBTablePrefix';", $stringReplace);
@@ -1408,15 +1473,7 @@ if ( isset( $_POST['Submit-DB-Table-Prefix'] ) && current_user_can('manage_optio
 			echo $bps_bottomDiv;			
 		}
 	} // end if ( file_exists($filename) ) {
-
-	$time_end = microtime( true );
-	$run_time = $time_end - $time_start;
-	$time_display = '<strong>DB Table Prefix Changer Completion Time: </strong>'. round( $run_time, 2 ) . ' Seconds';
-	echo $bps_topDiv;
-	echo bpsPro_memory_resource_usage();
-	echo $time_display;
-	echo $bps_bottomDiv;
-	}
+}
 
 	// Random DB Table Prefix Name generator
 	// Notes: If an external/remote form is submitted the WP nonce is not checked.
@@ -1427,14 +1484,14 @@ if ( isset( $_POST['Submit-DB-Table-Prefix'] ) && current_user_can('manage_optio
 ?>
 
 <form name="bpsTablePrefixChanger" action="<?php echo admin_url( 'admin.php?page=bulletproof-security/admin/db-backup-security/db-backup-security.php#bps-tabs-3' ); ?>" method="post">
-<?php wp_nonce_field('bulletproof_security_table_prefix_changer'); ?>
-<div>
-<strong><label for="bpsTablePrefix"><?php _e('Randomly Generated DB Table Prefix', 'bulletproof-security'); ?></label></strong><br />  
-<input type="text" name="DBTablePrefix" value="<?php if ( @preg_match( '|[^a-z0-9_]|', $_POST['DBTablePrefix'] ) ) { echo esc_html($prefix_obs); } else { echo esc_html($DBTablePrefix); } ?>" class="table-prefix-changer" /> <br />
-<p class="submit">
-<input type="submit" name="Submit-DB-Table-Prefix" value="<?php esc_attr_e('Change DB Table Prefix', 'bulletproof-security') ?>" class="button bps-button" onclick="bpsSpinnerTablePrefix()" />
-</p>
-</div>
+	<?php wp_nonce_field('bulletproof_security_table_prefix_changer'); ?>
+    <div>
+    <strong><label for="bpsTablePrefix"><?php _e('Randomly Generated DB Table Prefix', 'bulletproof-security'); ?></label></strong><br />  
+    <input type="text" name="DBTablePrefix" value="<?php if ( @preg_match( '|[^a-z0-9_]|', $_POST['DBTablePrefix'] ) ) { echo esc_html($prefix_obs); } else { echo esc_html($DBTablePrefix); } ?>" class="table-prefix-changer" /> <br />
+    <p class="submit">
+    <input type="submit" name="Submit-DB-Table-Prefix" value="<?php esc_attr_e('Change DB Table Prefix', 'bulletproof-security') ?>" class="button bps-button" onclick="bpsSpinnerTablePrefix()" />
+    </p>
+	</div>
 </form>
 
 <?php
@@ -1496,104 +1553,92 @@ global $wpdb, $bps_topDiv, $bps_bottomDiv;
 	if ( isset( $_POST['Submit-DB-Prefix-Table-Refresh'] ) && current_user_can('manage_options') ) {
 		check_admin_referer( 'bulletproof_security_db_prefix_refresh' );
 	
-	$time_start = microtime( true );
+		$base_prefix = $wpdb->base_prefix;
+		$DBTables = 0;
+		$getDBTables = $wpdb->get_results( $wpdb->prepare( "SHOW TABLE STATUS WHERE Rows >= %d", $DBTables ) );
+
+		echo '<div id="DBPrefixStatus1" style="margin:0px 0px 20px 0px;overflow:auto;width:100%;height:200px;border:1px solid black;">';
+		echo '<table style="text-align:left;border-right:1px solid black;padding:5px;">';
+		echo '<thead>';
+		echo '<tr>';
+		echo '<th scope="col" style="width:250px;font-size:1.13em;border-bottom:1px solid black;background-color:transparent;"><strong>'.__('DB Table Name', 'bulletproof-security').'</strong></th>';
+		echo '<th scope="col" style="width:400px;font-size:1.13em;border-bottom:1px solid black;background-color:transparent;"><strong>'.__('Length', 'bulletproof-security').'</strong></th>';
+		echo '</tr>';
+		echo '</thead>';
+		echo '<tbody>';
+		echo '<tr>';
 	
-	$base_prefix = $wpdb->base_prefix;
-	$DBTables = 0;
-	$getDBTables = $wpdb->get_results( $wpdb->prepare( "SHOW TABLE STATUS WHERE Rows >= %d", $DBTables ) );
-
-	echo '<div id="DBPrefixStatus1" style="margin:0px 0px 20px 0px;overflow:auto;width:100%;height:200px;border:1px solid black;">';
-	echo '<table style="text-align:left;border-right:1px solid black;padding:5px;">';
-	echo '<thead>';
-	echo '<tr>';
-	echo '<th scope="col" style="width:250px;font-size:1.13em;border-bottom:1px solid black;background-color:transparent;"><strong>'.__('DB Table Name', 'bulletproof-security').'</strong></th>';
-	echo '<th scope="col" style="width:400px;font-size:1.13em;border-bottom:1px solid black;background-color:transparent;"><strong>'.__('Length', 'bulletproof-security').'</strong></th>';
-	echo '</tr>';
-	echo '</thead>';
-	echo '<tbody>';
-	echo '<tr>';
-
-	foreach ( $getDBTables as $Tabledata ) {
-
-	echo '<td>'.$Tabledata->Name.'</td>';
-	echo '<td>'.strlen($Tabledata->Name).'</td>';
-	echo '</tr>';
-	}
-	echo '</tbody>';
-	echo '</table>';
-	echo '</div>';
-
-	$userRoles = '_user_roles';
-	$UserRolesRows = $wpdb->get_results( $wpdb->prepare( "SELECT * FROM $wpdb->options WHERE option_name LIKE %s", "%$userRoles" ) );
-	$MetaKeys = $wpdb->get_results( $wpdb->prepare( "SELECT * FROM $wpdb->usermeta WHERE meta_key LIKE %s", "$base_prefix%" ) );	
-
-	echo '<div id="DBPrefixStatus2" style="margin:0px 0px 20px 0px;overflow:auto;width:100%;height:200px;border:1px solid black;">';
-	echo '<table style="text-align:left;border-right:1px solid black;padding:5px;">';
-	echo '<thead>';
-	echo '<tr>';
-	echo '<th scope="col" style="width:250px;font-size:1.13em;border-bottom:1px solid black;background-color:transparent;"><strong>'.__('DB Table Name|Column', 'bulletproof-security').'</strong></th>';
-	echo '<th scope="col" style="width:400px;font-size:1.13em;border-bottom:1px solid black;background-color:transparent;"><strong>'.__('Other Prefix Changes', 'bulletproof-security').'</strong></th>';
-	echo '</tr>';
-	echo '</thead>';
-	echo '<tbody>';
-	echo '<tr>';
-
-	foreach ( $UserRolesRows as $data ) {
-
-	echo '<td>'.$wpdb->options.' | option_name</td>';
-	echo '<td>'.$data->option_name.'</td>';
-	echo '</tr>';
-	}
+		foreach ( $getDBTables as $Tabledata ) {
 	
-	if ( is_multisite() ) {
+			echo '<td>'.$Tabledata->Name.'</td>';
+			echo '<td>'.strlen($Tabledata->Name).'</td>';
+			echo '</tr>';
+		}
+		echo '</tbody>';
+		echo '</table>';
+		echo '</div>';
+
+		$userRoles = '_user_roles';
+		$UserRolesRows = $wpdb->get_results( $wpdb->prepare( "SELECT * FROM $wpdb->options WHERE option_name LIKE %s", "%$userRoles" ) );
+		$MetaKeys = $wpdb->get_results( $wpdb->prepare( "SELECT * FROM $wpdb->usermeta WHERE meta_key LIKE %s", "$base_prefix%" ) );	
+	
+		echo '<div id="DBPrefixStatus2" style="margin:0px 0px 20px 0px;overflow:auto;width:100%;height:200px;border:1px solid black;">';
+		echo '<table style="text-align:left;border-right:1px solid black;padding:5px;">';
+		echo '<thead>';
+		echo '<tr>';
+		echo '<th scope="col" style="width:250px;font-size:1.13em;border-bottom:1px solid black;background-color:transparent;"><strong>'.__('DB Table Name|Column', 'bulletproof-security').'</strong></th>';
+		echo '<th scope="col" style="width:400px;font-size:1.13em;border-bottom:1px solid black;background-color:transparent;"><strong>'.__('Other Prefix Changes', 'bulletproof-security').'</strong></th>';
+		echo '</tr>';
+		echo '</thead>';
+		echo '<tbody>';
+		echo '<tr>';
+	
+		foreach ( $UserRolesRows as $data ) {
+	
+		echo '<td>'.$wpdb->options.' | option_name</td>';
+		echo '<td>'.$data->option_name.'</td>';
+		echo '</tr>';
+		}
+	
+		if ( is_multisite() ) {
+			
+		echo '<tr>';
 		
-	echo '<tr>';
+			$network_ids = wp_get_sites();
 	
-		$network_ids = wp_get_sites();
-
-		foreach ( $network_ids as $key => $value ) {
-			
-			$net_id = $value['blog_id'];
-			
-			if ( $net_id != '1' ) {
-			
-				$network_options_tables = $base_prefix . $net_id . '_options';
-				$NetUserRolesRows = $wpdb->get_results( $wpdb->prepare( "SELECT * FROM $network_options_tables WHERE option_name LIKE %s", "%$userRoles" ) );
-
-				foreach ( $NetUserRolesRows as $data ) {
+			foreach ( $network_ids as $key => $value ) {
+				
+				$net_id = $value['blog_id'];
+				
+				if ( $net_id != '1' ) {
+				
+					$network_options_tables = $base_prefix . $net_id . '_options';
+					$NetUserRolesRows = $wpdb->get_results( $wpdb->prepare( "SELECT * FROM $network_options_tables WHERE option_name LIKE %s", "%$userRoles" ) );
 	
-					echo '<td>'.$network_options_tables.' | option_name</td>';
-					echo '<td>'.$data->option_name.'</td>';
-					echo '</tr>';
+					foreach ( $NetUserRolesRows as $data ) {
+		
+						echo '<td>'.$network_options_tables.' | option_name</td>';
+						echo '<td>'.$data->option_name.'</td>';
+						echo '</tr>';
+					}
 				}
 			}
 		}
-	}
 
-	echo '<tr>';
-	
-	foreach ( $MetaKeys as $mdata ) {
-	
-	if ( preg_match( "/^$wpdb->base_prefix/", $mdata->meta_key, $matches ) ) {
-	
-	echo '<td>'.$wpdb->usermeta.' | meta_key</td>';
-	echo '<td>'.'User ID: '.$mdata->user_id.' '.$mdata->meta_key.'</td>';
-	echo '</tr>';
-	}
-	}
-	
-	echo '</tbody>';
-	echo '</table>';
-	echo '</div>';
-	
-	$time_end = microtime( true );
-	$run_time = $time_end - $time_start;
-	$time_display = '<strong>DB Table Names Tool Completion Time: </strong>'. round( $run_time, 2 ) . ' Seconds';
-
-	echo $bps_topDiv;
-	echo bpsPro_memory_resource_usage();
-	echo $time_display;
-	echo $bps_bottomDiv;
+		echo '<tr>';
+		
+		foreach ( $MetaKeys as $mdata ) {
+		
+			if ( preg_match( "/^$wpdb->base_prefix/", $mdata->meta_key, $matches ) ) {
+			
+			echo '<td>'.$wpdb->usermeta.' | meta_key</td>';
+			echo '<td>'.'User ID: '.$mdata->user_id.' '.$mdata->meta_key.'</td>';
+			echo '</tr>';
+			}
+		}
+		echo '</tbody>';
+		echo '</table>';
+		echo '</div>';
 	}
 }
 
@@ -1608,7 +1653,7 @@ global $wpdb, $bps_topDiv, $bps_bottomDiv;
 	echo "</form>";
 	echo '</div>';
 	
-}// end if ( is_admin() && wp_script_is( 'bps-accordion', $list = 'queue' )...	
+}// end if ( is_admin() && current_user_can('manage_options')...	
 
 ?>
 

@@ -125,7 +125,7 @@ global $wpdb, $wp_version, $blog_id;
 	}
 	}
 
-// Whitelist BPS DB options: Total: 36
+// Whitelist BPS DB options: Total: 38
 register_setting('bulletproof_security_options', 'bulletproof_security_options', 'bulletproof_security_options_validate');
 register_setting('bulletproof_security_options_SLF', 'bulletproof_security_options_SLF', 'bulletproof_security_options_validate_SLF');
 register_setting('bulletproof_security_options_debug', 'bulletproof_security_options_debug', 'bulletproof_security_options_validate_debug');
@@ -136,7 +136,8 @@ register_setting('bulletproof_security_options_wpt_nodes', 'bulletproof_security
 register_setting('bulletproof_security_options_customcode', 'bulletproof_security_options_customcode', 'bulletproof_security_options_validate_customcode');
 register_setting('bulletproof_security_options_autoupdate', 'bulletproof_security_options_autoupdate', 'bulletproof_security_options_validate_autoupdate');
 register_setting('bulletproof_security_options_wizard_free', 'bulletproof_security_options_wizard_free', 'bulletproof_security_options_validate_wizard_free');
-register_setting('bulletproof_security_options_MScan_status', 'bulletproof_security_options_MScan_status', 'bulletproof_security_options_validate_MScan_status');	
+register_setting('bulletproof_security_options_MScan_status', 'bulletproof_security_options_MScan_status', 'bulletproof_security_options_validate_MScan_status');
+register_setting('bulletproof_security_options_mod_security', 'bulletproof_security_options_mod_security', 'bulletproof_security_options_validate_mod_security');
 register_setting('bulletproof_security_options_pop_uninstall', 'bulletproof_security_options_pop_uninstall', 'bulletproof_security_options_validate_pop_uninstall');
 register_setting('bulletproof_security_options_customcode_WPA', 'bulletproof_security_options_customcode_WPA', 'bulletproof_security_options_validate_customcode_WPA');
 register_setting('bulletproof_security_options_apache_modules', 'bulletproof_security_options_apache_modules', 'bulletproof_security_options_validate_apache_modules');
@@ -155,6 +156,7 @@ register_setting('bulletproof_security_options_maint_mode', 'bulletproof_securit
 register_setting('bulletproof_security_options_theme_skin', 'bulletproof_security_options_theme_skin', 'bulletproof_security_options_validate_theme_skin');
 register_setting('bulletproof_security_options_MScan_log', 'bulletproof_security_options_MScan_log', 'bulletproof_security_options_validate_MScan_log');
 register_setting('bulletproof_security_options_scrolltop', 'bulletproof_security_options_scrolltop', 'bulletproof_security_options_validate_scrolltop');
+register_setting('bulletproof_security_options_rate_free', 'bulletproof_security_options_rate_free', 'bulletproof_security_options_validate_rate_free');
 register_setting('bulletproof_security_options_hpf_cron', 'bulletproof_security_options_hpf_cron', 'bulletproof_security_options_validate_hpf_cron');
 register_setting('bulletproof_security_options_spinner', 'bulletproof_security_options_spinner', 'bulletproof_security_options_validate_spinner');
 register_setting('bulletproof_security_options_mynotes', 'bulletproof_security_options_mynotes', 'bulletproof_security_options_validate_mynotes');
@@ -187,6 +189,12 @@ register_setting('bulletproof_security_options_GDMW', 'bulletproof_security_opti
 		@chmod( WP_CONTENT_DIR . '/bps-backup/wp-hashes/', 0755 );
 	}
 
+	// Create the mscan folder for mscan pattern matching file/code
+	if ( ! is_dir( WP_CONTENT_DIR . '/bps-backup/mscan' ) ) {
+		@mkdir( WP_CONTENT_DIR . '/bps-backup/mscan', 0755, true );
+		@chmod( WP_CONTENT_DIR . '/bps-backup/mscan/', 0755 );
+	}
+
 	// Copy the blank wp-hashes.php file to the /wp-hashes/ folder
 	$wp_hashes_file_master = WP_PLUGIN_DIR . '/bulletproof-security/admin/htaccess/wp-hashes.php';
 	$wp_hashes_file = WP_CONTENT_DIR . '/bps-backup/wp-hashes/wp-hashes.php';
@@ -201,6 +209,22 @@ register_setting('bulletproof_security_options_GDMW', 'bulletproof_security_opti
 	
 	if ( ! file_exists($bpsProMScanLogARQ) ) {
 		@copy($bpsProMScanLog, $bpsProMScanLogARQ);
+	}
+
+	// Copy the mscan-pattern-match.php file to the /mscan/ folder and then delete it from the /htaccess/ folder
+	$mscan_pattern_match_master = WP_PLUGIN_DIR . '/bulletproof-security/admin/htaccess/mscan-pattern-match.php';
+	$mscan_pattern_match_file = WP_CONTENT_DIR . '/bps-backup/mscan/mscan-pattern-match.php';
+	
+	if ( ! file_exists($mscan_pattern_match_file) ) {
+		if ( file_exists($mscan_pattern_match_master) ) {		
+			copy($mscan_pattern_match_master, $mscan_pattern_match_file);
+		}
+	}
+
+	if ( file_exists($mscan_pattern_match_file) ) {
+		if ( file_exists($mscan_pattern_match_master) ) {
+			unlink($mscan_pattern_match_master);
+		}
 	}
 
 	// Copy and rename the blank.txt file to /master-backups - used for MScan Stop Scan
@@ -800,6 +824,8 @@ require_once( ABSPATH . 'wp-admin/includes/plugin.php');
 		delete_option('bulletproof_security_options_MScan_status');
 		delete_option('bulletproof_security_options_MScan');
 		delete_option('bulletproof_security_options_login_security_jtc'); 
+		delete_option('bulletproof_security_options_rate_free');
+		delete_option('bulletproof_security_options_mod_security');
 		// will be adding this new upgrade notice option later
 		// delete_option('bulletproof_security_options_upgrade_notice');	
 	
@@ -831,7 +857,9 @@ require_once( ABSPATH . 'wp-admin/includes/plugin.php');
 		delete_user_meta($user_id, 'bpsPro_ignore_EPC_plugin_notice');
 		delete_user_meta($user_id, 'bps_ignore_mscan_notice');
 		delete_user_meta($user_id, 'bps_ignore_jtc_lite_notice');
-		
+		delete_user_meta($user_id, 'bps_ignore_rate_notice');
+		delete_user_meta($user_id, 'bpsPro_ignore_mod_security_notice');
+
 		@unlink($wpadminHtaccess);	
 	
 		if ( @unlink($RootHtaccess) || ! file_exists($RootHtaccess) ) {
@@ -853,7 +881,8 @@ require_once( ABSPATH . 'wp-admin/includes/plugin.php');
 		delete_option( 'bulletproof_security_options' );
 		delete_option('bulletproof_security_options_wizard_free');
 		delete_transient( 'bulletproof-security_info' );
-		delete_option('bulletproof_security_options_MU_tools_free');		
+		delete_option('bulletproof_security_options_MU_tools_free');
+		delete_option('bulletproof_security_options_rate_free');
 
 		delete_user_meta($user_id, 'bps_ignore_autoupdate_notice');
 
@@ -1319,8 +1348,26 @@ function bulletproof_security_options_validate_login_security_jtc($input) {
 	// Note: You cannot use: wp_filter_nohtml_kses for multidimensional arrays - it will strip out the inner array code.
 	@$BPSoptionsJTC['bps_jtc_custom_roles'] = $input['bps_jtc_custom_roles'];	
 	$BPSoptionsJTC['bps_enable_jtc_woocommerce'] = wp_filter_nohtml_kses($input['bps_enable_jtc_woocommerce']);
+	$BPSoptionsJTC['bps_jtc_custom_form_error'] = $input['bps_jtc_custom_form_error'];
 
 	return $BPSoptionsJTC;  
+}
+
+// BPS plugin 30 day review/rating request Dismiss Notice
+function bulletproof_security_options_validate_rate_free($input) {  
+	$options = get_option('bulletproof_security_options_rate_free');  
+	$options['bps_free_rate_review'] = wp_filter_nohtml_kses($input['bps_free_rate_review']);		
+	
+	return $options;  
+}
+
+// Mod Security Check: function: bpsPro_apache_mod_directive_check() used in Mod Security Dismiss Notice
+function bulletproof_security_options_validate_mod_security($input) {  
+	$options = get_option('bulletproof_security_options_mod_security');  
+	$options['bps_mod_security_check'] = wp_filter_nohtml_kses($input['bps_mod_security_check']);
+	//$options['bps_mod_security2_check'] = wp_filter_nohtml_kses($input['bps_mod_security2_check']);
+		
+	return $options;  
 }
 
 ?>

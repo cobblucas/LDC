@@ -196,7 +196,202 @@ if ( ! current_user_can('manage_options') ) {
 	</p>
 </div>
 
-<?php if ( ! current_user_can('manage_options') ) { _e('Permission Denied', 'bulletproof-security'); } else { ?>
+<?php if ( ! current_user_can('manage_options') ) { _e('Permission Denied', 'bulletproof-security'); } else { 
+
+// Standard Static visible Login Security form proccessing - Lock, Unlock or Delete user login status from DB
+if ( isset($_POST['Submit-Login-Security-Radio'] ) && current_user_can('manage_options') ) {
+	check_admin_referer('bulletproof_security_login_security');
+	
+	$LSradio = $_POST['LSradio'];
+	$bpspro_login_table = $wpdb->prefix . "bpspro_login_security";
+
+	switch( $_POST['Submit-Login-Security-Radio'] ) {
+		case __('Submit', 'bulletproof-security'):
+		
+		$delete_users = array();
+		$unlock_users = array();
+		$lock_users = array();		
+		
+		if ( ! empty($LSradio) ) {
+			
+			foreach ( $LSradio as $key => $value ) {
+				
+				if ( $value == 'deleteuser' ) {
+					$delete_users[] = $key;
+				
+				} elseif ( $value == 'unlockuser' ) {
+					$unlock_users[] = $key;
+				
+				} elseif ( $value == 'lockuser' ) {
+					$lock_users[] = $key;
+				}
+			}
+		}
+			
+		if ( ! empty($delete_users) ) {
+			
+			echo '<div id="message" class="updated" style="background-color:#dfecf2;border:1px solid #999;-moz-border-radius-topleft:3px;-webkit-border-top-left-radius:3px;-khtml-border-top-left-radius:3px;border-top-left-radius:3px;-moz-border-radius-topright:3px;-webkit-border-top-right-radius:3px;-khtml-border-top-right-radius:3px;border-top-right-radius:3px;-webkit-box-shadow: 3px 3px 5px -1px rgba(153,153,153,0.7);-moz-box-shadow: 3px 3px 5px -1px rgba(153,153,153,0.7);box-shadow: 3px 3px 5px -1px rgba(153,153,153,0.7);"><p>';
+
+			foreach ( $delete_users as $delete_user ) {
+				
+				$LoginSecurityRows = $wpdb->get_results( $wpdb->prepare("SELECT * FROM $bpspro_login_table WHERE user_id = %s", $delete_user ) );
+			
+				foreach ( $LoginSecurityRows as $row ) {
+					
+					$delete_row = $wpdb->query( $wpdb->prepare( "DELETE FROM $bpspro_login_table WHERE user_id = %s", $delete_user ) );
+				
+					$textDelete = '<font color="green">'.$row->username.__(' has been deleted from the Login Security Database Table.', 'bulletproof-security').'</font><br>';
+					echo $textDelete;
+				}
+			}
+			echo '</p></div>';		
+		}
+		
+		if ( ! empty($unlock_users) ) {
+			
+			echo '<div id="message" class="updated" style="background-color:#dfecf2;border:1px solid #999;-moz-border-radius-topleft:3px;-webkit-border-top-left-radius:3px;-khtml-border-top-left-radius:3px;border-top-left-radius:3px;-moz-border-radius-topright:3px;-webkit-border-top-right-radius:3px;-khtml-border-top-right-radius:3px;border-top-right-radius:3px;-webkit-box-shadow: 3px 3px 5px -1px rgba(153,153,153,0.7);-moz-box-shadow: 3px 3px 5px -1px rgba(153,153,153,0.7);box-shadow: 3px 3px 5px -1px rgba(153,153,153,0.7);"><p>';
+
+			foreach ( $unlock_users as $unlock_user ) {
+				
+				$LoginSecurityRows = $wpdb->get_results( $wpdb->prepare("SELECT * FROM $bpspro_login_table WHERE user_id = %s", $unlock_user ) );
+			
+				foreach ( $LoginSecurityRows as $row ) {
+					$NLstatus = 'Not Locked';
+					$lockout_time = '0';		
+					$failed_logins ='0';
+
+					$update_rows = $wpdb->update( $bpspro_login_table, array( 'status' => $NLstatus, 'user_id' => $row->user_id, 'username' => $row->username, 'public_name' => $row->public_name, 'email' => $row->email, 'role' => $row->role, 'human_time' => current_time('mysql'), 'login_time' => $row->login_time, 'lockout_time' => $lockout_time, 'failed_logins' => $failed_logins, 'ip_address' => $row->ip_address, 'hostname' => $row->hostname, 'request_uri' => $row->request_uri ), array( 'user_id' => $row->user_id ) );
+				
+					$textUnlock = '<font color="green">'.$row->username.__(' has been Unlocked.', 'bulletproof-security').'</font><br>';
+					echo $textUnlock;				
+				}			
+			}
+			echo '</p></div>';		
+		}
+
+		if ( ! empty($lock_users) ) {
+			
+			echo '<div id="message" class="updated" style="background-color:#dfecf2;border:1px solid #999;-moz-border-radius-topleft:3px;-webkit-border-top-left-radius:3px;-khtml-border-top-left-radius:3px;border-top-left-radius:3px;-moz-border-radius-topright:3px;-webkit-border-top-right-radius:3px;-khtml-border-top-right-radius:3px;border-top-right-radius:3px;-webkit-box-shadow: 3px 3px 5px -1px rgba(153,153,153,0.7);-moz-box-shadow: 3px 3px 5px -1px rgba(153,153,153,0.7);box-shadow: 3px 3px 5px -1px rgba(153,153,153,0.7);"><p>';
+
+			foreach ( $lock_users as $lock_user ) {
+
+				$LoginSecurityRows = $wpdb->get_results( $wpdb->prepare("SELECT * FROM $bpspro_login_table WHERE user_id = %s", $lock_user ) );
+			
+				foreach ( $LoginSecurityRows as $row ) {
+					$Lstatus = 'Locked';
+					$manual_lockout_time = time() + (60 * $BPSoptions['bps_manual_lockout_duration']); // default is 1 hour/3600 seconds
+					$BPSoptions = get_option('bulletproof_security_options_login_security');
+					$failed_logins = $BPSoptions['bps_max_logins'];	
+
+					$update_rows = $wpdb->update( $bpspro_login_table, array( 'status' => $Lstatus, 'user_id' => $row->user_id, 'username' => $row->username, 'public_name' => $row->public_name, 'email' => $row->email, 'role' => $row->role, 'human_time' => current_time('mysql'), 'login_time' => $row->login_time, 'lockout_time' => $manual_lockout_time, 'failed_logins' => $failed_logins, 'ip_address' => $row->ip_address, 'hostname' => $row->hostname, 'request_uri' => $row->request_uri ), array( 'user_id' => $row->user_id ) );
+
+					$textLock = '<font color="green">'.$row->username.__(' has been Locked.', 'bulletproof-security').'</font><br>';
+					echo $textLock;
+				}			
+			}
+			echo '</p></div>';		
+		}
+		break;
+	} // end Switch
+}
+
+// Search Form - Login Security Dynamic Search Form - Lock, Unlock or Delete user login status from DB
+if ( isset($_POST['Submit-Login-Search-Radio'] ) && current_user_can('manage_options') ) {
+	check_admin_referer('bulletproof_security_login_security_search');
+	
+	$LSradio = $_POST['LSradio'];
+	$bpspro_login_table = $wpdb->prefix . "bpspro_login_security";
+	
+	switch( $_POST['Submit-Login-Search-Radio'] ) {
+		case __('Submit', 'bulletproof-security'):
+		
+		$delete_users = array();
+		$unlock_users = array();
+		$lock_users = array();		
+		
+		if ( ! empty($LSradio) ) {
+			
+			foreach ( $LSradio as $key => $value ) {
+				
+				if ( $value == 'deleteuser' ) {
+					$delete_users[] = $key;
+				
+				} elseif ( $value == 'unlockuser' ) {
+					$unlock_users[] = $key;
+				
+				} elseif ( $value == 'lockuser' ) {
+					$lock_users[] = $key;
+				}
+			}
+		}
+			
+		if ( ! empty($delete_users) ) {
+			
+			echo '<div id="message" class="updated" style="background-color:#dfecf2;border:1px solid #999;-moz-border-radius-topleft:3px;-webkit-border-top-left-radius:3px;-khtml-border-top-left-radius:3px;border-top-left-radius:3px;-moz-border-radius-topright:3px;-webkit-border-top-right-radius:3px;-khtml-border-top-right-radius:3px;border-top-right-radius:3px;-webkit-box-shadow: 3px 3px 5px -1px rgba(153,153,153,0.7);-moz-box-shadow: 3px 3px 5px -1px rgba(153,153,153,0.7);box-shadow: 3px 3px 5px -1px rgba(153,153,153,0.7);"><p>';
+
+			foreach ( $delete_users as $delete_user ) {
+				
+				$LoginSecurityRows = $wpdb->get_results( $wpdb->prepare("SELECT * FROM $bpspro_login_table WHERE user_id = %s", $delete_user ) );
+			
+				foreach ( $LoginSecurityRows as $row ) {
+					
+					$delete_row = $wpdb->query( $wpdb->prepare( "DELETE FROM $bpspro_login_table WHERE user_id = %s", $delete_user ) );
+				
+					$textDelete = '<font color="green">'.$row->username.__(' has been deleted from the Login Security Database Table.', 'bulletproof-security').'</font><br>';
+					echo $textDelete;
+				}
+			}
+			echo '</p></div>';		
+		}
+		
+		if ( ! empty($unlock_users) ) {
+			
+			echo '<div id="message" class="updated" style="background-color:#dfecf2;border:1px solid #999;-moz-border-radius-topleft:3px;-webkit-border-top-left-radius:3px;-khtml-border-top-left-radius:3px;border-top-left-radius:3px;-moz-border-radius-topright:3px;-webkit-border-top-right-radius:3px;-khtml-border-top-right-radius:3px;border-top-right-radius:3px;-webkit-box-shadow: 3px 3px 5px -1px rgba(153,153,153,0.7);-moz-box-shadow: 3px 3px 5px -1px rgba(153,153,153,0.7);box-shadow: 3px 3px 5px -1px rgba(153,153,153,0.7);"><p>';
+
+			foreach ( $unlock_users as $unlock_user ) {
+				
+				$LoginSecurityRows = $wpdb->get_results( $wpdb->prepare("SELECT * FROM $bpspro_login_table WHERE user_id = %s", $unlock_user ) );
+			
+				foreach ( $LoginSecurityRows as $row ) {
+					$NLstatus = 'Not Locked';
+					$lockout_time = '0';		
+					$failed_logins ='0';						
+					
+					$update_rows = $wpdb->update( $bpspro_login_table, array( 'status' => $NLstatus, 'user_id' => $row->user_id, 'username' => $row->username, 'public_name' => $row->public_name, 'email' => $row->email, 'role' => $row->role, 'human_time' => current_time('mysql'), 'login_time' => $row->login_time, 'lockout_time' => $lockout_time, 'failed_logins' => $failed_logins, 'ip_address' => $row->ip_address, 'hostname' => $row->hostname, 'request_uri' => $row->request_uri ), array( 'user_id' => $row->user_id ) );
+				
+					$textUnlock = '<font color="green">'.$row->username.__(' has been Unlocked.', 'bulletproof-security').'</font><br>';
+					echo $textUnlock;
+				}			
+			}
+			echo '</p></div>';
+		}
+
+		if ( ! empty($lock_users) ) {
+			
+			echo '<div id="message" class="updated" style="background-color:#dfecf2;border:1px solid #999;-moz-border-radius-topleft:3px;-webkit-border-top-left-radius:3px;-khtml-border-top-left-radius:3px;border-top-left-radius:3px;-moz-border-radius-topright:3px;-webkit-border-top-right-radius:3px;-khtml-border-top-right-radius:3px;border-top-right-radius:3px;-webkit-box-shadow: 3px 3px 5px -1px rgba(153,153,153,0.7);-moz-box-shadow: 3px 3px 5px -1px rgba(153,153,153,0.7);box-shadow: 3px 3px 5px -1px rgba(153,153,153,0.7);"><p>';
+
+			foreach ( $lock_users as $lock_user ) {
+				
+				$LoginSecurityRows = $wpdb->get_results( $wpdb->prepare("SELECT * FROM $bpspro_login_table WHERE user_id = %s", $lock_user ) );
+			
+				foreach ( $LoginSecurityRows as $row ) {
+					$Lstatus = 'Locked';
+					$manual_lockout_time = time() + (60 * $BPSoptions['bps_manual_lockout_duration']); // default is 1 hour/3600 seconds 	
+					$BPSoptions = get_option('bulletproof_security_options_login_security');
+					$failed_logins = $BPSoptions['bps_max_logins'];
+
+					$update_rows = $wpdb->update( $bpspro_login_table, array( 'status' => $Lstatus, 'user_id' => $row->user_id, 'username' => $row->username, 'public_name' => $row->public_name, 'email' => $row->email, 'role' => $row->role, 'human_time' => current_time('mysql'), 'login_time' => $row->login_time, 'lockout_time' => $manual_lockout_time, 'failed_logins' => $failed_logins, 'ip_address' => $row->ip_address, 'hostname' => $row->hostname, 'request_uri' => $row->request_uri ), array( 'user_id' => $row->user_id ) );
+
+					$textLock = '<font color="green">'.$row->username.__(' has been Locked.', 'bulletproof-security').'</font><br>';
+					echo $textLock;
+				}			
+			}
+			echo '</p></div>';
+		}
+		break;
+	} // end Switch
+}
+?>
 
 <div id="LoginSecurityOptions" style="width:100%;">
 
@@ -309,13 +504,11 @@ if ( ! current_user_can('manage_options') ) {
 
 function bpsDBRowCount() {
 global $wpdb;
-$bpspro_login_table = $wpdb->prefix . "bpspro_login_security";
-$id = '0';
-$DB_row_count = $wpdb->get_var( $wpdb->prepare( "SELECT COUNT(*) FROM $bpspro_login_table WHERE id != %d", $id ) );
-$BPSoptions = get_option('bulletproof_security_options_login_security');
-$Max_db_rows = $BPSoptions['bps_max_db_rows_display'];
-
-	if ( wp_script_is( 'bps-accordion', $list = 'queue' ) ) {
+	$bpspro_login_table = $wpdb->prefix . "bpspro_login_security";
+	$id = '0';
+	$DB_row_count = $wpdb->get_var( $wpdb->prepare( "SELECT COUNT(*) FROM $bpspro_login_table WHERE id != %d", $id ) );
+	$BPSoptions = get_option('bulletproof_security_options_login_security');
+	$Max_db_rows = $BPSoptions['bps_max_db_rows_display'];
 
 	echo '<div id="LoginSecurityDBRowCount">';
 	
@@ -327,48 +520,45 @@ $Max_db_rows = $BPSoptions['bps_max_db_rows_display'];
 		echo $text;	
 	}
 	echo '</div>';
-	}
 }
-echo bpsDBRowCount();
+bpsDBRowCount();
 
 // Login Security Search Form
 if ( isset( $_POST['Submit-Login-Security-search'] ) && current_user_can('manage_options') ) {
 	check_admin_referer('bulletproof_security_login_security_search');
 	
-	if ( wp_script_is( 'bps-accordion', $list = 'queue' ) ) {
+	$bpspro_login_table = $wpdb->prefix . "bpspro_login_security";
+	$search = $_POST['LSSearch'];
 
-		$bpspro_login_table = $wpdb->prefix . "bpspro_login_security";
-		$search = $_POST['LSSearch'];
+	$getLoginSecurityTable = $wpdb->get_results( $wpdb->prepare("SELECT * FROM $bpspro_login_table WHERE (status = %s) OR (user_id = %s) OR (username LIKE %s) OR (public_name LIKE %s) OR (email LIKE %s) OR (role LIKE %s) OR (ip_address LIKE %s) OR (hostname LIKE %s) OR (request_uri LIKE %s)", $search, $search, "%$search%", "%$search%", "%$search%", "%$search%", "%$search%", "%$search%", "%$search%" ) );
 
-		$getLoginSecurityTable = $wpdb->get_results( $wpdb->prepare("SELECT * FROM $bpspro_login_table WHERE (status = %s) OR (user_id = %s) OR (username LIKE %s) OR (public_name LIKE %s) OR (email LIKE %s) OR (role LIKE %s) OR (ip_address LIKE %s) OR (hostname LIKE %s) OR (request_uri LIKE %s)", $search, $search, "%$search%", "%$search%", "%$search%", "%$search%", "%$search%", "%$search%", "%$search%" ) );
+	echo '<form name="bpsLoginSecuritySearchDBRadio" action="'.admin_url( 'admin.php?page=bulletproof-security/admin/login/login.php' ).'" method="post">';
+	wp_nonce_field('bulletproof_security_login_security_search');
 
-		echo '<form name="bpsLoginSecuritySearchDBRadio" action="'.admin_url( 'admin.php?page=bulletproof-security/admin/login/login.php' ).'" method="post">';
-		wp_nonce_field('bulletproof_security_login_security_search');
-
-		echo '<div id="LoginSecurityCheckall">';
-		echo '<table class="widefat">';
-		echo '<thead>';
-		echo '<tr>';
-		echo '<th scope="col" style="width:10%;font-size:16px;"><strong>'.__('Login Status', 'bulletproof-security').'</strong></th>';
-		echo '<th scope="col" style="width:5%;font-size:12px;"><input type="checkbox" class="checkallLock" style="text-align:left;margin-left:2px;" /><br><strong>'.__('Lock', 'bulletproof-security').'</strong></th>';
-		echo '<th scope="col" style="width:5%;font-size:12px;"><input type="checkbox" class="checkallUnlock" style="text-align:left;margin-left:2px;" /><br><strong>'.__('Unlock', 'bulletproof-security').'</strong></th>';
-		echo '<th scope="col" style="width:5%;font-size:12px;"><input type="checkbox" class="checkallDelete" style="text-align:left;margin-left:2px;" /><br><strong>'.__('Delete', 'bulletproof-security').'</strong></th>';
-		echo '<th scope="col" style="width:5%;font-size:12px;"><strong>'.__('User ID', 'bulletproof-security').'</strong></th>';
-		echo '<th scope="col" style="width:5%;font-size:12px;"><strong>'.__('Username', 'bulletproof-security').'</strong></th>';
-		echo '<th scope="col" style="width:5%;font-size:12px;"><strong>'.__('Display Name', 'bulletproof-security').'</strong></th>';
-		echo '<th scope="col" style="width:5%;font-size:12px;"><strong>'.__('Email', 'bulletproof-security').'</strong></th>';
-		echo '<th scope="col" style="width:5%;font-size:12px;"><strong>'.__('Role', 'bulletproof-security').'</strong></th>';
-		echo '<th scope="col" style="width:5%;font-size:12px;"><strong>'.__('Login Time', 'bulletproof-security').'</strong></th>';
-		echo '<th scope="col" style="width:5%;font-size:12px;"><strong>'.__('Lockout Expires', 'bulletproof-security').'</strong></th>';
-		echo '<th scope="col" style="width:5%;font-size:12px;"><strong>'.__('IP Address', 'bulletproof-security').'</strong></th>';
-		echo '<th scope="col" style="width:5%;font-size:12px;"><strong>'.__('Hostname', 'bulletproof-security').'</strong></th>';
-		echo '<th scope="col" style="width:5%;font-size:12px;"><strong>'.__('Request URI', 'bulletproof-security').'</strong></th>';
-		echo '</tr>';
-		echo '</thead>';
-		echo '<tbody>';
-		echo '<tr>';
-		
-		foreach ( $getLoginSecurityTable as $row ) {
+	echo '<div id="LoginSecurityCheckall">';
+	echo '<table class="widefat">';
+	echo '<thead>';
+	echo '<tr>';
+	echo '<th scope="col" style="width:10%;font-size:16px;"><strong>'.__('Login Status', 'bulletproof-security').'</strong></th>';
+	echo '<th scope="col" style="width:5%;font-size:12px;"><input type="checkbox" class="checkallLock" style="text-align:left;margin-left:2px;" /><br><strong>'.__('Lock', 'bulletproof-security').'</strong></th>';
+	echo '<th scope="col" style="width:5%;font-size:12px;"><input type="checkbox" class="checkallUnlock" style="text-align:left;margin-left:2px;" /><br><strong>'.__('Unlock', 'bulletproof-security').'</strong></th>';
+	echo '<th scope="col" style="width:5%;font-size:12px;"><input type="checkbox" class="checkallDelete" style="text-align:left;margin-left:2px;" /><br><strong>'.__('Delete', 'bulletproof-security').'</strong></th>';
+	echo '<th scope="col" style="width:5%;font-size:12px;"><strong>'.__('User ID', 'bulletproof-security').'</strong></th>';
+	echo '<th scope="col" style="width:5%;font-size:12px;"><strong>'.__('Username', 'bulletproof-security').'</strong></th>';
+	echo '<th scope="col" style="width:5%;font-size:12px;"><strong>'.__('Display Name', 'bulletproof-security').'</strong></th>';
+	echo '<th scope="col" style="width:5%;font-size:12px;"><strong>'.__('Email', 'bulletproof-security').'</strong></th>';
+	echo '<th scope="col" style="width:5%;font-size:12px;"><strong>'.__('Role', 'bulletproof-security').'</strong></th>';
+	echo '<th scope="col" style="width:5%;font-size:12px;"><strong>'.__('Login Time', 'bulletproof-security').'</strong></th>';
+	echo '<th scope="col" style="width:5%;font-size:12px;"><strong>'.__('Lockout Expires', 'bulletproof-security').'</strong></th>';
+	echo '<th scope="col" style="width:5%;font-size:12px;"><strong>'.__('IP Address', 'bulletproof-security').'</strong></th>';
+	echo '<th scope="col" style="width:5%;font-size:12px;"><strong>'.__('Hostname', 'bulletproof-security').'</strong></th>';
+	echo '<th scope="col" style="width:5%;font-size:12px;"><strong>'.__('Request URI', 'bulletproof-security').'</strong></th>';
+	echo '</tr>';
+	echo '</thead>';
+	echo '<tbody>';
+	echo '<tr>';
+	
+	foreach ( $getLoginSecurityTable as $row ) {
 
 		if ( $wpdb->num_rows != 0 ) {
 			$gmt_offset = get_option( 'gmt_offset' ) * 3600;
@@ -378,30 +568,32 @@ if ( isset( $_POST['Submit-Login-Security-search'] ) && current_user_can('manage
 			} else {
 				echo '<th scope="row" style="border-bottom:none;">'.$row->status.'</th>';
 			}
-
-		echo "<td><input type=\"checkbox\" id=\"lockuser\" name=\"LSradio[$row->user_id]\" value=\"lockuser\" class=\"lockuserALL\" /><br><span style=\"font-size:10px;\">".__('Lock', 'bulletproof-security')."</span></td>";
-		echo "<td><input type=\"checkbox\" id=\"unlockuser\" name=\"LSradio[$row->user_id]\" value=\"unlockuser\" class=\"unlockuserALL\" /><br><span style=\"font-size:10px;\">".__('Unlock', 'bulletproof-security')."</span></td>";
-		echo "<td><input type=\"checkbox\" id=\"deleteuser\" name=\"LSradio[$row->user_id]\" value=\"deleteuser\" class=\"deleteuserALL\" /><br><span style=\"font-size:10px;\">".__('Delete', 'bulletproof-security')."</span></td>";
-
-		echo '<td>'.$row->user_id.'</td>';
-		echo '<td>'.$row->username.'</td>';
-		echo '<td>'.$row->public_name.'</td>';	
-		echo '<td>'.$row->email.'</td>';	
-		echo '<td>'.$row->role.'</td>';	
-		echo '<td>'.date_i18n(get_option('date_format').' '.get_option('time_format'), $row->login_time + $gmt_offset).'</td>';
-		if ( $row->lockout_time == 0 ) { 
-		echo '<td>'.__('NA', 'bulletproof-security').'</td>';
-		} else {
-		echo '<td>'.date_i18n(get_option('date_format').' '.get_option('time_format'), $row->lockout_time + $gmt_offset).'</td>';
-		}
-		echo '<td>'.$row->ip_address.'</td>';	
-		echo '<td>'.$row->hostname.'</td>';
-		echo '<td>'.$row->request_uri.'</td>';	
-		echo '</tr>';			
-		}
-		} 
+	
+			echo "<td><input type=\"checkbox\" id=\"lockuser\" name=\"LSradio[$row->user_id]\" value=\"lockuser\" class=\"lockuserALL\" /><br><span style=\"font-size:10px;\">".__('Lock', 'bulletproof-security')."</span></td>";
+			echo "<td><input type=\"checkbox\" id=\"unlockuser\" name=\"LSradio[$row->user_id]\" value=\"unlockuser\" class=\"unlockuserALL\" /><br><span style=\"font-size:10px;\">".__('Unlock', 'bulletproof-security')."</span></td>";
+			echo "<td><input type=\"checkbox\" id=\"deleteuser\" name=\"LSradio[$row->user_id]\" value=\"deleteuser\" class=\"deleteuserALL\" /><br><span style=\"font-size:10px;\">".__('Delete', 'bulletproof-security')."</span></td>";
 		
-		if ( $wpdb->num_rows == 0 ) {		
+			echo '<td>'.$row->user_id.'</td>';
+			echo '<td>'.$row->username.'</td>';
+			echo '<td>'.$row->public_name.'</td>';	
+			echo '<td>'.$row->email.'</td>';	
+			echo '<td>'.$row->role.'</td>';	
+			echo '<td>'.date_i18n(get_option('date_format').' '.get_option('time_format'), $row->login_time + $gmt_offset).'</td>';
+			
+			if ( $row->lockout_time == 0 ) { 
+			echo '<td>'.__('NA', 'bulletproof-security').'</td>';
+			} else {
+			echo '<td>'.date_i18n(get_option('date_format').' '.get_option('time_format'), $row->lockout_time + $gmt_offset).'</td>';
+			}
+			
+			echo '<td>'.$row->ip_address.'</td>';	
+			echo '<td>'.$row->hostname.'</td>';
+			echo '<td>'.$row->request_uri.'</td>';	
+			echo '</tr>';			
+		}
+	} 
+	
+	if ( $wpdb->num_rows == 0 ) {		
 		echo '<th scope="row" style="border-bottom:none;">'.__('No Logins|Locked', 'bulletproof-security').'</th>';
 		echo "<td></td>";
 		echo "<td></td>";
@@ -414,17 +606,15 @@ if ( isset( $_POST['Submit-Login-Security-search'] ) && current_user_can('manage
 		echo '<td></td>';		
 		echo '<td></td>'; 
 		echo '</tr>';		
-		}
-		echo '</tbody>';
-		echo '</table>';
-		echo '</div>';	
-
-		echo "<input type=\"submit\" name=\"Submit-Login-Search-Radio\" value=\"".__('Submit', 'bulletproof-security')."\" class=\"button bps-button\" onclick=\"return confirm('".__('Locking and Unlocking a User is reversible, but Deleting a User is not.\n\n-------------------------------------------------------------\n\nWhen you delete a User you are deleting that User database row from the BPS Login Security Database Table and not from the WordPress User Database Table.\n\n-------------------------------------------------------------\n\nTo delete a User Account from your WordPress website use the standard/normal WordPress Users page.\n\n-------------------------------------------------------------\n\nClick OK to proceed or click Cancel', 'bulletproof-security')."')\" />&nbsp;&nbsp;<input type=\"button\" name=\"cancel\" value=\"".__('Clear|Refresh', 'bulletproof-security')."\" class=\"button bps-button\" onclick=\"javascript:history.go(0)\" /></form><br>";
 	}
-	} else {
+	echo '</tbody>';
+	echo '</table>';
+	echo '</div>';	
 
-	if ( is_admin() && wp_script_is( 'bps-accordion', $list = 'queue' ) && current_user_can('manage_options') ) {
-	
+	echo "<input type=\"submit\" name=\"Submit-Login-Search-Radio\" value=\"".__('Submit', 'bulletproof-security')."\" class=\"button bps-button\" onclick=\"return confirm('".__('Locking and Unlocking a User is reversible, but Deleting a User is not.\n\n-------------------------------------------------------------\n\nWhen you delete a User you are deleting that User database row from the BPS Login Security Database Table and not from the WordPress User Database Table.\n\n-------------------------------------------------------------\n\nTo delete a User Account from your WordPress website use the standard/normal WordPress Users page.\n\n-------------------------------------------------------------\n\nClick OK to proceed or click Cancel', 'bulletproof-security')."')\" />&nbsp;&nbsp;<input type=\"button\" name=\"cancel\" value=\"".__('Clear|Refresh', 'bulletproof-security')."\" class=\"button bps-button\" onclick=\"javascript:history.go(0)\" /></form><br>";
+
+	} else { // if the LSM Search form is not submitted then display the static LSM form
+
 		echo '<form name="bpsLoginSecurityDBRadio" class="LSM-DBRadio-Form" action="'.admin_url( 'admin.php?page=bulletproof-security/admin/login/login.php' ).'" method="post">';
 		wp_nonce_field('bulletproof_security_login_security');
 
@@ -471,57 +661,58 @@ if ( isset( $_POST['Submit-Login-Security-search'] ) && current_user_can('manage
 		
 		foreach ( $getLoginSecurityTable as $row ) {
 
-		if ( $wpdb->num_rows != 0 ) {
-			$gmt_offset = get_option( 'gmt_offset' ) * 3600;
-			
-			if ( $row->status == 'Locked' ) {
-				echo '<th scope="row" style="border-bottom:none;color:red;font-weight:bold;">'.$row->status.'</th>';
-			} else {
-				echo '<th scope="row" style="border-bottom:none;">'.$row->status.'</th>';
+			if ( $wpdb->num_rows != 0 ) {
+				$gmt_offset = get_option( 'gmt_offset' ) * 3600;
+				
+				if ( $row->status == 'Locked' ) {
+					echo '<th scope="row" style="border-bottom:none;color:red;font-weight:bold;">'.$row->status.'</th>';
+				} else {
+					echo '<th scope="row" style="border-bottom:none;">'.$row->status.'</th>';
+				}
+	
+				echo "<td><input type=\"checkbox\" id=\"lockuser\" name=\"LSradio[$row->user_id]\" value=\"lockuser\" class=\"lockuserALL\" /><br><span style=\"font-size:10px;\">".__('Lock', 'bulletproof-security')."</span></td>";
+				echo "<td><input type=\"checkbox\" id=\"unlockuser\" name=\"LSradio[$row->user_id]\" value=\"unlockuser\" class=\"unlockuserALL\" /><br><span style=\"font-size:10px;\">".__('Unlock', 'bulletproof-security')."</span></td>";
+				echo "<td><input type=\"checkbox\" id=\"deleteuser\" name=\"LSradio[$row->user_id]\" value=\"deleteuser\" class=\"deleteuserALL\" /><br><span style=\"font-size:10px;\">".__('Delete', 'bulletproof-security')."</span></td>";
+		
+				echo '<td>'.$row->user_id.'</td>';
+				echo '<td>'.$row->username.'</td>';
+				echo '<td>'.$row->public_name.'</td>';	
+				echo '<td>'.$row->email.'</td>';	
+				echo '<td>'.$row->role.'</td>';	
+				echo '<td>'.date_i18n(get_option('date_format').' '.get_option('time_format'), $row->login_time + $gmt_offset).'</td>';
+				
+				if ( $row->lockout_time == 0 ) { 
+				echo '<td>'.__('NA', 'bulletproof-security').'</td>';
+				} else {
+				echo '<td>'.date_i18n(get_option('date_format').' '.get_option('time_format'), $row->lockout_time + $gmt_offset).'</td>';
+				}
+				
+				echo '<td>'.$row->ip_address.'</td>';	
+				echo '<td>'.$row->hostname.'</td>';
+				echo '<td>'.$row->request_uri.'</td>';	
+				echo '</tr>';			
 			}
-
-		echo "<td><input type=\"checkbox\" id=\"lockuser\" name=\"LSradio[$row->user_id]\" value=\"lockuser\" class=\"lockuserALL\" /><br><span style=\"font-size:10px;\">".__('Lock', 'bulletproof-security')."</span></td>";
-		echo "<td><input type=\"checkbox\" id=\"unlockuser\" name=\"LSradio[$row->user_id]\" value=\"unlockuser\" class=\"unlockuserALL\" /><br><span style=\"font-size:10px;\">".__('Unlock', 'bulletproof-security')."</span></td>";
-		echo "<td><input type=\"checkbox\" id=\"deleteuser\" name=\"LSradio[$row->user_id]\" value=\"deleteuser\" class=\"deleteuserALL\" /><br><span style=\"font-size:10px;\">".__('Delete', 'bulletproof-security')."</span></td>";
-
-		echo '<td>'.$row->user_id.'</td>';
-		echo '<td>'.$row->username.'</td>';
-		echo '<td>'.$row->public_name.'</td>';	
-		echo '<td>'.$row->email.'</td>';	
-		echo '<td>'.$row->role.'</td>';	
-		echo '<td>'.date_i18n(get_option('date_format').' '.get_option('time_format'), $row->login_time + $gmt_offset).'</td>';
-		if ( $row->lockout_time == 0 ) { 
-		echo '<td>'.__('NA', 'bulletproof-security').'</td>';
-		} else {
-		echo '<td>'.date_i18n(get_option('date_format').' '.get_option('time_format'), $row->lockout_time + $gmt_offset).'</td>';
-		}
-		echo '<td>'.$row->ip_address.'</td>';	
-		echo '<td>'.$row->hostname.'</td>';
-		echo '<td>'.$row->request_uri.'</td>';	
-		echo '</tr>';			
-		}
 		} 
 		
 		if ( $wpdb->num_rows == 0 ) {		
-		echo '<th scope="row" style="border-bottom:none;">'.__('No Logins|Locked', 'bulletproof-security').'</th>';
-		echo "<td></td>";
-		echo "<td></td>";
-		echo "<td></td>";
-		echo '<td></td>';		
-		echo '<td></td>'; 
-		echo '<td></td>';		
-		echo '<td></td>'; 
-		echo '<td></td>';
-		echo '<td></td>';		
-		echo '<td></td>'; 
-		echo '</tr>';		
+			echo '<th scope="row" style="border-bottom:none;">'.__('No Logins|Locked', 'bulletproof-security').'</th>';
+			echo "<td></td>";
+			echo "<td></td>";
+			echo "<td></td>";
+			echo '<td></td>';		
+			echo '<td></td>'; 
+			echo '<td></td>';		
+			echo '<td></td>'; 
+			echo '<td></td>';
+			echo '<td></td>';		
+			echo '<td></td>'; 
+			echo '</tr>';		
 		}
 		echo '</tbody>';
 		echo '</table>';
 		echo '</div>';	
 
 		echo "<input type=\"submit\" name=\"Submit-Login-Security-Radio\" value=\"".__('Submit', 'bulletproof-security')."\" class=\"button bps-button\" onclick=\"return confirm('".__('Locking and Unlocking a User is reversible, but Deleting a User is not.\n\n-------------------------------------------------------------\n\nWhen you delete a User you are deleting that User database row from the BPS Login Security Database Table and not from the WordPress User Database Table.\n\n-------------------------------------------------------------\n\nTo delete a User Account from your WordPress website use the standard/normal WordPress Users page.\n\n-------------------------------------------------------------\n\nClick OK to proceed or click Cancel', 'bulletproof-security')."')\" />&nbsp;&nbsp;<input type=\"button\" name=\"cancel\" value=\"".__('Clear|Refresh', 'bulletproof-security')."\" class=\"button bps-button\" onclick=\"javascript:history.go(0)\" /></form><br>";
-	}
 	}
 ?>
 <br />
@@ -577,205 +768,6 @@ jQuery(document).ready(function($){
 </script>
 
 <?php 
-// Standard Visible Login Security form proccessing - Lock, Unlock or Delete user login status from DB
-if ( isset($_POST['Submit-Login-Security-Radio'] ) && current_user_can('manage_options') ) {
-	check_admin_referer('bulletproof_security_login_security');
-	
-	$LSradio = $_POST['LSradio'];
-	$bpspro_login_table = $wpdb->prefix . "bpspro_login_security";
-
-	switch( $_POST['Submit-Login-Security-Radio'] ) {
-		case __('Submit', 'bulletproof-security'):
-		
-		$delete_users = array();
-		$unlock_users = array();
-		$lock_users = array();		
-		
-		if ( ! empty($LSradio) ) {
-			
-			foreach ( $LSradio as $key => $value ) {
-				
-				if ( $value == 'deleteuser' ) {
-					$delete_users[] = $key;
-				
-				} elseif ( $value == 'unlockuser' ) {
-					$unlock_users[] = $key;
-				
-				} elseif ( $value == 'lockuser' ) {
-					$lock_users[] = $key;
-				}
-			}
-		}
-			
-		if ( ! empty($delete_users) ) {
-			
-			echo '<div id="message" class="updated" style="background-color:#dfecf2;border:1px solid #999;-moz-border-radius-topleft:3px;-webkit-border-top-left-radius:3px;-khtml-border-top-left-radius:3px;border-top-left-radius:3px;-moz-border-radius-topright:3px;-webkit-border-top-right-radius:3px;-khtml-border-top-right-radius:3px;border-top-right-radius:3px;-webkit-box-shadow: 3px 3px 5px -1px rgba(153,153,153,0.7);-moz-box-shadow: 3px 3px 5px -1px rgba(153,153,153,0.7);box-shadow: 3px 3px 5px -1px rgba(153,153,153,0.7);"><p>';
-
-			foreach ( $delete_users as $delete_user ) {
-				
-				$LoginSecurityRows = $wpdb->get_results( $wpdb->prepare("SELECT * FROM $bpspro_login_table WHERE user_id = %s", $delete_user ) );
-			
-				foreach ( $LoginSecurityRows as $row ) {
-					
-					$delete_row = $wpdb->query( $wpdb->prepare( "DELETE FROM $bpspro_login_table WHERE user_id = %s", $delete_user ) );
-				
-					$textDelete = '<font color="green">'.$row->username.__(' has been deleted from the Login Security Database Table.', 'bulletproof-security').'</font><br>';
-					echo $textDelete;
-				}
-			}
-			echo '<div class="bps-message-button" style="width:90px;"><a href="'.admin_url( 'admin.php?page=bulletproof-security/admin/login/login.php' ).'">'.esc_attr__('Refresh Status', 'bulletproof-security').'</a></div>';
-			echo '</p></div>';		
-		}
-		
-		if ( ! empty($unlock_users) ) {
-			
-			echo '<div id="message" class="updated" style="background-color:#dfecf2;border:1px solid #999;-moz-border-radius-topleft:3px;-webkit-border-top-left-radius:3px;-khtml-border-top-left-radius:3px;border-top-left-radius:3px;-moz-border-radius-topright:3px;-webkit-border-top-right-radius:3px;-khtml-border-top-right-radius:3px;border-top-right-radius:3px;-webkit-box-shadow: 3px 3px 5px -1px rgba(153,153,153,0.7);-moz-box-shadow: 3px 3px 5px -1px rgba(153,153,153,0.7);box-shadow: 3px 3px 5px -1px rgba(153,153,153,0.7);"><p>';
-
-			foreach ( $unlock_users as $unlock_user ) {
-				
-				$LoginSecurityRows = $wpdb->get_results( $wpdb->prepare("SELECT * FROM $bpspro_login_table WHERE user_id = %s", $unlock_user ) );
-			
-				foreach ( $LoginSecurityRows as $row ) {
-					$NLstatus = 'Not Locked';
-					$lockout_time = '0';		
-					$failed_logins ='0';
-
-					$update_rows = $wpdb->update( $bpspro_login_table, array( 'status' => $NLstatus, 'user_id' => $row->user_id, 'username' => $row->username, 'public_name' => $row->public_name, 'email' => $row->email, 'role' => $row->role, 'human_time' => current_time('mysql'), 'login_time' => $row->login_time, 'lockout_time' => $lockout_time, 'failed_logins' => $failed_logins, 'ip_address' => $row->ip_address, 'hostname' => $row->hostname, 'request_uri' => $row->request_uri ), array( 'user_id' => $row->user_id ) );
-				
-					$textUnlock = '<font color="green">'.$row->username.__(' has been Unlocked.', 'bulletproof-security').'</font><br>';
-					echo $textUnlock;				
-				}			
-			}
-			echo '<div class="bps-message-button" style="width:90px;"><a href="'.admin_url( 'admin.php?page=bulletproof-security/admin/login/login.php' ).'">'.esc_attr__('Refresh Status', 'bulletproof-security').'</a></div>';		
-			echo '</p></div>';		
-		}
-
-		if ( ! empty($lock_users) ) {
-			
-			echo '<div id="message" class="updated" style="background-color:#dfecf2;border:1px solid #999;-moz-border-radius-topleft:3px;-webkit-border-top-left-radius:3px;-khtml-border-top-left-radius:3px;border-top-left-radius:3px;-moz-border-radius-topright:3px;-webkit-border-top-right-radius:3px;-khtml-border-top-right-radius:3px;border-top-right-radius:3px;-webkit-box-shadow: 3px 3px 5px -1px rgba(153,153,153,0.7);-moz-box-shadow: 3px 3px 5px -1px rgba(153,153,153,0.7);box-shadow: 3px 3px 5px -1px rgba(153,153,153,0.7);"><p>';
-
-			foreach ( $lock_users as $lock_user ) {
-
-				$LoginSecurityRows = $wpdb->get_results( $wpdb->prepare("SELECT * FROM $bpspro_login_table WHERE user_id = %s", $lock_user ) );
-			
-				foreach ( $LoginSecurityRows as $row ) {
-					$Lstatus = 'Locked';
-					$manual_lockout_time = time() + (60 * $BPSoptions['bps_manual_lockout_duration']); // default is 1 hour/3600 seconds
-					$BPSoptions = get_option('bulletproof_security_options_login_security');
-					$failed_logins = $BPSoptions['bps_max_logins'];	
-
-					$update_rows = $wpdb->update( $bpspro_login_table, array( 'status' => $Lstatus, 'user_id' => $row->user_id, 'username' => $row->username, 'public_name' => $row->public_name, 'email' => $row->email, 'role' => $row->role, 'human_time' => current_time('mysql'), 'login_time' => $row->login_time, 'lockout_time' => $manual_lockout_time, 'failed_logins' => $failed_logins, 'ip_address' => $row->ip_address, 'hostname' => $row->hostname, 'request_uri' => $row->request_uri ), array( 'user_id' => $row->user_id ) );
-
-					$textLock = '<font color="green">'.$row->username.__(' has been Locked.', 'bulletproof-security').'</font><br>';
-					echo $textLock;
-				}			
-			}
-			echo '<div class="bps-message-button" style="width:90px;"><a href="'.admin_url( 'admin.php?page=bulletproof-security/admin/login/login.php' ).'">'.esc_attr__('Refresh Status', 'bulletproof-security').'</a></div>';
-			echo '</p></div>';		
-		}
-		break;
-	} // end Switch
-}
-
-// Search Form - Login Security form proccessing - Lock, Unlock or Delete user login status from DB
-if ( isset($_POST['Submit-Login-Search-Radio'] ) && current_user_can('manage_options') ) {
-	check_admin_referer('bulletproof_security_login_security_search');
-	
-	$LSradio = $_POST['LSradio'];
-	$bpspro_login_table = $wpdb->prefix . "bpspro_login_security";
-	
-	switch( $_POST['Submit-Login-Search-Radio'] ) {
-		case __('Submit', 'bulletproof-security'):
-		
-		$delete_users = array();
-		$unlock_users = array();
-		$lock_users = array();		
-		
-		if ( ! empty($LSradio) ) {
-			
-			foreach ( $LSradio as $key => $value ) {
-				
-				if ( $value == 'deleteuser' ) {
-					$delete_users[] = $key;
-				
-				} elseif ( $value == 'unlockuser' ) {
-					$unlock_users[] = $key;
-				
-				} elseif ( $value == 'lockuser' ) {
-					$lock_users[] = $key;
-				}
-			}
-		}
-			
-		if ( ! empty($delete_users) ) {
-			
-			echo '<div id="message" class="updated" style="background-color:#dfecf2;border:1px solid #999;-moz-border-radius-topleft:3px;-webkit-border-top-left-radius:3px;-khtml-border-top-left-radius:3px;border-top-left-radius:3px;-moz-border-radius-topright:3px;-webkit-border-top-right-radius:3px;-khtml-border-top-right-radius:3px;border-top-right-radius:3px;-webkit-box-shadow: 3px 3px 5px -1px rgba(153,153,153,0.7);-moz-box-shadow: 3px 3px 5px -1px rgba(153,153,153,0.7);box-shadow: 3px 3px 5px -1px rgba(153,153,153,0.7);"><p>';
-
-			foreach ( $delete_users as $delete_user ) {
-				
-				$LoginSecurityRows = $wpdb->get_results( $wpdb->prepare("SELECT * FROM $bpspro_login_table WHERE user_id = %s", $delete_user ) );
-			
-				foreach ( $LoginSecurityRows as $row ) {
-					
-					$delete_row = $wpdb->query( $wpdb->prepare( "DELETE FROM $bpspro_login_table WHERE user_id = %s", $delete_user ) );
-				
-					$textDelete = '<font color="green">'.$row->username.__(' has been deleted from the Login Security Database Table.', 'bulletproof-security').'</font><br>';
-					echo $textDelete;
-				}
-			}
-			echo '<div class="bps-message-button" style="width:90px;"><a href="'.admin_url( 'admin.php?page=bulletproof-security/admin/login/login.php' ).'">'.esc_attr__('Refresh Status', 'bulletproof-security').'</a></div>';			
-			echo '</p></div>';		
-		}
-		
-		if ( ! empty($unlock_users) ) {
-			
-			echo '<div id="message" class="updated" style="background-color:#dfecf2;border:1px solid #999;-moz-border-radius-topleft:3px;-webkit-border-top-left-radius:3px;-khtml-border-top-left-radius:3px;border-top-left-radius:3px;-moz-border-radius-topright:3px;-webkit-border-top-right-radius:3px;-khtml-border-top-right-radius:3px;border-top-right-radius:3px;-webkit-box-shadow: 3px 3px 5px -1px rgba(153,153,153,0.7);-moz-box-shadow: 3px 3px 5px -1px rgba(153,153,153,0.7);box-shadow: 3px 3px 5px -1px rgba(153,153,153,0.7);"><p>';
-
-			foreach ( $unlock_users as $unlock_user ) {
-				
-				$LoginSecurityRows = $wpdb->get_results( $wpdb->prepare("SELECT * FROM $bpspro_login_table WHERE user_id = %s", $unlock_user ) );
-			
-				foreach ( $LoginSecurityRows as $row ) {
-					$NLstatus = 'Not Locked';
-					$lockout_time = '0';		
-					$failed_logins ='0';						
-					
-					$update_rows = $wpdb->update( $bpspro_login_table, array( 'status' => $NLstatus, 'user_id' => $row->user_id, 'username' => $row->username, 'public_name' => $row->public_name, 'email' => $row->email, 'role' => $row->role, 'human_time' => current_time('mysql'), 'login_time' => $row->login_time, 'lockout_time' => $lockout_time, 'failed_logins' => $failed_logins, 'ip_address' => $row->ip_address, 'hostname' => $row->hostname, 'request_uri' => $row->request_uri ), array( 'user_id' => $row->user_id ) );
-				
-					$textUnlock = '<font color="green">'.$row->username.__(' has been Unlocked.', 'bulletproof-security').'</font><br>';
-					echo $textUnlock;
-				}			
-			}
-			echo '<div class="bps-message-button" style="width:90px;"><a href="'.admin_url( 'admin.php?page=bulletproof-security/admin/login/login.php' ).'">'.esc_attr__('Refresh Status', 'bulletproof-security').'</a></div>';
-			echo '</p></div>';
-		}
-
-		if ( ! empty($lock_users) ) {
-			
-			echo '<div id="message" class="updated" style="background-color:#dfecf2;border:1px solid #999;-moz-border-radius-topleft:3px;-webkit-border-top-left-radius:3px;-khtml-border-top-left-radius:3px;border-top-left-radius:3px;-moz-border-radius-topright:3px;-webkit-border-top-right-radius:3px;-khtml-border-top-right-radius:3px;border-top-right-radius:3px;-webkit-box-shadow: 3px 3px 5px -1px rgba(153,153,153,0.7);-moz-box-shadow: 3px 3px 5px -1px rgba(153,153,153,0.7);box-shadow: 3px 3px 5px -1px rgba(153,153,153,0.7);"><p>';
-
-			foreach ( $lock_users as $lock_user ) {
-				
-				$LoginSecurityRows = $wpdb->get_results( $wpdb->prepare("SELECT * FROM $bpspro_login_table WHERE user_id = %s", $lock_user ) );
-			
-				foreach ( $LoginSecurityRows as $row ) {
-					$Lstatus = 'Locked';
-					$manual_lockout_time = time() + (60 * $BPSoptions['bps_manual_lockout_duration']); // default is 1 hour/3600 seconds 	
-					$BPSoptions = get_option('bulletproof_security_options_login_security');
-					$failed_logins = $BPSoptions['bps_max_logins'];
-
-					$update_rows = $wpdb->update( $bpspro_login_table, array( 'status' => $Lstatus, 'user_id' => $row->user_id, 'username' => $row->username, 'public_name' => $row->public_name, 'email' => $row->email, 'role' => $row->role, 'human_time' => current_time('mysql'), 'login_time' => $row->login_time, 'lockout_time' => $manual_lockout_time, 'failed_logins' => $failed_logins, 'ip_address' => $row->ip_address, 'hostname' => $row->hostname, 'request_uri' => $row->request_uri ), array( 'user_id' => $row->user_id ) );
-
-					$textLock = '<font color="green">'.$row->username.__(' has been Locked.', 'bulletproof-security').'</font><br>';
-					echo $textLock;
-				}			
-			}
-			echo '<div class="bps-message-button" style="width:90px;"><a href="'.admin_url( 'admin.php?page=bulletproof-security/admin/login/login.php' ).'">'.esc_attr__('Refresh Status', 'bulletproof-security').'</a></div>';
-			echo '</p></div>';
-		}
-		break;
-	} // end Switch
-}
 } // end if current_user_can('manage_options') - forms are not displayed to non-administrators
 ?>
 </td>
@@ -862,16 +854,17 @@ if ( isset( $_POST['Submit-Security-Log-Options-JTC'] ) && current_user_can('man
 	'bps_jtc_comment_form_label' 		=> esc_html($_POST['bps_jtc_comment_form_label']), 
 	'bps_jtc_comment_form_input' 		=> esc_html($_POST['bps_jtc_comment_form_input']), 
 	'bps_jtc_custom_roles' 				=> $Custom_Roles_array, 
-	'bps_enable_jtc_woocommerce' 		=> '' 
+	'bps_enable_jtc_woocommerce' 		=> '', 
+	'bps_jtc_custom_form_error' 		=> stripslashes($_POST['bps_jtc_custom_form_error'])
 	);	
 	
-		foreach( $JTC_Options as $key => $value ) {
-			update_option('bulletproof_security_options_login_security_jtc', $JTC_Options);
-		}
+	foreach( $JTC_Options as $key => $value ) {
+		update_option('bulletproof_security_options_login_security_jtc', $JTC_Options);
+	}
 
-		echo $bps_topDiv;
-		echo '<strong><font color="green">'.__('JTC-Lite Settings Saved.', 'bulletproof-security').'</font></strong><br>';
-		echo $bps_bottomDiv;
+	echo $bps_topDiv;
+	echo '<strong><font color="green">'.__('JTC-Lite Settings Saved.', 'bulletproof-security').'</font></strong><br>';
+	echo $bps_bottomDiv;
 }
 
 if ( ! current_user_can('manage_options') ) { _e('Permission Denied', 'bulletproof-security'); } else {
@@ -895,12 +888,12 @@ if ( ! current_user_can('manage_options') ) { _e('Permission Denied', 'bulletpro
   <tr>
     <td><label for="LSLog"><?php _e('JTC ToolTip:', 'bulletproof-security'); ?></label></td>
     <td><input type="text" name="bps_tooltip_captcha_hover_text" class="regular-text-250" value="<?php if ( $BPSoptionsJTC['bps_tooltip_captcha_hover_text'] != '' ) { echo $BPSoptionsJTC['bps_tooltip_captcha_hover_text']; } else { echo 'Type/Enter:  '; } ?>" /></td>
-    <td><label for="LSLog" style="margin:0px 0px 0px 5px;font-style:italic;font-weight:normal;"><?php _e('Type/Enter:  jtc', 'bulletproof-security'); ?></label></td>
+    <td><label for="LSLog" style="margin:0px 0px 0px 5px;font-style:italic;font-weight:normal;"><?php _e('Type/Enter:  jtc. Enter a blank space for no text (Spacebar Key)', 'bulletproof-security'); ?></label></td>
   </tr>
   <tr>
     <td><label for="LSLog"><?php _e('JTC Title|Text:', 'bulletproof-security'); ?></label></td>
     <td><input type="text" name="bps_tooltip_captcha_title" class="regular-text-250" value="<?php if ( $BPSoptionsJTC['bps_tooltip_captcha_title'] != '' ) { echo $BPSoptionsJTC['bps_tooltip_captcha_title']; } else { echo 'Hover or click the text box below'; } ?>" /></td>
-    <td><label for="LSLog" style="margin:0px 0px 0px 5px;font-style:italic;font-weight:normal;"><?php _e('Enter a blank space for no text', 'bulletproof-security'); ?></label></td>
+    <td><label for="LSLog" style="margin:0px 0px 0px 5px;font-style:italic;font-weight:normal;"><?php _e('Enter a blank space for no text (Spacebar Key)', 'bulletproof-security'); ?></label></td>
   </tr>
 
 
@@ -956,7 +949,10 @@ if ( ! current_user_can('manage_options') ) { _e('Permission Denied', 'bulletpro
 </div>
 
 	<br />
-    <label for="LSLog13"><?php _e('Comment Form: CAPTCHA Error message (BPS Pro Only)', 'bulletproof-security'); ?></label><br />
+    <label for="LSLog"><?php _e('Login Form: CAPTCHA Error message', 'bulletproof-security'); ?></label><br />
+    <input type="text" name="bps_jtc_custom_form_error" class="regular-text-short-fixed" style="width:75%;" value="<?php if ($BPSoptionsJTC['bps_jtc_custom_form_error'] != '') { echo $BPSoptionsJTC['bps_jtc_custom_form_error']; } else { echo '<strong>ERROR</strong>: Incorrect CAPTCHA Entered.'; } ?>" /><br /><br />
+
+    <label for="LSLog"><?php _e('Comment Form: CAPTCHA Error message (BPS Pro Only)', 'bulletproof-security'); ?></label><br />
     <input type="text" name="bps_jtc_comment_form_error" class="regular-text-short-fixed" style="width:75%;" value="<?php if ($BPSoptionsJTC['bps_jtc_comment_form_error'] != '') { echo $BPSoptionsJTC['bps_jtc_comment_form_error']; } else { echo '<strong>ERROR</strong>: Incorrect JTC CAPTCHA Entered. Click your Browser back button and re-enter the JTC CAPTCHA.'; } ?>" /><br /><br />
     
     <label><strong><?php _e('Comment Form: CSS Styling (BPS Pro Only)', 'bulletproof-security'); ?></strong></label><br />
@@ -1019,7 +1015,7 @@ if ( ! current_user_can('manage_options') ) { _e('Permission Denied', 'bulletpro
 
 <?php
 if ( ! current_user_can('manage_options') ) { _e('Permission Denied', 'bulletproof-security'); } else {
-$scrolltoISLMessage = isset($_REQUEST['scrolltoISLMessage']) ? (int) $_REQUEST['scrolltoISLMessage'] : 0;
+	$scrolltoISLMessage = isset($_REQUEST['scrolltoISLMessage']) ? (int) $_REQUEST['scrolltoISLMessage'] : 0;
 
 // ISL Form processing
 if ( isset( $_POST['Submit-ISL-Options'] ) && current_user_can('manage_options') ) {
@@ -1068,9 +1064,9 @@ if ( isset( $_POST['Submit-ISL-Options'] ) && current_user_can('manage_options')
 	'bps_isl_custom_roles' 				=> $Custom_Roles_array  
 	);	
 	
-		foreach( $ISL_Options as $key => $value ) {
-			update_option('bulletproof_security_options_idle_session', $ISL_Options);
-		}
+	foreach( $ISL_Options as $key => $value ) {
+		update_option('bulletproof_security_options_idle_session', $ISL_Options);
+	}
 	
 	if ( $_POST['bps_isl'] == 'On' ) {
 		echo $bps_topDiv;
@@ -1242,9 +1238,9 @@ if ( isset( $_POST['Submit-ACE-Options'] ) && current_user_can('manage_options')
 	'bps_ace_custom_roles' 				=> $Custom_Roles_array  
 	);	
 	
-		foreach( $ACE_Options as $key => $value ) {
-			update_option('bulletproof_security_options_auth_cookie', $ACE_Options);
-		}
+	foreach( $ACE_Options as $key => $value ) {
+		update_option('bulletproof_security_options_auth_cookie', $ACE_Options);
+	}
 	
 	if ( $_POST['bps_ace'] == 'On' ) {
 		echo $bps_topDiv;

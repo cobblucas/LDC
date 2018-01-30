@@ -362,6 +362,20 @@ $failMessage = __('Error: Unable to create DB Table ', 'bulletproof-security');
 $failTextEnd = '</strong></font><br>';
 $HFiles_options = get_option('bulletproof_security_options_htaccess_files');
 
+	// 2.5: BPS plugin 30 day review/rating request Dismiss Notice
+	$bps_rate_options = 'bulletproof_security_options_rate_free';
+	$gmt_offset = get_option( 'gmt_offset' ) * 3600;
+	$bps_free_rate_review = mktime(0, 0, 0, date("m")+1, date("d")+1, date("Y"));
+
+	$BPS_Rate_Option = array( 'bps_free_rate_review' => $bps_free_rate_review + $gmt_offset );
+
+	if ( ! get_option( $bps_rate_options ) ) {	
+	
+		foreach( $BPS_Rate_Option as $key => $value ) {
+			update_option('bulletproof_security_options_rate_free', $BPS_Rate_Option);
+		}
+	}
+
 	$bps_setup_wizard = 'bulletproof_security_options_wizard_free';
 	$BPS_Wizard = array( 'bps_wizard_free' => 'wizard' );	
 	
@@ -807,6 +821,7 @@ $HFiles_options = get_option('bulletproof_security_options_htaccess_files');
 	echo '<div style="color:black;font-size:1.13em;font-weight:bold;margin-bottom:15px;">'.__('BulletProof Security JTC-Lite Options Setup', 'bulletproof-security').'</div>';
 	echo '<div id="SWJTC-Lite" style="border-top:3px solid #999999;border-bottom:3px solid #999999;margin-top:-10px;"><p>';
 
+	// 2.9: Added new JTC option: bps_jtc_custom_form_error. Defaults to standard JTC CAPTCHA error message.
 	$bps_option_name9b = 'bulletproof_security_options_login_security_jtc';
 	$successMessage9b = __(' DB Option created or updated Successfully!', 'bulletproof-security');
 	$jtc_options = get_option('bulletproof_security_options_login_security_jtc'); 
@@ -829,6 +844,8 @@ $HFiles_options = get_option('bulletproof_security_options_htaccess_files');
 		}
 	}
 	
+	$bps_jtc_custom_form_error = ! $jtc_options['bps_jtc_custom_form_error'] ? '' : $jtc_options['bps_jtc_custom_form_error'];
+
 	$jtc_db_options_new = array(
 	'bps_tooltip_captcha_key' 			=> 'jtc', 
 	'bps_tooltip_captcha_hover_text' 	=> 'Type/Enter:  jtc', 
@@ -849,7 +866,8 @@ $HFiles_options = get_option('bulletproof_security_options_htaccess_files');
 	'bps_jtc_comment_form_label' 		=> '', 
 	'bps_jtc_comment_form_input' 		=> '', 
 	'bps_jtc_custom_roles' 				=> $bps_jtc_custom_roles, 
-	'bps_enable_jtc_woocommerce' 		=> '' 
+	'bps_enable_jtc_woocommerce' 		=> '', 
+	'bps_jtc_custom_form_error' 		=> $bps_jtc_custom_form_error 
 	);
 
 	if ( ! get_option( $bps_option_name9b ) ) {	
@@ -881,7 +899,8 @@ $HFiles_options = get_option('bulletproof_security_options_htaccess_files');
 		'bps_jtc_comment_form_label' 		=> $jtc_options['bps_jtc_comment_form_label'], 
 		'bps_jtc_comment_form_input' 		=> $jtc_options['bps_jtc_comment_form_input'], 
 		'bps_jtc_custom_roles' 				=> $bps_jtc_custom_roles, 
-		'bps_enable_jtc_woocommerce' 		=> '' 
+		'bps_enable_jtc_woocommerce' 		=> '', 
+		'bps_jtc_custom_form_error' 		=> $bps_jtc_custom_form_error 
 		);
 	
 		foreach( $jtc_db_options as $key => $value ) {
@@ -1342,7 +1361,8 @@ if ( isset( $_POST['Submit-Net-JTC'] ) && current_user_can('manage_options') ) {
 			'bps_jtc_comment_form_label' 		=> '', 
 			'bps_jtc_comment_form_input' 		=> '', 
 			'bps_jtc_custom_roles' 				=> '', 
-			'bps_enable_jtc_woocommerce' 		=> '' 
+			'bps_enable_jtc_woocommerce' 		=> '', 
+			'bps_jtc_custom_form_error' 		=> '' 
 			);
 
 			if ( ! get_blog_option( $net_id, $bps_Net_jtc ) ) {	
@@ -1377,7 +1397,8 @@ if ( isset( $_POST['Submit-Net-JTC'] ) && current_user_can('manage_options') ) {
 				'bps_jtc_comment_form_label' 		=> $BPS_JTC_Options_Net['bps_jtc_comment_form_label'], 
 				'bps_jtc_comment_form_input' 		=> $BPS_JTC_Options_Net['bps_jtc_comment_form_input'], 
 				'bps_jtc_custom_roles' 				=> $BPS_JTC_Options_Net['bps_jtc_custom_roles'], 
-				'bps_enable_jtc_woocommerce' 		=> '' 
+				'bps_enable_jtc_woocommerce' 		=> '', 
+				'bps_jtc_custom_form_error' 		=> $BPS_JTC_Options_Net['bps_jtc_custom_form_error'] 
 				);
 
 				foreach( $BPS_Net_Options_jtc as $key => $value ) {

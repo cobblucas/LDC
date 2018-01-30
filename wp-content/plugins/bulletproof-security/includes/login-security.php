@@ -125,9 +125,15 @@ if ( $BPSoptions['bps_login_security_OnOff'] == 'On' && $BPSoptions['bps_login_s
 		// 2.4: JTC-Lite added - incorrect CAPTCHA entered stops Login processing
 		if ( $BPSoptionsJTC['bps_jtc_login_form'] == '1' ) {
 			
+			if ( ! $BPSoptionsJTC['bps_jtc_custom_form_error'] || $BPSoptionsJTC['bps_jtc_custom_form_error'] == '' ) {
+				$bps_jtc_custom_form_error = '<strong>ERROR</strong>: Incorrect CAPTCHA Entered.';		
+			} else {
+				$bps_jtc_custom_form_error = $BPSoptionsJTC['bps_jtc_custom_form_error'];
+			}
+
 			if ( $_POST['reference'] != $BPSoptionsJTC['bps_tooltip_captcha_key'] || $_POST['captcha'] != '' ) {
 				$error = new WP_Error();
-				$error->add( 'captcha_error', __('<strong>ERROR</strong>: Incorrect CAPTCHA Entered.', 'bulletproof-security') );
+				$error->add( 'captcha_error', __($bps_jtc_custom_form_error, 'bulletproof-security') );
 				return $error;
 			}
 		}
@@ -385,8 +391,9 @@ if ( $BPSoptions['bps_login_security_OnOff'] == 'On' && $BPSoptions['bps_login_s
 				}
 			} // end foreach
 			
-			if ( $failed_logins >= $BPSoptions['bps_max_logins'] ) {
-				$status = 'Locked';	
+			// 2.9: BugFix for additional login attempts after account was locked and lockout time has expired: changed >= to ==
+			if ( $failed_logins == $BPSoptions['bps_max_logins'] ) {
+				$status = 'Locked';
 
 			// Network/Multisite subsites - logging is not used/allowed
 			if ( is_multisite() && $blog_id != 1 ) {
@@ -428,8 +435,19 @@ if ( $BPSoptions['bps_login_security_OnOff'] == 'On' && $BPSoptions['bps_login_s
 				$no_zeros = '0';
 				$LSM_zero_filter = $wpdb->get_results( $wpdb->prepare( "SELECT * FROM $bpspro_login_table WHERE user_id = %d AND failed_logins != %d", $user->ID, $no_zeros ) );
 				
-				$update_rows = $wpdb->update( $bpspro_login_table, array( 'status' => $status, 'user_id' => $row->user_id, 'username' => $row->username, 'public_name' => $row->public_name, 'email' => $row->email, 'role' => $row->role, 'human_time' => current_time('mysql'), 'login_time' => $login_time, 'lockout_time' => $lockout_time, 'failed_logins' => $failed_logins, 'ip_address' => $row->ip_address, 'hostname' => $row->hostname, 'request_uri' => $row->request_uri ), array( 'user_id' => $row->user_id, 'failed_logins' => $row->failed_logins ) );
+				## 2.9: BugFix for additional login attempts after account was locked and lockout time has expired
+				if ( $failed_logins > $BPSoptions['bps_max_logins'] && $timeNow < $row->lockout_time ) {
+					
+					$failed_logins = 1;
+					$status = 'Not Locked';
+					$lockout_time = 0;
+					
+					$update_rows = $wpdb->update( $bpspro_login_table, array( 'status' => $status, 'user_id' => $row->user_id, 'username' => $row->username, 'public_name' => $row->public_name, 'email' => $row->email, 'role' => $row->role, 'human_time' => current_time('mysql'), 'login_time' => $login_time, 'lockout_time' => $lockout_time, 'failed_logins' => $failed_logins, 'ip_address' => $row->ip_address, 'hostname' => $row->hostname, 'request_uri' => $row->request_uri ), array( 'user_id' => $row->user_id, 'failed_logins' => $row->failed_logins ) );
 
+				} else {
+
+					$update_rows = $wpdb->update( $bpspro_login_table, array( 'status' => $status, 'user_id' => $row->user_id, 'username' => $row->username, 'public_name' => $row->public_name, 'email' => $row->email, 'role' => $row->role, 'human_time' => current_time('mysql'), 'login_time' => $login_time, 'lockout_time' => $lockout_time, 'failed_logins' => $failed_logins, 'ip_address' => $row->ip_address, 'hostname' => $row->hostname, 'request_uri' => $row->request_uri ), array( 'user_id' => $row->user_id, 'failed_logins' => $row->failed_logins ) );
+				}
 			}
 		} // end if ( $wpdb->num_rows != 0...
 } // end $BPSoptions['bps_login_security_logging'] == 'logAll') {...
@@ -468,9 +486,15 @@ if ( $BPSoptions['bps_login_security_OnOff'] == 'On' && $BPSoptions['bps_login_s
 		// 2.4: JTC-Lite added - incorrect CAPTCHA entered stops Login processing
 		if ( $BPSoptionsJTC['bps_jtc_login_form'] == '1' ) {
 			
+			if ( ! $BPSoptionsJTC['bps_jtc_custom_form_error'] || $BPSoptionsJTC['bps_jtc_custom_form_error'] == '' ) {
+				$bps_jtc_custom_form_error = '<strong>ERROR</strong>: Incorrect CAPTCHA Entered.';		
+			} else {
+				$bps_jtc_custom_form_error = $BPSoptionsJTC['bps_jtc_custom_form_error'];
+			}
+
 			if ( $_POST['reference'] != $BPSoptionsJTC['bps_tooltip_captcha_key'] || $_POST['captcha'] != '' ) {
 				$error = new WP_Error();
-				$error->add( 'captcha_error', __('<strong>ERROR</strong>: Incorrect CAPTCHA Entered.', 'bulletproof-security') );
+				$error->add( 'captcha_error', __($bps_jtc_custom_form_error, 'bulletproof-security') );
 				return $error;
 			}
 		}
@@ -641,7 +665,8 @@ if ( $BPSoptions['bps_login_security_OnOff'] == 'On' && $BPSoptions['bps_login_s
 				}
 			} // end foreach
 			
-			if ( $failed_logins >= $BPSoptions['bps_max_logins'] ) {
+			// 2.9: BugFix for additional login attempts after account was locked and lockout time has expired: changed >= to ==
+			if ( $failed_logins == $BPSoptions['bps_max_logins'] ) {
 				$status = 'Locked';
 
 			// Network/Multisite subsites - logging is not used/allowed
@@ -684,8 +709,19 @@ if ( $BPSoptions['bps_login_security_OnOff'] == 'On' && $BPSoptions['bps_login_s
 				$no_zeros = '0';
 				$LSM_zero_filter = $wpdb->get_results( $wpdb->prepare( "SELECT * FROM $bpspro_login_table WHERE user_id = %d AND failed_logins != %d", $user->ID, $no_zeros ) );
 				
-				$update_rows = $wpdb->update( $bpspro_login_table, array( 'status' => $status, 'user_id' => $row->user_id, 'username' => $row->username, 'public_name' => $row->public_name, 'email' => $row->email, 'role' => $row->role, 'human_time' => current_time('mysql'), 'login_time' => $login_time, 'lockout_time' => $lockout_time, 'failed_logins' => $failed_logins, 'ip_address' => $row->ip_address, 'hostname' => $row->hostname, 'request_uri' => $row->request_uri ), array( 'user_id' => $row->user_id, 'failed_logins' => $row->failed_logins ) );
+				## 2.9: BugFix for additional login attempts after account was locked and lockout time has expired
+				if ( $failed_logins > $BPSoptions['bps_max_logins'] && $timeNow < $row->lockout_time ) {
+					
+					$failed_logins = 1;
+					$status = 'Not Locked';
+					$lockout_time = 0;
+					
+					$update_rows = $wpdb->update( $bpspro_login_table, array( 'status' => $status, 'user_id' => $row->user_id, 'username' => $row->username, 'public_name' => $row->public_name, 'email' => $row->email, 'role' => $row->role, 'human_time' => current_time('mysql'), 'login_time' => $login_time, 'lockout_time' => $lockout_time, 'failed_logins' => $failed_logins, 'ip_address' => $row->ip_address, 'hostname' => $row->hostname, 'request_uri' => $row->request_uri ), array( 'user_id' => $row->user_id, 'failed_logins' => $row->failed_logins ) );
 
+				} else {
+
+				$update_rows = $wpdb->update( $bpspro_login_table, array( 'status' => $status, 'user_id' => $row->user_id, 'username' => $row->username, 'public_name' => $row->public_name, 'email' => $row->email, 'role' => $row->role, 'human_time' => current_time('mysql'), 'login_time' => $login_time, 'lockout_time' => $lockout_time, 'failed_logins' => $failed_logins, 'ip_address' => $row->ip_address, 'hostname' => $row->hostname, 'request_uri' => $row->request_uri ), array( 'user_id' => $row->user_id, 'failed_logins' => $row->failed_logins ) );
+				}
 			}
 		} // end if ( $wpdb->num_rows != 0...
 } // end $BPSoptions['bps_login_security_logging'] == 'logLockouts') {...
@@ -742,12 +778,15 @@ if ( $BPSoptions['bps_login_security_OnOff'] == 'On' && isset( $_POST['wp-submit
 		
 		if ( $BPSoptions['bps_login_security_remaining'] == 'On' ) {
 			
-			if ( $failed_logins == 1 ) {
+			## 2.9: BugFix for additional login attempts after account was locked and lockout time has expired 
+			if ( $failed_logins == $BPSoptions['bps_max_logins'] + 1 ) {
+				$attempts_remaining = $BPSoptions['bps_max_logins'];
+			} elseif ( $failed_logins == 1 ) {
 				$attempts_remaining = $BPSoptions['bps_max_logins'] - 1;
 			} else {
 				$attempts_remaining = $remaining;
 			}
-			
+
 			if ( strpos( $username, '@' ) ) {
 				return new WP_Error('incorrect_password', sprintf('<strong>'.__('ERROR:', 'bulletproof-security').'</strong>'.__(' The password you entered for the email address ', 'bulletproof-security').'<strong>%1$s</strong>'.__(' is incorrect. ', 'bulletproof-security').' <a href="%2$s">'.__('Lost your password?', 'bulletproof-security').'</a>'.__(' Login Attempts Remaining ', 'bulletproof-security').'<strong>%3$d</strong>', $username, wp_lostpassword_url(), $attempts_remaining ) );
 
@@ -774,11 +813,14 @@ if ( $BPSoptions['bps_login_security_OnOff'] == 'On' && isset( $_POST['wp-submit
 
 		if ( $BPSoptions['bps_login_security_remaining'] == 'On' ) {
 
-			if ( $failed_logins == 1 ) {
+			## 2.9: BugFix for additional login attempts after account was locked and lockout time has expired 
+			if ( $failed_logins == $BPSoptions['bps_max_logins'] + 1 ) {
+				$attempts_remaining = $BPSoptions['bps_max_logins'];
+			} elseif ( $failed_logins == 1 ) {
 				$attempts_remaining = $BPSoptions['bps_max_logins'] - 1;
 			} else {
 				$attempts_remaining = $remaining;
-			}			
+			}	
 			
 			return new WP_Error('incorrect_password', sprintf('<strong>'.__('ERROR:', 'bulletproof-security').'</strong>'.__(' Invalid Entry.', 'bulletproof-security').' <a href="%2$s">'.__('Lost your password?', 'bulletproof-security').'</a>'.__(' Login Attempts Remaining ', 'bulletproof-security').'<strong>%3$d</strong>', $username, wp_lostpassword_url(), $attempts_remaining ) );
 
@@ -793,7 +835,10 @@ if ( $BPSoptions['bps_login_security_OnOff'] == 'On' && isset( $_POST['wp-submit
 
 		if ( $BPSoptions['bps_login_security_remaining'] == 'On' ) {
 
-			if ( $failed_logins == 1 ) {
+			## 2.9: BugFix for additional login attempts after account was locked and lockout time has expired 
+			if ( $failed_logins == $BPSoptions['bps_max_logins'] + 1 ) {
+				$attempts_remaining = $BPSoptions['bps_max_logins'];
+			} elseif ( $failed_logins == 1 ) {
 				$attempts_remaining = $BPSoptions['bps_max_logins'] - 1;
 			} else {
 				$attempts_remaining = $remaining;
@@ -921,9 +966,15 @@ function bpsPro_jtc_wp_login_page( $user, $password ) {
 
 	if ( $BPSoptionsJTC['bps_jtc_login_form'] == '1' ) {
 
+		if ( ! $BPSoptionsJTC['bps_jtc_custom_form_error'] || $BPSoptionsJTC['bps_jtc_custom_form_error'] == '' ) {
+			$bps_jtc_custom_form_error = '<strong>ERROR</strong>: Incorrect CAPTCHA Entered.';		
+		} else {
+			$bps_jtc_custom_form_error = $BPSoptionsJTC['bps_jtc_custom_form_error'];
+		}
+
 		if ( $_POST['reference'] != $BPSoptionsJTC['bps_tooltip_captcha_key'] || $_POST['captcha'] != '' ) {
 			$error = new WP_Error();
-			$error->add( 'captcha_error', __('<strong>ERROR</strong>: Incorrect CAPTCHA Entered.', 'bulletproof-security') );
+			$error->add( 'captcha_error', __($bps_jtc_custom_form_error, 'bulletproof-security') );
 			return $error;
 		}
 		return $user;
@@ -978,7 +1029,7 @@ function bps_captcha_login_form_field() {
     
     <p>
     <label for="reference"><?php echo $BPSoptionsJTC['bps_tooltip_captcha_title']; ?><br />
-    <input type="text" name="reference" id="reference" class="input" title="<?php echo $BPSoptionsJTC['bps_tooltip_captcha_hover_text']; ?>" value="<?php echo esc_attr(stripslashes($reference)); ?>" /></label>
+    <input type="text" name="reference" id="reference" class="input" title="<?php if ( $BPSoptionsJTC['bps_tooltip_captcha_hover_text'] != ' ' ) { echo $BPSoptionsJTC['bps_tooltip_captcha_hover_text']; } ?>" value="<?php echo esc_attr(stripslashes($reference)); ?>" /></label>
     <input type="text" name="captcha" id="captcha" class="input" value="<?php echo esc_attr(stripslashes($captcha)); ?>" style="display:none;" />
     </p>
     

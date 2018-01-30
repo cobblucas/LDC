@@ -1,10 +1,10 @@
 === BulletProof Security ===
 Contributors: AITpro
 Donate link: https://wordpress.org/support/view/plugin-reviews/bulletproof-security?rate=5#postform
-Tags: security, secure, scanner, login security, firewall, security plugin, wordpress security, login, malware, malware scanner, bruteforce, backup, exploit, infection, protection, virus, anti-virus, logout, spam, anti-spam
+Tags: security, secure, malware scanner, login security, firewall, security plugin, wordpress security, login, bruteforce, backup, exploit, infection, protection, virus, anti-virus, logout, spam, anti-spam
 Requires at least: 3.8 
-Tested up to: 4.8
-Stable tag: 2.8
+Tested up to: 4.9
+Stable tag: 2.9
 License: GPLv2 or later
 License URI: http://www.gnu.org/licenses/gpl-2.0.html
 
@@ -106,6 +106,7 @@ Security plugin features and frequently asked questions see the FAQ section belo
 3. DB Table Prefix Changer
 4. Maintenance Mode
 5. UI|UX Settings: Choose UI|UX visual preferences & functionality.
+6. MScan Malware Scanner
 
 * <strong>Uninstall Options</strong>
 1. An Uninstall Options link is located on the WordPress Plugins page under the BulletProof Security plugin.
@@ -125,6 +126,16 @@ Security plugin features and frequently asked questions see the FAQ section belo
 * <strong>Login Security & Monitoring Setup Steps</strong>
 1. Click the Login Security & Monitoring Save Options button to use & save the BPS default Login Security settings or choose your own settings.
 2. Click the Login Security: Send Login Security Email Alert When... Save Options button to use and save BPS default Email Alerts and Log File settings or choose your own settings.
+
+* <strong>JTC-Lite Setup Steps</strong>
+1. Add a checkmark in the Login Form checkbox to enable the JTC-Lite CAPTCHA on your WordPress Login page.
+2. Click the Save Options button to use & save the BPS default JTC-Lite settings or choose your own settings.
+
+* <strong>MScan Malware Scanner Setup Steps</strong>
+1. Add a checkmark in the Hosting Account Root Folders checkboxes to enable MScan to scan the folders that you have chosen.
+2. Keep the default MScan Options settings or choose your own settings.
+3. Click the Save MScan Options button.
+4. Recommendation: Click the Scan Time Estimate Tool button to check the total estimated scan time for your scan based on your MScan Options settings. 
 
 * <strong>Idle Session Logout (ISL) Setup Steps</strong>
 1. Choose the ISL option settings you want to use.
@@ -181,6 +192,26 @@ Security plugin features and frequently asked questions see the FAQ section belo
 
 Please see the <a href="https://forum.ait-pro.com/forums/topic/read-me-first-free/#bps-free-general-troubleshooting/" title="BulletProof Security Forum" rel="nofollow" target="_blank">BulletProof Security Forum.</a>
 
+= Unable to save Root or wp-admin htaccess custom code using the BPS Custom Code forms =
+
+* You may see a 403, 404 or 500 error or no errors and nothing works/happens.
+* This common problem is caused by Mod Security. Please see this <a href="https://forum.ait-pro.com/forums/topic/mod-security-common-known-problems/" title="Common Known Mod Security problems" rel="nofollow" target="_blank">Common Known Mod Security problems</a> forum topic.
+
+= Unable to save htaccess code using the BPS htaccess File Editor =
+
+* You may see a 403, 404 or 500 error or no errors and nothing works/happens.
+* This common problem is caused by Mod Security. Please see this <a href="https://forum.ait-pro.com/forums/topic/mod-security-common-known-problems/" title="Common Known Mod Security problems" rel="nofollow" target="_blank">Common Known Mod Security problems</a> forum topic.
+
+= Unable to login or logout of your website =
+
+* You may see a 403, 404 or 500 error or no errors and nothing works/happens.
+* This common problem is caused by Mod Security. Please see this <a href="https://forum.ait-pro.com/forums/topic/mod-security-common-known-problems/" title="Common Known Mod Security problems" rel="nofollow" target="_blank">Common Known Mod Security problems</a> forum topic.
+
+= Unable to install plugins or themes using the WordPress Upload Zip installer =
+
+* You may see a 403, 404 or 500 error or no errors and nothing works/happens.
+* This common problem is caused by Mod Security. Please see this <a href="https://forum.ait-pro.com/forums/topic/mod-security-common-known-problems/" title="Common Known Mod Security problems" rel="nofollow" target="_blank">Common Known Mod Security problems</a> forum topic.
+
 = BulletProof Security Compatible Hosting|Host Server|WordPress Site Types =
 
 * <strong>Types:</strong> Shared, VPS, Dedicated, Managed, Colocation, In-house
@@ -235,7 +266,7 @@ scanning is available in BPS Pro only. For more details see the <a href="https:/
 
 = BulletProof Security System Info =
 
-* PHP|MySQL|MySQLi|OS|Server|Memory Usage and Limits|IP|SAPI|WP Filesystem API Method|DNS|Apache Modules|Directives Compatibility Checks|Max Upload|Zend Engine Version|Zend Guard|Loader|Optimizer|ionCube Loader|Suhosin|APC|eAccelerator|XCache|Varnish|cURL|OpenSSL Library|cURL OpenSSL Version|Memcache|Memcached|Plugins|Versions Installed|Activated|Get Plugins List|Browser Compression|GD Library|ImageMagick|WP Temp Dir|PHP Temp Dir|PHP Upload Temp Dir|Session Save Path|WP_TEMP_DIR constant|php.ini file path, etc.
+* PHP|MySQL|MySQLi|OS|Server|Memory Usage and Limits|IP|SAPI|WP Filesystem API Method|DNS|Apache Modules|Directives Compatibility Checks|Mod Security|Max Upload|Zend Engine Version|Zend Guard|Loader|Optimizer|ionCube Loader|Suhosin|APC|eAccelerator|XCache|Varnish|cURL|OpenSSL Library|cURL OpenSSL Version|Memcache|Memcached|Plugins|Versions Installed|Activated|Get Plugins List|Browser Compression|GD Library|ImageMagick|WP Temp Dir|PHP Temp Dir|PHP Upload Temp Dir|Session Save Path|WP_TEMP_DIR constant|php.ini file path, etc.
 * File|Folder Permissions (CGI or DSO)|Script Owner User ID (UID)|File Owner User ID
 * PHP Server|PHP.ini|PHP directives Info
 * Website Headers Check Tool: Check your website Headers or another website's Headers remotely by making a GET or HEAD Request
@@ -365,9 +396,11 @@ Website performance is just as important as website security. BulletProof Securi
 
 = Can BulletProof Security be Network Activated on Network|Multisite Sites? =
 
-The BulletProof Security plugin can be Network Activated or you can allow BulletProof Security to be activated individually on each Network/Multisite subsite or of course you can choose not to Network Activate BulletProof Security or allow the BPS plugin on subsites. Super Admins will see BPS Dashboard Alerts and other Status displays on the Primary Site only. Administrators can activate or deactivate BulletProof Security on subsites if you allow this on your Network/Multisite website. The BPS Primary Site Menus will display all BPS menus. The BPS Subsite Menus will display: Login Security, Maintenance Mode, System Info & UI|UX Theme Skin menus. All BulletProof Security features are not available on subsites since Network/Multisite subsites are virtual and do not have physical website folders. All BulletProof Security features work sitewide and affect all other virtual subsites. Login Security and Maintenance Mode work independently on each subsite. 
+The BulletProof Security plugin can be Network Activated or you can allow BulletProof Security to be activated individually on each Network/Multisite subsite or of course you can choose not to Network Activate BulletProof Security or allow the BPS plugin on subsites. Super Admins will see BPS Dashboard Alerts and other Status displays on the Primary Site only. Administrators can activate or deactivate BulletProof Security on subsites if you allow this on your Network/Multisite website. The BPS Primary Site Menus will display all BPS menus. The BPS Subsite Menus will display: Login Security, JTC-Lite, Maintenance Mode, System Info & UI|UX Theme Skin menus. All BulletProof Security features are not available on subsites since Network/Multisite subsites are virtual and do not have physical website folders. All BulletProof Security features work sitewide and affect all other virtual subsites. Login Security and Maintenance Mode work independently on each subsite. 
 
-* Login Security works individually for each specific subsite. Login Security has all the same functionality on Network/Multisite subsites with these exceptions: Login Security email alerting is not available for subsites. 
+* The BPS Setup Wizard Options page contains these two Network/Multisite options: Network|Multisite Sitewide Login Security Settings and Network|Multisite Sitewide JTC-Lite Settings, which allow you to bulk setup all subsites with default JTC-Lite option settings.
+* Login Security works individually for each specific subsite. Login Security has all the same functionality on Network/Multisite subsites with these exceptions: Login Security email alerting is not available for subsites.
+* JTC-Lite works individually for each specific subsite. JTC-Lite has all the same functionality on Network/Multisite subsites.
 * Maintenance Mode works individually for each specific subsite. MMode has all the same functionality on Network/Multisite subsites with these exceptions: BackEnd Maintenance is not available on subsites & these Primary site options are not available on subsites: Put The Primary Site And All Subsites In Maintenance Mode & Put All Subsites In Maintenance Mode, But Not The Primary Site.
 * System Info has all the same functionality on Network/Multisite subsites with these exceptions: MySQL Database information is not displayed on subsites. 
 * BulletProof Security also works with Network/Multisite Domain Mapping.
@@ -456,11 +489,15 @@ Yes. BulletProof Security automatically creates customized .htaccess website sec
 
 = Security Log File Automation - Automatically Zipped, Emailed and Replaced =
 
-Security Log files are automatically zipped, emailed and replaced with a new blank Security Log file when the log file reaches the maximum file size setting that you choose. By Default BulletProof Security sets this DB option to zip, email and replace the Security Log file when it reaches 500KB. The Security Log file is checked once per hour with a WordPress Cron. The optimum recommended file size setting is 500KB.
+Security Log files are automatically zipped, emailed and replaced with a new blank Security Log file when the log file reaches the maximum file size setting that you choose. By Default BulletProof Security sets this DB option to zip, email and replace the Security Log file when it reaches 500KB. The Security Log file is checked once per hour with a WordPress Cron. The optimum recommended file size setting is 500KB. Email and Log file settings are located under the Email|Log Settings menu/page.
+
+= MScan Malware Scanner Log File Automation - Automatically Zipped, Emailed and Replaced =
+
+MScan Log files are automatically zipped, emailed and replaced with a new blank MScan Log file when the log file reaches the maximum file size setting that you choose. By Default BulletProof Security sets this DB option to zip, email and replace the MScan Log file when it reaches 500KB. The MScan Log file is checked once per hour with a WordPress Cron. The optimum recommended file size setting is 500KB. Email and Log file settings are located under the Email|Log Settings menu/page.
 
 = DB Backup Log File Automation - Automatically Zipped, Emailed and Replaced =
 
-DB Backup Log files are automatically zipped, emailed and replaced with a new blank DB Backup Log file when the log file reaches the maximum file size setting that you choose. By Default BulletProof Security sets this DB option to zip, email and replace the Security Log file when it reaches 500KB. The DB Backup Log file is checked once per hour with a WordPress Cron. The optimum recommended file size setting is 500KB.
+DB Backup Log files are automatically zipped, emailed and replaced with a new blank DB Backup Log file when the log file reaches the maximum file size setting that you choose. By Default BulletProof Security sets this DB option to zip, email and replace the Security Log file when it reaches 500KB. The DB Backup Log file is checked once per hour with a WordPress Cron. The optimum recommended file size setting is 500KB. Email and Log file settings are located under the Email|Log Settings menu/page.
 
 = BulletProof Security Fast and Simple with No Manual Configuration or FTP Required =
 

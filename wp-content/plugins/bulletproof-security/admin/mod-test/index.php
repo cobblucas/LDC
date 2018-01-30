@@ -229,10 +229,50 @@ Require host example.com
 </pre>
 	</td>
     <td style="text-align:center;"><span style="font-size:30px;font-weight:bold;">12</span></td>
+    <td style="text-align:center;background-color:#333333;"><img src="mod_security.png" alt="" title="" /></td>
+    <td>
+<pre style="height:100px;overflow:auto;">
+# 12 mod_security: IfModule Conditions
+&lt;FilesMatch &quot;^(mod_security\.png)$&quot;&gt;
+	&lt;IfModule mod_security.c&gt;
+		&lt;IfModule mod_access_compat.c&gt;
+			Order Allow,Deny
+			Deny from all
+		&lt;/IfModule&gt;
+	
+		&lt;IfModule mod_authz_core.c&gt;
+			Require all denied
+		&lt;/IfModule&gt;
+	&lt;/IfModule&gt;
+&lt;/FilesMatch&gt;
+</pre>
+	</td>
+	</tr>
+	<tr>
+	<th scope="row" style="font-size:30px;">13</th>
+	<td style="text-align:center;background-color:#333333;"><img src="mod_security-2.png" alt="" title="" /></td>
+	<td>
+<pre style="height:100px;overflow:auto;">
+# 13 mod_security2: IfModule Conditions
+&lt;FilesMatch &quot;^(mod_security-2\.png)$&quot;&gt;
+	&lt;IfModule mod_security2.c&gt;
+		&lt;IfModule mod_access_compat.c&gt;
+			Order Allow,Deny
+			Deny from all
+		&lt;/IfModule&gt;
+	
+		&lt;IfModule mod_authz_core.c&gt;
+			Require all denied
+		&lt;/IfModule&gt;
+	&lt;/IfModule&gt;
+&lt;/FilesMatch&gt;
+</pre>
+	</td>
+    <td style="text-align:center;"><span style="font-size:30px;font-weight:bold;">14</span></td>
     <td style="text-align:center;background-color:#333333;"><img src="mod_access_compat-od-nc-allowed.png" alt="" title="" /></td>
     <td>
 <pre>
-# 12 Unused: No Tests Performed
+# 14 Unused: No Tests Performed
 </pre>
 	</td>
 	</tr>
@@ -270,6 +310,12 @@ If you see an image displayed <strong>without</strong> a white #9 displayed in t
 	<th scope="row" style="font-size:30px;">11</th>
 	<td style="padding:5px;">If you do <strong>NOT</strong> see an image displayed then your Apache server has the mod_authz_host Module loaded on your server. If the Module is loaded then you will <strong>NOT</strong> see the mod_authz_host-nc-require-host.png image file displayed to you. <strong>"Require host example.com"</strong> means <strong>ONLY</strong> display the image file if the Hostname (your website) is example.com. The Hostname is intentionally a bogus Hostname and is <strong>NOT</strong> your Hostname (your website). Or your server is not processing the <strong>"Require host example.com"</strong> directive and a 500 error will occur and you will not see the image. See the System Info page.</td>
     <td style="text-align:center;"><span style="font-size:30px;font-weight:bold;">12</span></td>
+    <td style="padding:5px;">If you do <strong>NOT</strong> see an image displayed then your Apache server has the mod_security Module loaded on your server. If the mod_security Module is loaded then you will <strong>NOT</strong> see the mod_security.png image file displayed to you. Mod Security is now included in current versions of cPanel and breaks several BPS Pro features and option setting forms as well as various things in WordPress and other Plugins and Themes. Some web hosts allow you to remove the individual Mod Security SecRules and SecFilters that are breaking things, but most web hosts only allow you to either Disable or Enable Mod Security in your web host control panel. See this Forum Topic for known things that Mod Security breaks in BPS: <a href="https://forum.ait-pro.com/forums/topic/mod-security-common-known-problems/" target="_blank">common known Mod Security problems</a></td>
+	</tr>
+	<tr>
+	<th scope="row" style="font-size:30px;">13</th>
+	<td style="padding:5px;">If you do <strong>NOT</strong> see an image displayed then your Apache server has the mod_security2 Module loaded on your server. If the mod_security2 Module is loaded then you will <strong>NOT</strong> see the mod_security-2.png image file displayed to you. Mod Security is now included in current versions of cPanel and breaks several BPS Pro features and option setting forms as well as various things in WordPress and other Plugins and Themes. Some web hosts allow you to remove the individual Mod Security SecRules and SecFilters that are breaking things, but most web hosts only allow you to either Disable or Enable Mod Security in your web host control panel. See this Forum Topic for known things that Mod Security breaks in BPS: <a href="https://forum.ait-pro.com/forums/topic/mod-security-common-known-problems/" target="_blank">common known Mod Security problems</a></td>
+    <td style="text-align:center;"><span style="font-size:30px;font-weight:bold;">14</span></td>
     <td style="padding:5px;">Unused: No Tests Performed.</td>
 	</tr>
 </tbody>

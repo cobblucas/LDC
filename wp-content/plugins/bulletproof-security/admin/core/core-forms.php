@@ -654,6 +654,22 @@ if ( isset( $_POST['bpsResetDismissSubmit'] ) && current_user_can('manage_option
 		echo $text;
 	}
 
+	if ( ! delete_user_meta($user_id, 'bps_ignore_rate_notice') ) {
+		$text = __('The BPS Plugin Star Rating Request Notice is NOT set. Nothing to reset.', 'bulletproof-security').'<br>';
+		echo $text;
+	} else {
+		$text = '<span style="color:#008000;">'.__('Success! The BPS Plugin Star Rating Request Notice is reset.', 'bulletproof-security').'</span><br>';
+		echo $text;
+	}
+
+	if ( ! delete_user_meta($user_id, 'bpsPro_ignore_mod_security_notice') ) {
+		$text = __('The Mod Security Module is Loaded|Enabled Notice is NOT set. Nothing to reset.', 'bulletproof-security').'<br>';
+		echo $text;
+	} else {
+		$text = '<span style="color:#008000;">'.__('Success! The Mod Security Module is Loaded|Enabled Notice is reset.', 'bulletproof-security').'</span><br>';
+		echo $text;
+	}
+
 	echo '<div class="bps-message-button" style="width:90px;margin-bottom:9px;"><a href="'.admin_url( 'admin.php?page=bulletproof-security/admin/core/core.php#bps-tabs-7' ).'">'.__('Refresh Status', 'bulletproof-security').'</a></div>';
 	echo '</p></div>';
 	}

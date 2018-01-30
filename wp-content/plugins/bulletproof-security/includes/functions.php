@@ -1085,10 +1085,13 @@ function bpsPro_apache_mod_directive_check() {
 			// 11: 403 if mod_authz_host IS loaded. 
 			// 11: 500 error if mod_authz_host is NOT loaded
 			$url11 = plugins_url( '/bulletproof-security/admin/mod-test/mod_authz_host-nc-require-host.png' );
-
+			// 12: mod_security: 403 if mod_security IS loaded.
+			$url12 = plugins_url( '/bulletproof-security/admin/mod-test/mod_security.png' );
+			// 13: mod_security2: 403 if mod_security2 IS loaded.
+			$url13 = plugins_url( '/bulletproof-security/admin/mod-test/mod_security-2.png' );
 
 			$view_test_page = plugins_url( '/bulletproof-security/admin/mod-test/' );
-			$url_array = array( $url2, $url3, $url4, $url5, $url6, $url8, $url9, $url10, $url11 );
+			$url_array = array( $url2, $url3, $url4, $url5, $url6, $url8, $url9, $url10, $url11, $url12, $url13 );
 	
 			echo '<strong><span class="sysinfo-label-text">'.__('Apache Modules|Directives|Backward Compatibility(Yes|No)|IfModule(Yes|No): ', 'bulletproof-security').'</span><a href="'.$view_test_page.'" target="_blank" title="Apache Module and Directives test page">View Visual Test</a></strong><br>';
 	
@@ -1134,6 +1137,14 @@ function bpsPro_apache_mod_directive_check() {
 						$status_code11 = $response['response']['code'];
 					}
 
+					if ( $key == 9 ) { // 12
+						$status_code12 = $response['response']['code'];
+					}
+
+					if ( $key == 10 ) { // 13
+						$status_code13 = $response['response']['code'];
+					}
+				
 				} else {
 		
 					$text = '<font color="#fb0101"><strong>'.__('ERROR: wp_remote_get() function is blocked or unable to get the URL path', 'bulletproof-security').'</strong></font><br>';
@@ -1271,6 +1282,35 @@ function bpsPro_apache_mod_directive_check() {
 				}			
 			}
 
+			// 2.9: mod_security or mod_security2 Module loaded.
+			if ( 403 == $status_code12 || 403 == $status_code13 ) {
+				
+				if ( 403 == $status_code12 ) {
+					$text = '<font color="#fb0101"><strong>'.$status_code12.':</strong></font> '.__('mod_security Module is Loaded|Enabled', 'bulletproof-security').'<br>';
+					echo $text;
+				} elseif ( 403 == $status_code13 ) {
+					$text = '<font color="#fb0101"><strong>'.$status_code13.':</strong></font> '.__('mod_security2 Module is Loaded|Enabled', 'bulletproof-security').'<br>';
+					echo $text;						
+				}
+				
+				$bps_mod_security_options = array( 'bps_mod_security_check' => '1' );
+				
+				foreach( $bps_mod_security_options as $key => $value ) {
+					update_option('bulletproof_security_options_mod_security', $bps_mod_security_options);
+				}					
+
+			} else {
+				
+				$text = '<font color="green"><strong>'.$status_code12.':</strong></font> '.__('mod_security Module is not Loaded|Enabled', 'bulletproof-security').'<br>';
+				echo $text;
+				
+				$bps_mod_security_options = array( 'bps_mod_security_check' => '0' );
+				
+				foreach( $bps_mod_security_options as $key => $value ) {
+					update_option('bulletproof_security_options_mod_security', $bps_mod_security_options);
+				}
+			}
+
 		// End: System Info page check
 		// BEGIN: Pre-Installation Wizard, BPS Upgrade & Core Inpage check. Create/update db options and new htaccess files
 		} else {
@@ -1288,8 +1328,12 @@ function bpsPro_apache_mod_directive_check() {
 			// 10: 403 if mod_authz_core IS loaded. 
 			// 10: 500 error if mod_authz_core is NOT loaded
 			$url10 = plugins_url( '/bulletproof-security/admin/mod-test/mod_authz_core-nc-denied.png' );
-
-			$url_array = array( $url2, $url8, $url9, $url10 );
+			// 12: mod_security: 403 if mod_security IS loaded.
+			$url12 = plugins_url( '/bulletproof-security/admin/mod-test/mod_security.png' );
+			// 13: mod_security2: 403 if mod_security2 IS loaded.
+			$url13 = plugins_url( '/bulletproof-security/admin/mod-test/mod_security-2.png' );
+			
+			$url_array = array( $url2, $url8, $url9, $url10, $url12, $url13 );
 
 			// 11.5: Pre-Installation Wizard: No time restriction
 			if ( esc_html($_SERVER['QUERY_STRING']) == 'page=bulletproof-security/admin/wizard/wizard.php' ) {
@@ -1314,6 +1358,14 @@ function bpsPro_apache_mod_directive_check() {
 						
 						if ( $key == 3 ) { // 10
 							$status_code10 = $response['response']['code'];
+						}
+
+						if ( $key == 4 ) { // 12
+							$status_code12 = $response['response']['code'];
+						}
+	
+						if ( $key == 5 ) { // 13
+							$status_code13 = $response['response']['code'];
 						}
 					}
 				}
@@ -1365,6 +1417,24 @@ function bpsPro_apache_mod_directive_check() {
 					}			
 				}
 
+				// 2.9: mod_security or mod_security2 Module loaded.
+				if ( 403 == $status_code12 || 403 == $status_code13 ) {
+					
+					$bps_mod_security_options = array( 'bps_mod_security_check' => '1' );
+					
+					foreach( $bps_mod_security_options as $key => $value ) {
+						update_option('bulletproof_security_options_mod_security', $bps_mod_security_options);
+					}					
+	
+				} else {
+					
+					$bps_mod_security_options = array( 'bps_mod_security_check' => '0' );
+					
+					foreach( $bps_mod_security_options as $key => $value ) {
+						update_option('bulletproof_security_options_mod_security', $bps_mod_security_options);
+					}
+				}
+
 				bpsPro_apache_mod_create_htaccess_files();				
 			
 			} else { // END: Setup Wizard no time restriction.
@@ -1399,6 +1469,14 @@ function bpsPro_apache_mod_directive_check() {
 							if ( $key == 3 ) { // 10
 								$status_code10 = $response['response']['code'];
 							}
+							
+							if ( $key == 4 ) { // 12
+								$status_code12 = $response['response']['code'];
+							}
+		
+							if ( $key == 5 ) { // 13
+								$status_code13 = $response['response']['code'];
+							}						
 						}
 					}
 			
@@ -1448,7 +1526,24 @@ function bpsPro_apache_mod_directive_check() {
 							update_option('bulletproof_security_options_htaccess_files', $htaccess_files_Options);
 						}			
 					}
-
+					
+					// 2.9: mod_security or mod_security2 Module loaded.
+					if ( 403 == $status_code12 || 403 == $status_code13 ) {
+						
+						$bps_mod_security_options = array( 'bps_mod_security_check' => '1' );
+						
+						foreach( $bps_mod_security_options as $key => $value ) {
+							update_option('bulletproof_security_options_mod_security', $bps_mod_security_options);
+						}					
+		
+					} else {
+						
+						$bps_mod_security_options = array( 'bps_mod_security_check' => '0' );
+						
+						foreach( $bps_mod_security_options as $key => $value ) {
+							update_option('bulletproof_security_options_mod_security', $bps_mod_security_options);
+						}
+					}
 					bpsPro_apache_mod_create_htaccess_files();
 				} // end if ( time() < $Apache_Mod_options['bps_apache_mod_time'] ) {
 			}

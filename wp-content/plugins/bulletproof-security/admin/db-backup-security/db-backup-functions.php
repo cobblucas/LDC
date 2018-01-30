@@ -12,6 +12,30 @@ function bpsPro_reset_db_backup_folder() {
 	if ( isset( $_POST['Submit-DBB-Reset'] ) && current_user_can('manage_options') ) {
 		check_admin_referer('bulletproof_security_db_backup_reset');
 
+		?>
+		
+		<style>
+		<!--
+		.ui-accordion.bps-accordion .ui-accordion-content {overflow:hidden;}
+		-->
+		</style>
+		
+			<script type="text/javascript">
+			/* <![CDATA[ */
+			jQuery(document).ready(function($){
+				$( "#bps-accordion-1" ).accordion({
+				collapsible: true,
+				active: 2,
+				autoHeight: true,
+				clearStyle: true,
+				heightStyle: "content"
+				});
+			});
+			/* ]]> */
+			</script>
+		
+		<?php
+
 		$source = WP_CONTENT_DIR . '/bps-backup';
 
 		if ( is_dir($source) ) {
@@ -34,10 +58,7 @@ function bpsPro_reset_db_backup_folder() {
 		
 					echo '<div id="message" class="updated" style="background-color:#dfecf2;border:1px solid #999;-moz-border-radius-topleft:3px;-webkit-border-top-left-radius:3px;-khtml-border-top-left-radius:3px;border-top-left-radius:3px;-moz-border-radius-topright:3px;-webkit-border-top-right-radius:3px;-khtml-border-top-right-radius:3px;border-top-right-radius:3px;-webkit-box-shadow: 3px 3px 5px -1px rgba(153,153,153,0.7);-moz-box-shadow: 3px 3px 5px -1px rgba(153,153,153,0.7);box-shadow: 3px 3px 5px -1px rgba(153,153,153,0.7);"><p>';
 					$text = '<font color="green"><strong>'.__('The DB Backup folder name has been renamed to: ', 'bulletproof-security').$new_db_backup_folder.'</strong></font><br>';
-					
-				
 					echo $text;
-					echo '<div class="bps-message-button" style="width:90px;"><a href="'.admin_url( 'admin.php?page=bulletproof-security/admin/db-backup-security/db-backup-security.php' ).'">'.esc_attr__('Refresh Status', 'bulletproof-security').'</a></div>';					
 					echo '</p></div>';
 					
 					$dbb_options = 'bulletproof_security_options_db_backup';
@@ -87,11 +108,9 @@ function bpsPro_reset_db_backup_folder() {
 					echo '<div id="message" class="updated" style="background-color:#dfecf2;border:1px solid #999;-moz-border-radius-topleft:3px;-webkit-border-top-left-radius:3px;-khtml-border-top-left-radius:3px;border-top-left-radius:3px;-moz-border-radius-topright:3px;-webkit-border-top-right-radius:3px;-khtml-border-top-right-radius:3px;border-top-right-radius:3px;-webkit-box-shadow: 3px 3px 5px -1px rgba(153,153,153,0.7);-moz-box-shadow: 3px 3px 5px -1px rgba(153,153,153,0.7);box-shadow: 3px 3px 5px -1px rgba(153,153,153,0.7);"><p>';
 					$text = '<font color="green"><strong>'.__('The DB Backup folder: ', 'bulletproof-security').$new_db_backup_folder.__(' was created successfully.', 'bulletproof-security').'</strong></font>';
 					echo $text;
-					echo '<div class="bps-message-button" style="width:90px;"><a href="'.admin_url( 'admin.php?page=bulletproof-security/admin/db-backup-security/db-backup-security.php' ).'">'.esc_attr__('Refresh Status', 'bulletproof-security').'</a></div>';	
 					echo '</p></div>';
 				
 					@chmod( WP_CONTENT_DIR . '/bps-backup/' . $new_db_backup_folder . '/', 0755 );
-				
 					@mkdir( WP_CONTENT_DIR . '/bps-backup/' . $new_db_backup_folder . '/db-diff', 0755, true );
 					@chmod( WP_CONTENT_DIR . '/bps-backup/' . $new_db_backup_folder . '/db-diff/', 0755 );
 

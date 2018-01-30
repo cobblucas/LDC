@@ -26,6 +26,8 @@ function bps_HUD_WP_Dashboard() {
 		bps_hud_check_autoupdate();
 		bpsPro_hud_mscan_notice();
 		bpsPro_hud_jtc_lite_notice();
+		bpsPro_hud_rate_notice();
+		bpsPro_hud_mod_security_check();
 		//bps_hud_check_public_username();
 	}
 }
@@ -723,5 +725,87 @@ $user_id = $current_user->ID;
 		add_user_meta($user_id, 'bps_ignore_jtc_lite_notice', 'true', true);
 	}
 }
+
+// Heads Up Display w/ Dismiss - BPS plugin 30 day review/rating request Dismiss Notice
+function bpsPro_hud_rate_notice() {
+
+	global $current_user, $pagenow;
+	$user_id = $current_user->ID;
+
+	if ( ! get_option('bulletproof_security_options_rate_free') ) {
+		return;
+	}
+
+	$options = get_option('bulletproof_security_options_rate_free');
+
+	if ( time() >= $options['bps_free_rate_review'] ) {
+
+		if ( preg_match( '/page=bulletproof-security/', esc_html($_SERVER['REQUEST_URI']), $matches) || 'update-core.php' == $pagenow || 'plugins.php' == $pagenow ) {
+	
+			if ( ! get_user_meta($user_id, 'bps_ignore_rate_notice') ) {
+					
+				if ( esc_html($_SERVER['QUERY_STRING']) == '' && basename(esc_html($_SERVER['REQUEST_URI'])) != 'wp-admin' ) {
+					$bps_base = basename(esc_html($_SERVER['REQUEST_URI'])) . '?';
+				} elseif ( esc_html($_SERVER['QUERY_STRING']) == '' && basename(esc_html($_SERVER['REQUEST_URI'])) == 'wp-admin' ) {
+					$bps_base = basename( str_replace( 'wp-admin', 'index.php?', esc_html($_SERVER['REQUEST_URI'])));
+				} else {
+					$bps_base = str_replace( admin_url(), '', esc_html($_SERVER['REQUEST_URI']) ) . '&';
+				}
+
+				$text = '<div style="background-color:#dfecf2;border:1px solid #999;font-size:1em;font-weight:600;padding:0px 5px;margin:0px 0px 35px 0px;-moz-border-radius-topleft:3px;-webkit-border-top-left-radius:3px;-khtml-border-top-left-radius:3px;border-top-left-radius:3px;-moz-border-radius-topright:3px;-webkit-border-top-right-radius:3px;-khtml-border-top-right-radius:3px;border-top-right-radius:3px;-webkit-box-shadow: 3px 3px 5px -1px rgba(153,153,153,0.7);-moz-box-shadow: 3px 3px 5px -1px rgba(153,153,153,0.7);box-shadow: 3px 3px 5px -1px rgba(153,153,153,0.7);"><font color="blue">'.__('BPS Plugin Star Rating Request', 'bulletproof-security').'</font><br>'.__('A BPS star rating only takes a couple of minutes and would be very much appreciated. We are looking for 5 star ratings and not "fancy" reviews.', 'bulletproof-security').'<br>'.__('A simple review like "works great" or "has been protecting my website for X months or X years" is perfect.', 'bulletproof-security').'<br>'.__('Click this link to submit a BPS Plugin Star Rating: ', 'bulletproof-security').'<a href="https://wordpress.org/support/plugin/bulletproof-security/reviews/#postform" target="_blank" title="BPS Plugin Star Rating">'.__('BPS Plugin Star Rating', 'bulletproof-security').'</a>, '.__('login to the WordPress.org site and scroll to the bottom of the Reviews page.', 'bulletproof-security').'<br>'.__('To Dismiss this one-time Notice click the Dismiss Notice button below. To Reset Dismiss Notices click the Reset|Recheck Dismiss Notices button on the BPS Custom Code page.', 'bulletproof-security').'<br><div style="float:left;margin:3px 0px 3px 0px;padding:2px 6px 2px 6px;background-color:#e8e8e8;border:1px solid gray;"><a href="'.$bps_base.'bpsPro_rate_nag_ignore=0'.'" style="text-decoration:none;font-weight:bold;">'.__('Dismiss Notice', 'bulletproof-security').'</a></div></div>';
+				echo $text;
+			}
+		}
+	}
+}
+
+add_action('admin_init', 'bpsPro_rate_nag_ignore');
+
+function bpsPro_rate_nag_ignore() {
+global $current_user;
+$user_id = $current_user->ID;
+        
+	if ( isset($_GET['bpsPro_rate_nag_ignore']) && '0' == $_GET['bpsPro_rate_nag_ignore'] ) {
+		add_user_meta($user_id, 'bps_ignore_rate_notice', 'true', true);
+	}
+}
+
+// Heads Up Display w/ Dismiss Notice - Check if Mod Security is Loaded|Enabled. Displays a link to a help forum topic.
+function bpsPro_hud_mod_security_check() {
+	
+	$bps_mod_security_options = get_option('bulletproof_security_options_mod_security');
+
+	if ( $bps_mod_security_options['bps_mod_security_check'] == '1' ) {
+
+		global $current_user;
+		$user_id = $current_user->ID;		
+
+		if ( ! get_user_meta($user_id, 'bpsPro_ignore_mod_security_notice')) { 
+		
+			if ( esc_html($_SERVER['QUERY_STRING']) == '' && basename(esc_html($_SERVER['REQUEST_URI'])) != 'wp-admin' ) {
+				$bps_base = basename(esc_html($_SERVER['REQUEST_URI'])) . '?';
+			} elseif ( esc_html($_SERVER['QUERY_STRING']) == '' && basename(esc_html($_SERVER['REQUEST_URI'])) == 'wp-admin' ) {
+				$bps_base = basename( str_replace( 'wp-admin', 'index.php?', esc_html($_SERVER['REQUEST_URI'])));
+			} else {
+				$bps_base = str_replace( admin_url(), '', esc_html($_SERVER['REQUEST_URI']) ) . '&';
+			}
+			
+			$text = '<div class="update-nag" style="background-color:#dfecf2;border:1px solid #999;font-size:1em;font-weight:600;padding:2px 5px;margin-top:2px;-moz-border-radius-topleft:3px;-webkit-border-top-left-radius:3px;-khtml-border-top-left-radius:3px;border-top-left-radius:3px;-moz-border-radius-topright:3px;-webkit-border-top-right-radius:3px;-khtml-border-top-right-radius:3px;border-top-right-radius:3px;-webkit-box-shadow: 3px 3px 5px -1px rgba(153,153,153,0.7);-moz-box-shadow: 3px 3px 5px -1px rgba(153,153,153,0.7);box-shadow: 3px 3px 5px -1px rgba(153,153,153,0.7);"><font color="blue">'.__('BPS Notice: Mod Security Module is Loaded|Enabled', 'bulletproof-security').'</font><br>'.__('Please take a minute to view this Mod Security help forum topic: ', 'bulletproof-security').'<a href="https://forum.ait-pro.com/forums/topic/mod-security-common-known-problems/" target="_blank" title="Mod Security Common Known Problems">'.__('Mod Security Common Known Problems', 'bulletproof-security').'</a>.<br>'.__('If you are not experiencing any of the problems listed in the Mod Security help forum topic then you can dismiss this Dismiss Notice.', 'bulletproof-security').'<br>'.__('To Dismiss this Notice click the Dismiss Notice button below. To Reset Dismiss Notices click the Reset|Recheck Dismiss Notices button on the BPS Custom Code page.', 'bulletproof-security').'<br><div style="float:left;margin:3px 0px 3px 0px;padding:2px 6px 2px 6px;background-color:#e8e8e8;border:1px solid gray;"><a href="'.$bps_base.'bpsPro_mod_security_nag_ignore=0'.'" style="text-decoration:none;font-weight:bold;">'.__('Dismiss Notice', 'bulletproof-security').'</a></div></div>';
+			echo $text;
+		}
+	}
+}
+
+add_action('admin_init', 'bpsPro_mod_security_nag_ignore');
+
+function bpsPro_mod_security_nag_ignore() {
+global $current_user;
+$user_id = $current_user->ID;
+        
+	if ( isset($_GET['bpsPro_mod_security_nag_ignore']) && '0' == $_GET['bpsPro_mod_security_nag_ignore'] ) {
+		add_user_meta($user_id, 'bpsPro_ignore_mod_security_notice', 'true', true);
+	}
+}
+
 
 ?>

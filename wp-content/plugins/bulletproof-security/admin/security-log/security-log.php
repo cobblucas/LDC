@@ -490,7 +490,7 @@ $search = '';
 <div id="SecurityLogTurnOffButton">
 <form name="BPSErrorLogOff" action="<?php echo admin_url( 'admin.php?page=bulletproof-security/admin/security-log/security-log.php' ); ?>" method="post">
 <?php wp_nonce_field('bps-error-log-off'); ?>
-<input type="submit" name="Submit-Error-Log-Off" value="<?php esc_attr_e('Turn Off Logging', 'bulletproof-security') ?>" class="button bps-button" style="width:120px;margin-right:15px;height:auto;white-space:normal" onclick="return confirm('<?php $text = __('Click OK to Turn Off Error Logging or click Cancel.', 'bulletproof-security'); echo $text; ?>')" />
+<input type="submit" name="Submit-Error-Log-Off" value="<?php esc_attr_e('Turn Off Logging', 'bulletproof-security') ?>" class="button bps-button" style="width:125px;margin-right:15px;height:auto;white-space:normal" onclick="return confirm('<?php $text = __('Click OK to Turn Off Error Logging or click Cancel.', 'bulletproof-security'); echo $text; ?>')" />
 </form>
 </div>
 </td>
@@ -498,7 +498,7 @@ $search = '';
 <div id="SecurityLogTurnOnButton">
 <form name="BPSErrorLogOn" action="<?php echo admin_url( 'admin.php?page=bulletproof-security/admin/security-log/security-log.php' ); ?>" method="post">
 <?php wp_nonce_field('bps-error-log-on'); ?>
-<input type="submit" name="Submit-Error-Log-On" value="<?php esc_attr_e('Turn On Logging', 'bulletproof-security') ?>" class="button bps-button" style="width:120px;margin-right:15px;height:auto;white-space:normal" onclick="return confirm('<?php $text = __('Click OK to Turn On Logging or click Cancel.', 'bulletproof-security'); echo $text; ?>')" />
+<input type="submit" name="Submit-Error-Log-On" value="<?php esc_attr_e('Turn On Logging', 'bulletproof-security') ?>" class="button bps-button" style="width:125px;margin-right:15px;height:auto;white-space:normal" onclick="return confirm('<?php $text = __('Click OK to Turn On Logging or click Cancel.', 'bulletproof-security'); echo $text; ?>')" />
 </form>
 </div>
 </td>
@@ -506,7 +506,7 @@ $search = '';
 <div id="SecurityLogDeleteLogButton">
 <form name="DeleteLogForm" action="<?php echo admin_url( 'admin.php?page=bulletproof-security/admin/security-log/security-log.php' ); ?>" method="post">
 <?php wp_nonce_field('bps-delete-security-log'); ?>
-<input type="submit" name="Submit-Delete-Log" value="<?php esc_attr_e('Delete Log', 'bulletproof-security') ?>" class="button bps-button" style="width:120px;height:auto;white-space:normal" onclick="return confirm('<?php $text = __('Clicking OK will delete the contents of your Security Log file.', 'bulletproof-security').'\n\n'.$bpsSpacePop.'\n\n'.__('Click OK to Delete the Log file contents or click Cancel.', 'bulletproof-security'); echo $text; ?>')" />
+<input type="submit" name="Submit-Delete-Log" value="<?php esc_attr_e('Delete Log', 'bulletproof-security') ?>" class="button bps-button" style="width:125px;height:auto;white-space:normal" onclick="return confirm('<?php $text = __('Clicking OK will delete the contents of your Security Log file.', 'bulletproof-security').'\n\n'.$bpsSpacePop.'\n\n'.__('Click OK to Delete the Log file contents or click Cancel.', 'bulletproof-security'); echo $text; ?>')" />
 </form>
 </div>
 </td>

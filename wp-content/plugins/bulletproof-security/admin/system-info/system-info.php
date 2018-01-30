@@ -380,6 +380,7 @@ function bpsPro_count_network_activated_plugins($count) {
 	}
 	echo '<br>';
 	
+	// This function is in /includes/functions.php
 	bpsPro_apache_mod_directive_check();
 
 	echo '<strong><span class="sysinfo-label-text">'.__('cURL', 'bulletproof-security').':</span></strong> ';

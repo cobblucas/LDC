@@ -503,9 +503,13 @@ $bps_secure_bottom_misc_code = "# HOTLINKING/FORBID COMMENT SPAMMERS/BLOCK BOTS/
 	// Only create a new root htaccess file if the PHP/php.ini handler issue does not exist else return.
 	// root htaccess file backup to /master-backups
 	$bps_master_backup_root_file = WP_CONTENT_DIR . '/bps-backup/master-backups/root.htaccess';
+	$gmt_offset = get_option( 'gmt_offset' ) * 3600;
+	$rootHtaccessBackupTime = WP_CONTENT_DIR . '/bps-backup/master-backups/root.htaccess-'.date( 'Y-m-d-g-i-s-a', time() + $gmt_offset );
 	
 	if ( is_dir( WP_CONTENT_DIR . '/bps-backup/master-backups' ) ) {
 		@copy($bps_auto_write_secure_file_root, $bps_master_backup_root_file);
+		// root htaccess file backup with timestamp: root.htaccess-2017-11-02-3-00-00
+		copy($bps_auto_write_secure_file_root, $rootHtaccessBackupTime);
 		echo $successTextBegin.$bps_master_backup_root_file.__(' Root .htaccess File backup Successful!', 'bulletproof-security').$successTextEnd;
 	}
 

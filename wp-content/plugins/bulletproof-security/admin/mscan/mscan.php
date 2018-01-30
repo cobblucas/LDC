@@ -46,6 +46,21 @@ require_once( ABSPATH . 'wp-admin/includes/plugin-install.php' );
 		echo '</div>';
 		echo '</div>';
 }
+
+## 2.9: Created new file for mscan pattern matching code. If web host deletes or nulls that file or Dir then mscan will not work, but BPS Pro will still work.
+function bpsPro_mscan_pattern_match_file_check() {
+	
+	$mscan_pattern_match_file = WP_CONTENT_DIR . '/bps-backup/mscan/mscan-pattern-match.php';
+	$mscan_pattern_match_dir = WP_CONTENT_DIR . '/bps-backup/mscan';
+	$bps_wpcontent_dir = str_replace( ABSPATH, '', WP_CONTENT_DIR );
+	
+	if ( ! is_dir($mscan_pattern_match_dir) || ! is_readable($mscan_pattern_match_dir) || ! is_file($mscan_pattern_match_file) || ! is_readable($mscan_pattern_match_file) ) {
+
+			$text = '<div style="background-color:#dfecf2;border:1px solid #999;font-size:1em;font-weight:600;padding:0px 5px;margin:-7px 0px 10px 0px;-moz-border-radius-topleft:3px;-webkit-border-top-left-radius:3px;-khtml-border-top-left-radius:3px;border-top-left-radius:3px;-moz-border-radius-topright:3px;-webkit-border-top-right-radius:3px;-khtml-border-top-right-radius:3px;border-top-right-radius:3px;-webkit-box-shadow: 3px 3px 5px -1px rgba(153,153,153,0.7);-moz-box-shadow: 3px 3px 5px -1px rgba(153,153,153,0.7);box-shadow: 3px 3px 5px -1px rgba(153,153,153,0.7);"><font color="#fb0101">'.__('The MScan folder or pattern matching file does not exist or is not readable /', 'bulletproof-security').$bps_wpcontent_dir.__('/bps-backup/mscan/mscan-pattern-match.php.', 'bulletproof-security').'</font><br>'.__('Most likely your web host sees the pattern matching code in the MScan mscan-pattern-match.php file as malicious and has either deleted the file or made the file or /mscan/ folder unreadable.', 'bulletproof-security').'<br>'.__('Unfortunately that means you will not be able to use MScan on your website/server/web host.', 'bulletproof-security').'</div>';
+			echo $text;
+	}
+}
+bpsPro_mscan_pattern_match_file_check();
 ?>
 
 <h2 class="bps-tab-title"><?php _e('BulletProof Security ~ MScan Malware Scanner', 'bulletproof-security'); ?></h2>
@@ -787,6 +802,7 @@ if ( isset( $_POST['Submit-MScan-Options'] ) && current_user_can('manage_options
 	$MScan_status = get_option('bulletproof_security_options_MScan_status');
 	$mscan_scan_skipped_files_message = '';
 	$mscan_image_files_message = '';
+	$mscan_scan_delete_tmp_files_message = '';
 
 	if ( $MScan_options['mscan_scan_skipped_files'] == 'On' && $MScan_status['bps_mscan_total_skipped_files'] > 0 ) {
 		$mscan_scan_skipped_files_message = '<br><font color="blue"><strong>'.__('Skipped file scanning is turned On. Only skipped files will be scanned.', 'bulletproof-security').'</strong></font>';
@@ -800,8 +816,12 @@ if ( isset( $_POST['Submit-MScan-Options'] ) && current_user_can('manage_options
 		$mscan_image_files_message = '<br><font color="blue"><strong>'.__('Image file scanning is turned On. On some web hosts scanning image files will cause the scan to stop/fail.', 'bulletproof-security').'</strong></font>';
 	}
 
+	if ( $MScan_options['mscan_scan_delete_tmp_files'] == 'On' ) {
+		$mscan_scan_delete_tmp_files_message = '<br><strong><font color="#fb0101">'.__('Warning: ', 'bulletproof-security').'</font>'.__('On some web hosts (Known host issues: SiteGround, Cyon) turning On the "Automatically Delete /tmp Files" option setting will cause your website/server to crash. If your website/server does crash contact your web host support folks, tell them that you deleted /tmp files and your website/server has crashed.', 'bulletproof-security').'</strong>';
+	}
+
 	echo $bps_topDiv;
-	$text = '<font color="green"><strong>'.__('MScan Options saved.', 'bulletproof-security').'</strong></font>'.$mscan_scan_skipped_files_message.$mscan_image_files_message;
+	$text = '<font color="green"><strong>'.__('MScan Options saved.', 'bulletproof-security').'</strong></font>'.$mscan_scan_skipped_files_message.$mscan_image_files_message.$mscan_scan_delete_tmp_files_message;
 	echo $text;
 	echo $bps_bottomDiv;
 }
@@ -1006,8 +1026,8 @@ bpsPro_save_mscan_options();
 
 	echo '<label for="bps-mscan-label">'.__('Automatically Delete /tmp Files', 'bulletproof-security').'</label><br>';
 	echo '<select name="mscan_scan_delete_tmp_files_select" class="form-340" style="margin-bottom:10px">';
-	echo '<option value="On"'. selected('On', $MScan_options['mscan_scan_delete_tmp_files']).'>'.__('Delete Tmp Files On', 'bulletproof-security').'</option>';
 	echo '<option value="Off"'. selected('Off', $MScan_options['mscan_scan_delete_tmp_files']).'>'.__('Delete Tmp Files Off', 'bulletproof-security').'</option>';
+	echo '<option value="On"'. selected('On', $MScan_options['mscan_scan_delete_tmp_files']).'>'.__('Delete Tmp Files On', 'bulletproof-security').'</option>';
 	echo '</select><br>';
 
 	echo '<label for="bps-mscan-label">'.__('Scheduled Scan Frequency (BPS Pro only)', 'bulletproof-security').'</label><br>';
@@ -1552,7 +1572,7 @@ if ( isset( $_POST['Submit-MScan-Suspect-DB-Form'] ) && current_user_can('manage
 					
 					if ( $row->mscan_pattern == 'PharmaHack' ) {
 						
-						$text = '<div style="margin:0px 0px 5px 0px;font-size:1.13em;font-weight:600"><span style="width:100px;margin:0px;padding:0px 6px 0px 6px;background-color:#e8e8e8;border:1px solid gray;"><a href="'.admin_url( "admin.php?page=bulletproof-security/admin/mscan/mscan.php&mscan_view_db=view_db_entry&_wpnonce=$nonce" ).'" style="text-decoration:none;">'.__('Close', 'bulletproof-security').'</a></span> '.__('Pharma Hack DB Table and Column', 'bulletproof-security').': <span style="background-color:yellow;">'.esc_html($row->mscan_db_table).' : '.esc_html($row->mscan_db_column).'</span><br>'.__('Pharma Hack cleanup/removal steps', 'bulletproof-security').': '.__('Login to your web host control panel, login to your WP Database using phpMyAdmin and delete these DB option name Rows below from the DB Table and Column shown above. Note: You may or may not see all of these DB option name Rows so just delete any that you do see.', 'bulletproof-security').'<br><br>wp_check_hash<br>class_generic_support<br>widget_generic_support<br>ftp_credentials<br>fwp<br>rss_7988287cd8f4f531c6b94fbdbc4e1caf<br>rss_d77ee8bfba87fa91cd91469a5ba5abea<br>rss_552afe0001e673901a9f2caebdd3141d</div>';
+						$text = '<div style="margin:0px 0px 5px 0px;font-size:1.13em;font-weight:600"><span style="width:100px;margin:0px;padding:0px 6px 0px 6px;background-color:#e8e8e8;border:1px solid gray;"><a href="'.admin_url( "admin.php?page=bulletproof-security/admin/mscan/mscan.php&mscan_view_db=view_db_entry&_wpnonce=$nonce" ).'" style="text-decoration:none;">'.__('Close', 'bulletproof-security').'</a></span> '.__('Pharma Hack DB Table and Column', 'bulletproof-security').': <span style="background-color:yellow;">'.esc_html($row->mscan_db_table).' : '.esc_html($row->mscan_db_column).'</span><br>'.__('Pharma Hack cleanup/removal steps', 'bulletproof-security').':<br>'.__('Edit your theme\'s header.php file and delete this code: ', 'bulletproof-security').'<\?php include \'nav.php\'; \?>. '.__('Delete this file in your theme\'s root folder: nav.php. Login to your web host control panel, login to your WP Database using phpMyAdmin and delete these DB option name Rows below from the DB Table and Column shown above. Note: You may or may not see all of these DB option name Rows so just delete any that you do see.', 'bulletproof-security').'<br><br>wp_check_hash<br>class_generic_support<br>widget_generic_support<br>ftp_credentials<br>fwp<br>rss_7988287cd8f4f531c6b94fbdbc4e1caf<br>rss_d77ee8bfba87fa91cd91469a5ba5abea<br>rss_552afe0001e673901a9f2caebdd3141d</div>';
 						echo $text;
 
 					} else {

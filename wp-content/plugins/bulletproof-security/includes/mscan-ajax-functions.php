@@ -969,15 +969,15 @@ global $wp_version, $wpdb;
 		
 		$safe_plugins = '/(.*)(\/|\\\)(bulletproof-security|theme-check|cforms|all-in-one-seo-pack|adminer|akismet|jetpack|wp-super-cache|bbpress|buddypress|wordpress-seo|contact-form-7|woocommerce|tinymce-advanced|limit-login-attempts|mailchimp-for-wp|wordpress-importer|google-sitemap-generator|google-analytics-for-wordpress|google-analytics-dashboard-for-wp|duplicate-post|w3-total-cache|updraftplus|really-simple-captcha|nextgen-gallery|duplicator|ml-slider|wp-smushit|googleanalytics|broken-link-checker|managewp|sucuri-scanner|gotmls|better-wp-security|all-in-one-wp-security-and-firewall|wordfence)(\/|\\\)(.*)/';
 
-		// Too general/common: \|iframe\||
-		$js_pattern = '/(\|MakeFrameEx\||\|yahoo_api\||\|exec\||ww=window|ww\.document|visibility:hidden|rotatingtext\[\d\]=\"I\sMISS\sYOU\"|\(!l1l&&!ll1&&!lll\)|s(\W){2,6}c(\W){2,6}r|(\'|")i(\'|")(\.|\+|\s)(\+|\'|"|\.)(\s|f)(\'|")(f|\+|\.)|scr("|\')(|\s)\+(|\s)("|\')ipt|(\\\x(\d|\w[^a])(\d[^0]|\w))+|((%\d(\w|\d){1})+%)|%\d(\w|\d){3}|\(\'hideme\'\)|\["style"\]\["visibility"\]|useragent\.match\(\/(\^(\w|\d){1,}\.\*\|)+|xtrackPageview|document\.write\(\'<\'\+x\[\d\]\+\'>|\\\u00(\d|\w){5,}|(\\\x22(.*)\\\x22)+|(\$(\d){2}){2}|(0|1){8}|_0x(\d|\w){4}|lave(\(|\))|(\(|\))lave)/i';
-
-		$htaccess_pattern = '/(RewriteCond\s%\{HTTP_REFERER\}\s(.*)[^!](google|yahoo|aol|bing|ask|facebook|twitter|msn)|ErrorDocument\s(400|403|404)\s(http|https|):|(RewriteCond\s%\{HTTP_USER_AGENT\}(.*\]\s*)){4}|RewriteRule(.*)(\w|\d){1,8}\.php\?(\w|\d){1,6}=(\$|)(\s|\d){1,3}|RewriteRule(.*)\(htm\|pdf\|jar\)|RewriteRule(.*)\{QUERY_STRING\})/i';
-
-		// old: base\'\.\(\d{1,3}\*\d{1,3}\)\.\'_de\'\.\'code
-		$php_pattern = '/(base64_decode\(|edoced_46esab|base\'\.\(\d{1,3}(|\s)(\*|\/)(|\s)\d{1,3}\)\.\'_de\'\.\'code|("|\')base(.*)\.(.*)64(.*)(_|\.|)decode("|\')|gzinflate\(|O0|ev("|\')(.*)\.("|\')al\(|lave(\(|\))|(\(|\))lave|preg_replace\(("|\')(\/(\w{1,}|\.\*))\/e|(\\\x(\d|\w){2,3}\\\x(\d|\w){2,3})|__halt_compiler|k2ll33d|\(!l1l&&!ll1&&!lll\)|\|iframe\||\|MakeFrameEx\||\|yahoo_api\||ww=window|ww\.document|ekibastos|scr("|\')(|\s)\+(|\s)("|\')ipt|\(\'hideme\'\)|\["style"\]\["visibility"\]|useragent\.match\(\/(\^(\w|\d){1,}\.\*\|)+|xtrackPageview|\$_COOKIE(|\s)\[str_replace\(.*\$_SERVER\[\'HTTP_HOST\'\]\)\]|\$_\w___\w|\'Windows-1251\'|document\.write\(\'<\'\+x\[\d\]\+\'>|\+(|\s)(\'|")\w(\'|")(|\s)\+|(\\\x22(.*)\\\x22)+|(|\[)_0x(\w|\d){1,6}\[\d{1,3}\]{1,2}|\\\142\\\141\\\x73|\\\u00(\d|\w){5,}|(\'|")i(\'|")(\.|\+|\s)(\+|\'|"|\.)(\s|f)(\'|")(f|\+|\.)|s(\W){2,6}c(\W){2,6}r|(\$\w{1,3}\{\d{1,2}\}(|\s)\.(|\s)){3}|\$<(\d|\w){2}>|\$_(\/\*)|%3C%21|%3Cscript%3E|%253C|(%\d(\w|\d)){5}|\$(\d|\w){1,}\[\'(\d|\w){1,}\'\]\[(\d){1,3}\](\s\.|\.)(\$|\s\$)|(\$(\w){2}\[\d{1,2}\]\.)+|(0|1){8}|_0x(\d|\w){4}|\(64\)(\s|)\.(\s|)(\'|")_(\'|"))/i';
+		## 2.9: Created new file for mscan pattern matching code. If web host deletes or nulls that file or Dir then mscan will not work, but BPS Pro will still work.
+		$mscan_pattern_match_file = WP_CONTENT_DIR . '/bps-backup/mscan/mscan-pattern-match.php';
+		$mscan_pattern_match_dir = WP_CONTENT_DIR . '/bps-backup/mscan';
 		
-		$image_pattern = '/(<\?php|eval\(|exec\(|popen\(|create_function\(|passthru\(|shell_exec\(|proc_open\(|pcntl_exec\(|fopen\(|fputs\(|file_put_contents\(|fwrite\(|gzinflate\(|base64_decode\(|isset|\$_REQUEST|\$_FILES|\$_GET|\$_POST|\$_SERVER|\$_SESSION|system\(|\'cmd\'|__halt_compiler|<script|javascript|function|createElement|<html>|visibility:|<textarea)/i';
+		if ( is_dir($mscan_pattern_match_dir) && is_readable($mscan_pattern_match_dir) ) {
+			if ( is_file($mscan_pattern_match_file) && is_readable($mscan_pattern_match_file) ) {
+				require_once( WP_CONTENT_DIR . '/bps-backup/mscan/mscan-pattern-match.php' );
+			}
+		}
 
 		$js_code_match = 0;
 		$htaccess_code_match = 0;
@@ -1298,15 +1298,7 @@ global $wp_version, $wpdb;
 				$DBTables = 0;
 				$getDBTables = $wpdb->get_results( $wpdb->prepare( "SHOW TABLE STATUS WHERE Rows >= %d", $DBTables ) );
 			
-				$search1 = 'eval(';
-				$search2 = '(lave';		
-				$search3 = 'base64_decode';		
-				$search4 = 'edoced_46esab';
-				$search5 = '<script';
-				$search6 = '<iframe';
-				$search7 = '<noscript';
-				$search8 = 'display:';
-				$search9 = 'visibility:';
+				## 13.4.1: MScan Database Scan search patterns for DB Query below are now in file: /wp-content/bps-backup/mscan/mscan-pattern-match.php
 	
 				foreach ( $getDBTables as $Table ) {
 		
@@ -1346,15 +1338,15 @@ global $wp_version, $wpdb;
 												unset($json_array[$column->Field]);
 											}
 											
-											if ( preg_grep( '/(eval\(|\(lave)/i', $json_array ) ) {
+											if ( preg_grep( $eval_match, $json_array ) ) {
 												$db_code_match = 1;
 			
 												fwrite( $handle, "Scanning Database: DB Table: $Table->Name | Column|Field: $column->Field | Primary Key ID: ".$json_array_converted[$PKey->Column_name]."\r\n" );
-												fwrite( $handle, "Scanning Database: Code Pattern Match: eval( or (lave\r\n" );
+												fwrite( $handle, "Scanning Database: Code Pattern Match: $eval_text\r\n" );
 			
 												if ( ! in_array($json_array_converted[$PKey->Column_name], $mscan_db_pkid_array) ) {
 									
-													if ( $insert_rows = $wpdb->insert( $MStable, array( 'mscan_status' => 'suspect', 'mscan_type' => 'db', 'mscan_path' => '', 'mscan_pattern' => 'eval( or (lave', 'mscan_skipped' => '', 'mscan_ignored' => '', 'mscan_db_table' => $Table->Name, 'mscan_db_column' => $column->Field, 'mscan_db_pkid' => $json_array_converted[$PKey->Column_name], 'mscan_time' => current_time('mysql') ) ) ) {
+													if ( $insert_rows = $wpdb->insert( $MStable, array( 'mscan_status' => 'suspect', 'mscan_type' => 'db', 'mscan_path' => '', 'mscan_pattern' => $eval_text, 'mscan_skipped' => '', 'mscan_ignored' => '', 'mscan_db_table' => $Table->Name, 'mscan_db_column' => $column->Field, 'mscan_db_pkid' => $json_array_converted[$PKey->Column_name], 'mscan_time' => current_time('mysql') ) ) ) {
 									
 														$send_email = 'send';	
 													}
@@ -1421,16 +1413,16 @@ global $wp_version, $wpdb;
 												}
 											}
 				
-											if ( preg_grep( '/(base64_decode|edoced_46esab)/i', $json_array ) ) {
+											if ( preg_grep( $base64_decode_match, $json_array ) ) {
 												$db_code_match = 1;
 				
 												fwrite( $handle, "Scanning Database: DB Table: $Table->Name | Column|Field: $column->Field | Primary Key ID: ".$json_array_converted[$PKey->Column_name]."\r\n" );
-												fwrite( $handle, "Scanning Database: Code Pattern Match: base64_decode or edoced_46esab\r\n" );								
+												fwrite( $handle, "Scanning Database: Code Pattern Match: $base64_decode_text\r\n" );								
 			
 			
 												if ( ! in_array($json_array_converted[$PKey->Column_name], $mscan_db_pkid_array) ) {
 									
-													if ( $insert_rows = $wpdb->insert( $MStable, array( 'mscan_status' => 'suspect', 'mscan_type' => 'db', 'mscan_path' => '', 'mscan_pattern' => 'base64_decode or edoced_46esab', 'mscan_skipped' => '', 'mscan_ignored' => '', 'mscan_db_table' => $Table->Name, 'mscan_db_column' => $column->Field, 'mscan_db_pkid' => $json_array_converted[$PKey->Column_name], 'mscan_time' => current_time('mysql') ) ) ) {
+													if ( $insert_rows = $wpdb->insert( $MStable, array( 'mscan_status' => 'suspect', 'mscan_type' => 'db', 'mscan_path' => '', 'mscan_pattern' => $base64_decode_text, 'mscan_skipped' => '', 'mscan_ignored' => '', 'mscan_db_table' => $Table->Name, 'mscan_db_column' => $column->Field, 'mscan_db_pkid' => $json_array_converted[$PKey->Column_name], 'mscan_time' => current_time('mysql') ) ) ) {
 									
 														$send_email = 'send';	
 													}
